@@ -1,0 +1,227 @@
+.login__bg {
+  /* width: 1366px; */
+  color: white;
+  height: 100%;
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.65) 0%,
+      rgba(0, 0, 0, 0.65) 100%
+    ),
+    url("../assets/login-bg.png") center/cover, lightgray;
+  flex-shrink: 0;
+}
+/* @media screen and (min-width: 480px) { 
+  forgot__container
+  login__bg {
+    height: 100vh !important;
+  }
+} */
+
+.go_back {
+  border: none;
+  font-size: 24px;
+  padding: 5px 11px 7px 10px;
+  background-color: var(--parrot-color);
+  color: white;
+  font-weight: 600;
+  border-radius: 2.5px;
+}
+.go_back:hover {
+  background-color: var(--hover-parrot-button);
+}
+
+.top_bootm-border {
+  border-bottom: 0.2px solid #d1d1d1;
+}
+.footer_top__border {
+  border-top: 0.2px solid #d1d1d1;
+}
+.top_button_nav {
+  display: flex;
+  justify-content: center;
+}
+.top_button_nav > a {
+  color: white;
+}
+.top__nav {
+  padding: 0;
+  color: #fff;
+  font-family: "Lato", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.icon__size {
+  font-size: 24px;
+}
+
+.main__logo {
+  padding: 9px 0px;
+  height: 67px;
+  display: flex;
+  flex-shrink: 0;
+  /* justify-content: center; */
+}
+.login__container > div {
+  background: rgba(134, 134, 134, 0.25);
+  border-radius: 5px;
+  padding: 10px 20px;
+  /* width: 35%; */
+}
+.login__container {
+  display: flex;
+  padding-bottom: 36px;
+  border-radius: 5px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.auth__button {
+  color: white;
+  padding: 4px 20px;
+  width: 160px;
+  font-size: 24px;
+  border-radius: 2.5px;
+  border: 2px solid #17c737;
+  background: #17c737;
+}
+.auth__button:hover {
+  background: #23a03a;
+}
+
+.login__heading {
+  display: flex;
+  flex-direction: column;
+  font-family: "Quicksand", sans-serif;
+  text-align: center;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 38px;
+}
+
+.login__description {
+  font-family: "Quicksand", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.login__input {
+  color: #757575;
+  font-family: Lato;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+}
+.acc-terms-label {
+  font-family: Lato;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.forgot__password {
+  font-family: Lato;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.input__padding {
+  padding: 14px 0px 14px 39px !important;
+}
+.form-control:focus {
+  box-shadow: none !important;
+  border-color: #86b7fe;
+}
+
+.input__icon {
+  position: absolute;
+  top: 36%;
+  left: 4%;
+}
+
+input[type="checkbox"] {
+  accent-color: rgba(145, 142, 142, 0.169);
+}
+
+.Login__logo {
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid red; */
+}
+
+.forgot__password__container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.forgot_password_heading {
+  text-align: center;
+  font-family: Quicksand;
+  font-size: 22px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 30px;
+}
+
+.fortgot_description {
+  text-align: center;
+  font-family: Quicksand;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px; /* 142.857% */
+}
+@media screen and (min-width: 992px) {
+  .forgot__container {
+    width: 45%;
+    padding: 10px 46px !important;
+  }
+
+  .Forgot_Logo {
+    padding: 0 70px;
+  }
+
+  .forgot_password_heading {
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  .fortgot_description {
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+@media screen and (min-width: 772px) {
+  .top__nav {
+    padding: 3px 70px;
+  }
+
+  .top_button_nav {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .main__logo {
+    width: 164.187px;
+    /* margin-left: 70px; */
+    margin: 0px;
+  }
+  .Login__logo {
+    /* margin-left: 70px; */
+    justify-content: start !important;
+    margin: 0 70px;
+  }
+
+  .login__container {
+    margin-top: 50px;
+  }
+}

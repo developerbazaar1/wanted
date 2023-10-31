@@ -1,0 +1,137 @@
+.profile_details {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  text-align: center;
+  padding: 7px 0;
+}
+
+.updateImagInput {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+@media screen and (min-width: 800px) {
+  .profile_details {
+    flex-direction: row !important;
+    justify-content: space-between;
+  }
+
+  .profilepic {
+    width: 161px !important;
+  }
+
+  .border_bootm {
+    text-align: start;
+  }
+
+  .name_group {
+    width: 58%;
+  }
+  .profile_details {
+    padding: 0px;
+  }
+}
+
+.form_group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #888888;
+  padding: 13px 0 8px 0;
+}
+
+.form_group > label {
+  width: 54%;
+
+  text-align: start;
+  color: #000;
+  font-family: Quicksand;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 550;
+  line-height: 24px;
+}
+
+.form_group > input {
+  color: #333;
+
+  /* Body 16 R */
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  width: 62%;
+  outline: none;
+  border: none;
+}
+
+.border_bootm {
+  border-bottom: 2px dashed #000;
+}
+
+.setting_content {
+  padding: 8px 9px 10px 11px;
+}
+
+.name_group {
+  padding: 9px 0px;
+}
+
+.saveButton {
+  margin: 12px 0 0 0;
+  color: black;
+  padding: 5px 10px 5px 10px;
+  width: 164px;
+  height: 44px;
+  border-radius: 5.5px;
+  border: none;
+}
+
+.profilepic {
+  border-radius: 4px;
+  border: 2px solid black;
+}
+
+.profilePicdv {
+  padding: 9px 0 0 0;
+}
+.profilePicdv > div {
+  position: relative;
+}
+
+.quicksand-600-18 {
+  color: #333;
+  font-family: Quicksand;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 133.333% */
+}
+
+.profile_picker {
+  background: black;
+  right: 0;
+  width: 30px;
+  height: 17%;
+  height: 27px;
+  position: absolute;
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 17px;
+}
+
+.hidden-input {
+  display: none;
+}
+.edit_icon {
+  cursor: pointer;
+  display: inline-block;
+}
+.profilepic {
+  width: 200px;
+}

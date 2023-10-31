@@ -1,0 +1,36 @@
+/* .reward_head {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+} */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tabel_container {
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.reward_button {
+  border-radius: 2.5px;
+  padding: 5px 10px;
+  width: 134px;
+  border: none;
+  background: #f3f3f3;
+}
+
+.reward_button:hover {
+  background-color: #32cd32;
+}
+@media screen and (max-width: 600px) {
+  .tabel_container {
+    max-width: 560px;
+    overflow-x: auto;
+  }
+  .sub_container {
+    width: 560px;
+    padding: 0 0 9px 0;
+  }
+}

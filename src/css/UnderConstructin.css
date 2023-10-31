@@ -1,0 +1,21 @@
+.under-construction-container {
+  text-align: center;
+  margin: 100px auto;
+  width: 80%;
+  max-width: 400px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+.under-construction-container > h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.under-construction-container > p {
+  font-size: 16px;
+  color: #666;
+}

@@ -1,0 +1,175 @@
+:root {
+  --main-background: #f3f3f3;
+  --background-color: #000000;
+  --parrot-color: #32cd32;
+  --white-text: white;
+  --hover-parrot-button: #2df54f;
+  --light-gray-color: #757575;
+  --text-black-color: #000000;
+  --qicksand--font-family: Quicksand;
+  --parrot-button-radiue: 3px;
+  --var-category-font-size: 12px;
+  --var-cateogry-font-weight: 400;
+  --var-card-description-font-size: 16px;
+  --var-card-description-font-weitht: 600;
+  --var-card-description-font-weight: 600;
+  --var-card-provider-font-size: 14px;
+  --var-card-provider-font-weight: 500;
+  --var-card-price-font-size: 20px;
+  --var-card-price-font-weight: 700;
+  --var-card-offPrice-font-size: 14px;
+  --var-card-oofPrice-font-weight: 500;
+}
+
+.auth_back_button {
+  font-size: 2em;
+  margin-top: 4px;
+  margin-right: 7px;
+  cursor: pointer;
+}
+@media screen and (min-width: 768px) {
+  .w-92 {
+    width: 92%;
+    /* margin: auto; */
+  }
+}
+
+.cat_icon_img_div {
+  width: 30px;
+  height: 30px;
+}
+
+.cat_icon_img_div > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.next_button {
+  /* display: flex; */
+  width: 150px;
+  height: 40px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  color: white;
+  background: #17c737;
+}
+
+.blac__background {
+  background-color: #000000;
+}
+.white {
+  color: white;
+}
+.white__background {
+  background-color: #ffffff;
+}
+.parrot {
+  color: #32cd32;
+}
+
+.grayaa {
+  background: #f3f3f3;
+}
+
+.parrot_background {
+  background-color: #32cd32;
+}
+.red {
+  color: #ff0000;
+}
+.item__center {
+  /* justify-content: center; */
+  display: flex;
+  align-items: center;
+  width: 0%;
+}
+
+.quicksand-500-18 {
+  font-size: 18px;
+  font-weight: 500;
+  font-family: "Quicksand";
+  color: #000000;
+}
+.quicksand-550-16 {
+  color: #000;
+  font-family: Quicksand;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 550;
+  line-height: 20px; /* 125% */
+}
+.quicksand-500-16 {
+  color: #000;
+  font-family: Quicksand;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+}
+
+.quicksand-500-24 {
+  font-family: "Quicksand";
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 500;
+  color: #000;
+}
+.quicksand-500-14 {
+  font-family: "Quicksand";
+  font-size: 14px;
+  line-height: 30px;
+  font-weight: 500;
+  color: #000;
+}
+
+.quicksand-550-18 {
+  color: #000;
+  font-family: Quicksand;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 550;
+  line-height: 24px; /* 133.333% */
+}
+.quicksand-500-16 {
+  color: #000;
+  font-family: Quicksand;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px; /* 137.5% */
+}
+
+.unfilled {
+  fill: white;
+  cursor: pointer;
+}
+.filled {
+  fill: red;
+}
+
+.border_5 {
+  border-radius: 5px;
+  border: 0.5px solid #d9d9d9;
+  background: #fff;
+}
+.pointer {
+  cursor: pointer;
+}
+
+.lato_600_16 {
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+.ads_label {
+  width: 69px;
+  border: none;
+  border-radius: 22px;
+  margin-top: 15px;
+  color: red;
+  background-color: #c9ffd3;
+}
