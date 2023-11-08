@@ -5,14 +5,48 @@ import addCardIma2 from "../assets/plan-card02.png";
 import addCardIma3 from "../assets/plan-card03.png";
 import paymentsucess from "../assets/pay-secure-img.png";
 import { Link } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
+import { ProctedApi } from "../config/axiosUtils";
+import { useAuth } from "../service/auth";
+import { castAddAdvert } from "../helper/castAddAdvert";
+import { toast } from "react-toastify";
+import Spiner from "../components/Spiner";
 const AddAdvert = () => {
+  const [loading, setLoading] = useState(false);
+  const { token, user, portfolio_id } = useAuth();
   const [selectedImage, setSelectedImage] = useState(null);
-
   const [fileName, setfileName] = useState("");
 
-  // handle drag and drop
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
+  const HandleAddadvertSubmit = (formData) => {
+    setLoading(true);
+    const data = castAddAdvert(formData, user, portfolio_id);
+
+    ProctedApi.AddAdvert(data, token)
+      .then((response) => {
+        console.log(response);
+        if (response.status === 201) {
+          return toast.success("created");
+        }
+      })
+      .catch((e) => {
+        // console.log(e, "error");
+        // console.log(e.response.statusText);
+        return toast.error(e.response.statusText);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  /**
+   * @handle drag and drop
+   */
   const handleImageDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
@@ -49,6 +83,7 @@ const AddAdvert = () => {
   };
   return (
     <>
+      <Spiner loading={loading} />
       <main className="app-content">
         <div className="row">
           <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -101,12 +136,20 @@ const AddAdvert = () => {
           <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div id="form" className="form-container">
               {/* <!-- add book form start--> */}
-              <form action="" className="w-100" id="add-advert-form">
+              <form
+                onSubmit={handleSubmit(HandleAddadvertSubmit)}
+                className="w-100"
+                id="add-advert-form"
+              >
                 {/* <!-- form row start at lower div --> */}
                 <div className=" cst-add-new-form row">
                   {/* <!-- field col 01 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.advert_title ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="title">
                         Advert Title
                       </label>
@@ -115,6 +158,16 @@ const AddAdvert = () => {
                         className="form-control"
                         id="advert_title"
                         placeholder="Enter your advert title"
+                        {...register("advert_title", {
+                          pattern: {
+                            value: /^[ A-Za-z0-9._%+-]*$/,
+                            message: "Invalid String",
+                          },
+                          required: {
+                            value: true,
+                            message: "Title is Required",
+                          },
+                        })}
                       />
                     </div>
                   </div>
@@ -125,7 +178,11 @@ const AddAdvert = () => {
                       <label className="form-head" htmlFor="show-ad">
                         Where To Show:
                       </label>
-                      <div className="  d-flex flex-column flex-md-row justify-content-between where_to_show_group">
+                      <div
+                        className={`d-flex flex-column flex-md-row justify-content-between where_to_show_group ${
+                          errors?.userSearch ? "whrer_To_show_error" : ""
+                        }`}
+                      >
                         <div className="d-flex align-items-center gap-3 justify-content-between">
                           <label
                             className="form-head mb-0 custom_advert_label"
@@ -137,7 +194,11 @@ const AddAdvert = () => {
                             className="radioColor"
                             type="radio"
                             name="userSearch"
+                            value="liveAds"
                             id="liveads"
+                            {...register("userSearch", {
+                              required: true,
+                            })}
                           />
                         </div>
                         <div className="d-flex align-items-center gap-3 justify-content-between">
@@ -147,11 +208,16 @@ const AddAdvert = () => {
                           >
                             Latest Offer
                           </label>
+
                           <input
+                            {...register("userSearch", {
+                              required: true,
+                            })}
                             className="radioColor"
                             type="radio"
                             name="userSearch"
                             id="latestoffer"
+                            value="latesOffer"
                           />
                         </div>
 
@@ -163,10 +229,14 @@ const AddAdvert = () => {
                             Services
                           </label>
                           <input
+                            {...register("userSearch", {
+                              required: true,
+                            })}
                             className="radioColor"
                             type="radio"
                             name="userSearch"
                             id="service"
+                            value="service"
                           />
                         </div>
                       </div>
@@ -175,38 +245,114 @@ const AddAdvert = () => {
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 03 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.adcategory ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="category">
                         Advert Category
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="ad-category"
+                        id="adcategory"
                         placeholder="Enter your advert Category"
+                        {...register("adcategory", {
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 04 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.subCategory ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="sub-ad">
                         Advert Sub Category
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="sub-category"
+                        id="subCategory"
                         placeholder="Enter your advert Sub Category"
-                        required=""
+                        {...register("subCategory", {
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.adPostalCode ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="adPostalCode">
+                        Postal Code
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="adPostalCode"
+                        placeholder="Enter your advert Postal Code"
+                        {...register("adPostalCode", {
+                          pattern: {
+                            value: /^\d+$/,
+                            message: "Enter a Valid Postal Code",
+                          },
+                          required: {
+                            value: true,
+                            message: "Postal Code is Required",
+                          },
+                        })}
+                      />
+                    </div>
+                  </div>
+                  {/* <!-- field col end --> */}
+                  {/* <!-- field col 05 start --> */}
+                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.adPrice ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="price">
+                        Advert Price
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="adPrice"
+                        placeholder="Enter your advert price"
+                        {...register("adPrice", {
+                          pattern: {
+                            value: /^\d+$/,
+                            message: "Enter Valid Price",
+                          },
+                          required: {
+                            value: true,
+                            message: "Price is Required",
+                          },
+                        })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* post code feild section */}
+
+                  <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.ad_location ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="location">
                         Location
                       </label>
@@ -215,30 +361,21 @@ const AddAdvert = () => {
                         className="form-control"
                         id="ad_location"
                         placeholder="Enter location"
-                        required
+                        {...register("ad_location", {
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
-                  {/* <!-- field col end --> */}
-                  {/* <!-- field col 05 start --> */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
-                      <label className="form-head" htmlFor="price">
-                        Advert Price
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="ad-price"
-                        placeholder="Enter your advert price"
-                        required
-                      />
-                    </div>
-                  </div>
+
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 07 start --> */}
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.exampleTextarea ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="description">
                         Advert Description
                       </label>
@@ -248,6 +385,9 @@ const AddAdvert = () => {
                         id="exampleTextarea"
                         rows="6"
                         name="answer"
+                        {...register("exampleTextarea", {
+                          required: true,
+                        })}
                       ></textarea>
                       <div className="text-end">
                         <small className="text-muted " id="wordCount">
@@ -324,6 +464,13 @@ const AddAdvert = () => {
                   </div>
                   {/* <!-- field col end --> */}
                 </div>
+
+                {/* <button
+                  className="payment_final_submission_btn mt-2"
+                  type="submit"
+                >
+                  Submit
+                </button> */}
               </form>
               {/* <!-- add book form up end --> */}
             </div>
@@ -335,9 +482,9 @@ const AddAdvert = () => {
           <div className="row justify-content-center mt-5 pb-5">
             <div className="col-md-12 col-sm-12 col-xs-12 justify-content-center">
               <div className="select-plan-head">
-                <h4>Choose Plan</h4>
+                <h4 className="text-center">Choose Plan</h4>
               </div>
-              <div className="  text-center d-flex flex-column flex-md-row gap-4  justify-content-center">
+              <div className="text-center d-flex flex-column flex-md-row gap-4  justify-content-center align-items-center">
                 {/* <!-- card-01 --> */}
                 <div className="card-plan pointer">
                   <div className="plan-card-image ">
@@ -460,7 +607,12 @@ const AddAdvert = () => {
                 </p>
               </div>
               <div>
-                <button className="payment_final_submission_btn mt-2">
+                <button
+                  className="payment_final_submission_btn mt-2"
+                  type="submit"
+                  form="add-advert-form"
+                  disabled={loading}
+                >
                   Submit
                 </button>
               </div>

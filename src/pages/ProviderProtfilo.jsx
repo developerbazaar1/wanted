@@ -2,11 +2,44 @@ import ProviderTop from "../assets/provider-top-img.png";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { ProctedApi } from "../config/axiosUtils";
+import { useAuth } from "../service/auth";
 const ProviderProtfilo = () => {
+  const { user, token } = useAuth();
   const [selectedImage, setSelectedImage] = useState(null);
   const [fileName, setfileName] = useState("");
-
+  // const [portfolioData, setPortPolioData] = useState(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   // handle drag and drop
+
+  const handlePortfolio = (formData) => {
+    console.log(formData);
+    const data = {
+      _id: user.id,
+      storeName: formData?.store_name,
+      storeEmail: formData?.store_email,
+      storeCategory: formData?.store_category,
+      storeAddress: formData?.store_address,
+      storeDescription: formData?.store_description,
+      storeWebsite: formData?.store_website,
+      storeContactDetails: formData?.store_contact,
+      storeSubCategory: formData?.store_subcategory,
+      storeThumbNail:
+        "https://images.unsplash.com/photo-1422565096762-bdb997a56a84?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    };
+    ProctedApi.CreatPortfolio(data, token)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleImageDrop = (e) => {
     e.preventDefault();
@@ -25,6 +58,7 @@ const ProviderProtfilo = () => {
   const handleImageSelect = (e) => {
     const filename = e?.target?.files[0].name;
     setfileName(filename);
+    console.log(filename);
 
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -136,28 +170,42 @@ const ProviderProtfilo = () => {
           <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div id="form" className="form-container">
               {/* <!-- add book form start--> */}
-              <form action="" className="w-100" id="provider-form">
+              <form
+                onSubmit={handleSubmit(handlePortfolio)}
+                className="w-100"
+                id="provider-form"
+              >
                 {/* <!-- form row start at lower div --> */}
                 <div className=" cst-add-new-form row">
                   {/* <!-- field col 01 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_name ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_name">
                         Store Name
                       </label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control "
                         id="store_name"
                         placeholder="Enter your store name "
-                        required
+                        {...register("store_name", {
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 02 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_website ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_website">
                         Store Website
                       </label>
@@ -166,14 +214,26 @@ const ProviderProtfilo = () => {
                         className="form-control"
                         id="store_website"
                         placeholder="Enter your store website link"
-                        required
+                        {...register("store_website", {
+                          pattern: {
+                            value: /^(https?|ftp):\/\/[A-Z0-9.-]+\.[A-Z]{2,}/i,
+                            message: "Invalid URL",
+                          },
+                          required: {
+                            value: true,
+                          },
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 03 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_email ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_email">
                         Store Email Address
                       </label>
@@ -182,14 +242,24 @@ const ProviderProtfilo = () => {
                         className="form-control"
                         id="store_email"
                         placeholder="Enter your store email address"
-                        required=""
+                        {...register("store_email", {
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: "Invalid Email Address",
+                          },
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 04 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_contact ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_contact">
                         Store Contact Details
                       </label>
@@ -198,14 +268,24 @@ const ProviderProtfilo = () => {
                         className="form-control"
                         id="store_contact"
                         placeholder="Enter your store contact details"
-                        required=""
+                        {...register("store_contact", {
+                          // pattern:{
+                          //   value:,
+                          //   message:"Enter valid number"
+                          // },
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_category ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_category">
                         Store Category
                       </label>
@@ -214,14 +294,20 @@ const ProviderProtfilo = () => {
                         className="form-control"
                         id="store_category"
                         placeholder="Enter your store category"
-                        required=""
+                        {...register("store_category", {
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_subcategory ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_subcategory">
                         Store Sub-Category
                       </label>
@@ -230,14 +316,20 @@ const ProviderProtfilo = () => {
                         className="form-control"
                         id="store_subcategory"
                         placeholder="Enter your store sub-category"
-                        required=""
+                        {...register("store_subcategory", {
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 06 start --> */}
                   <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_address ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_address">
                         Store Address
                       </label>
@@ -246,14 +338,20 @@ const ProviderProtfilo = () => {
                         className="form-control"
                         id="store_address"
                         placeholder="Enter your store address"
-                        required=""
+                        {...register("store_address", {
+                          required: true,
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 07 start --> */}
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.store_description ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="store_description">
                         Store Description
                       </label>
@@ -263,6 +361,9 @@ const ProviderProtfilo = () => {
                         id="store_description"
                         rows="6"
                         name="answer"
+                        {...register("store_description", {
+                          required: true,
+                        })}
                       ></textarea>
                       <div className="text-end">
                         <small className="text-muted " id="wordCount">
@@ -286,11 +387,15 @@ const ProviderProtfilo = () => {
                         <input
                           name="file1"
                           type="file"
+                          multiple={true}
                           className=" protfilo_image_input_field"
-                          data-height="100"
-                          data-allowed-file-extensions="jpg jpeg png"
+                          // data-height="100"
+                          // data-allowed-file-extensions="jpg jpeg png"
                           id="file_upload"
                           onChange={handleImageSelect}
+                          // {...register("file_upload", {
+                          //   required: true,
+                          // })}
                         />
                         {/* message to show when no image have has been selected start */}
                         {!selectedImage && (
@@ -345,7 +450,6 @@ const ProviderProtfilo = () => {
                   <button
                     type="submit"
                     className=" provider_protfilo_save_button"
-                    id=""
                   >
                     Save Updates
                   </button>

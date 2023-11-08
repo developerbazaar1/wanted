@@ -4,13 +4,18 @@ import "../../css/MyCss.css";
 import Footer from "./Footer";
 import { BiUser } from "react-icons/bi";
 import TopNav from "../TopNav";
+import { logout } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
+import { useAuth } from "../../service/auth";
 const NavBar = () => {
   const navigate = useNavigate();
-  const toekn = localStorage.getItem("wantedToken");
+  const { user } = useAuth();
+  const dispatch = useDispatch();
+  const toekn = localStorage.getItem("wantedPtoken");
 
   const handleLogout = () => {
-    localStorage.removeItem("wantedToken");
-    console.log("log");
+    localStorage.removeItem("wantedPtoken");
+    dispatch(logout());
     navigate("/login");
   };
   return (
@@ -33,7 +38,7 @@ const NavBar = () => {
               <Link to="/account" className="vendor_profile_name text-light">
                 <BiUser className="vendor_profile_icon" />
 
-                <div>Dino Hebert</div>
+                <div>{user?.userName}</div>
               </Link>
             )}
 

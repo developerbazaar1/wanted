@@ -620,6 +620,21 @@ span.plan-month {
   font-size: 11px;
 }
 
+.whrer_To_show_error {
+  border: 1px solid red !important;
+}
+
+.error_pesudo > input {
+  border: 1px solid red !important;
+}
+.error_pesudo > textarea {
+  border: 1px solid red !important;
+}
+
+.error_pesudo > ::placeholder {
+  color: red !important;
+}
+
 /* css of 19/10/23 alok sir end */
 
 /* /css of 23/20/23 */
@@ -903,7 +918,7 @@ input:checked + .slider:before {
 
 .where_to_show_group {
   border: 1px solid;
-  padding: 5px 5px;
+  padding: 9px 5px;
   border-radius: 4px;
 }
 /* tabel check box end */
@@ -1000,6 +1015,18 @@ input:checked + .slider:before {
   }
 }
 
+.spinner_loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 99;
+}
+
+.auth_error {
+  color: #ff1c1c;
+  margin: 0 0 6px 4px;
+  text-align: left;
+}
 /* footer style start from here  */
 
 .list__style-none {
