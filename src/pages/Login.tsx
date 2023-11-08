@@ -2,13 +2,31 @@ import Logo from "../components/Logo.tsx";
 import TopNav from "../components/TopNav";
 import LoginFooter from "../components/LoginFooter.tsx";
 import Mail from "../assets/Mail.svg";
+import { useForm } from "react-hook-form";
+
 import Account from "../assets/Account.svg";
 import "../css/login.css";
 import { Link, useNavigate } from "react-router-dom";
+import { LoginInputTypes } from "../utils/Types.ts";
+// import { useAuth } from "../service/auth.ts";
+// import { useAppSelector } from "../app/hooks.ts";
+import { useAuth } from "../service/auth.ts";
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const handleLogin = (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
+
+  // const count = useAppSelector((state) => state.auth);
+  const { user } = useAuth();
+  console.log(user);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInputTypes>();
+
+  const handleLogin = (data: unknown) => {
+    console.log(data);
+
     localStorage.setItem("wantedToken", "4343wedwe43ds43435r3");
     navigate("/");
   };
@@ -28,31 +46,51 @@ const Login: React.FC = () => {
             <p className="login__description">
               Unlock deals with your account credentials
             </p>
-            <form>
+            <form onSubmit={handleSubmit(handleLogin)}>
               <div>
                 <div className="mb-3 position-relative">
                   <img src={Mail} alt="main" className="input__icon" />
                   <input
-                    name="email"
                     type="email"
                     id="email"
                     placeholder="Enter Email Address"
                     className="form-control input__padding login__input"
+                    {...register("email", {
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Invalid Email Address",
+                      },
+                      required: {
+                        value: true,
+                        message: "Email is Required",
+                      },
+                    })}
                   />
                 </div>
+                <div className="auth_error">{errors?.email?.message}</div>
                 <div className="position-relative">
                   <img src={Account} alt="main" className="input__icon" />
                   <input
-                    name="password"
                     type="password"
                     className="form-control input__padding login__input"
                     id="password"
                     placeholder="Password"
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Password is Required",
+                      },
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters long",
+                      },
+                    })}
                   />
                 </div>
+                <div className="auth_error">{errors?.password?.message}</div>
               </div>
               <div className="login__buttons ">
-                <div className="py-3 d-flex justify-content-center align-item-center gap-1">
+                <div className="py-2 d-flex justify-content-center align-item-center gap-1">
                   <input
                     type="checkbox"
                     name="checkbox"
@@ -66,10 +104,7 @@ const Login: React.FC = () => {
                   </label>
                 </div>
                 <div className="d-block text-align-center pb-3">
-                  <button
-                    className="auth__button"
-                    onClick={(event: any) => handleLogin(event)}
-                  >
+                  <button className="auth__button" type="submit">
                     LOGIN
                   </button>
                 </div>
@@ -79,8 +114,9 @@ const Login: React.FC = () => {
                   to="/forgotassword"
                   style={{
                     color: "#17c737",
+                    // textDecoration: "underline",
                   }}
-                  className="forgot__password"
+                  className="forgot__password text-decoration-underline"
                 >
                   Forgot Your Password?
                 </Link>

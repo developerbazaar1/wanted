@@ -23,6 +23,12 @@ a {
   text-decoration: none !important;
 }
 
+.auth_error {
+  color: #ff3131;
+  margin: 0 0 6px 4px;
+  text-align: left;
+}
+
 ul {
   padding-left: 0 !important;
   margin-bottom: 0 !important;
