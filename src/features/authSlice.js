@@ -25,9 +25,10 @@ export const authSlice = createSlice({
       state.portfolio_id = null;
     },
     update: (state, action) => {
-      state.isLoggedIn = true;
-      state.user = action.payload.user;
-      state.token = action.payload.token;
+      return {
+        ...state,
+        user: action.payload.user,
+      };
     },
   },
 });

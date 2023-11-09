@@ -54,4 +54,55 @@ export const ProctedApi = {
     });
     return response;
   },
+
+  /**
+   *
+   * @param {*} data
+   * @param {*} token
+   * @returns {*return the user data}
+   */
+  getAdvert: async (id, token) => {
+    const response = await api.request({
+      url: `/getAdvert?_id=${id}`,
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  },
+
+  deleteAdvert: async (data, token) => {
+    const response = await api.request({
+      url: `/deleteAdvert`,
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  /**
+   *
+   * @param {} data
+   * @param {*} token
+   * @returns update Profile data
+   */
+
+  updateProfile: async (data, token) => {
+    const response = await api.request({
+      url: `/update/profile`,
+      method: "PUT",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+    return response;
+  },
 };
