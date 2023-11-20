@@ -81,10 +81,20 @@ const portfolioValidator = async (req, res, next) => {
     storeWebsite,
     storeContactDetails,
     storeSubCategory,
-    storeThumbNail,
     _id,
   } = req.body;
-
+  // console.log(_id);
+  console.log(
+    storeName,
+    storeEmail,
+    storeCategory,
+    storeAddress,
+    storeDescription,
+    storeWebsite,
+    storeContactDetails,
+    storeSubCategory,
+    _id
+  );
   try {
     if (!_id) {
       return res.status(UNAUTHORIZED).json({
@@ -135,11 +145,11 @@ const advertValidator = async (req, res, next) => {
     advertPrice,
     advertDescription,
     advertPostalCode,
-    advertImages,
     provider_portfolio_id,
     provider_id,
   } = req.body;
 
+  // console.log(req.body, "advert validator");
   try {
     if (
       !advertTitle ||
@@ -149,8 +159,7 @@ const advertValidator = async (req, res, next) => {
       !advertLocation ||
       !advertPrice ||
       !advertDescription ||
-      !advertPostalCode ||
-      !advertImages
+      !advertPostalCode
     ) {
       return res.status(BAD_REQUEST).json({
         status: "Error",
@@ -158,8 +167,8 @@ const advertValidator = async (req, res, next) => {
       });
       a;
     }
-    console.log(provider_portfolio_id, "portfoloio _id");
-    console.log(provider_id, "provider Id");
+    // console.log(provider_portfolio_id, "portfoloio _id");
+    // console.log(provider_id, "provider Id");
 
     if (!provider_portfolio_id || !provider_id) {
       return res.status(UNAUTHORIZED).json({
@@ -183,18 +192,19 @@ const advertValidator = async (req, res, next) => {
 
 const updateAdvertValidator = async (req, res, next) => {
   let { _id, provider_id } = req.body;
+  console.log(req.body);
   try {
     if (!_id || !provider_id) {
       return res.status(BAD_REQUEST).json({
         status: "error",
-        error: "Addvert Id is Missing",
+        message: "Addvert Id is Missing",
       });
     }
     next();
   } catch (error) {
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
-      error: "Internal server error",
+      message: "Internal server error",
     });
   }
 };

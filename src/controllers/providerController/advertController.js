@@ -30,7 +30,7 @@ const addAdvert = async (req, res, next) => {
     provider_portfolio_id,
     provider_id,
   } = req.body;
-
+  let { advertImageUrls } = req;
   try {
     let advertCreated = await AdvertModal.create({
       advertTitle,
@@ -41,7 +41,7 @@ const addAdvert = async (req, res, next) => {
       advertPrice,
       advertDescription,
       advertPostalCode,
-      advertImages,
+      advertImages: advertImageUrls,
       advertProviderPortfolio_id: provider_portfolio_id,
       advertProvider_id: provider_id,
     });
@@ -75,7 +75,8 @@ const addAdvert = async (req, res, next) => {
  */
 
 const getAdvert = async (req, res, next) => {
-  const { _id } = req.body;
+  const { _id } = req.query;
+
   try {
     const adverts = await AdvertModal.find({ advertProvider_id: _id });
 
@@ -87,7 +88,7 @@ const getAdvert = async (req, res, next) => {
     }
 
     return res.status(OK).json({
-      data: adverts,
+      adverts,
       status: "success",
     });
   } catch (error) {
@@ -103,9 +104,11 @@ const getAdvert = async (req, res, next) => {
  */
 
 const updateAdvert = async (req, res, next) => {
+  console.log("request in advert updage");
   let { _id, provider_id } = req.body;
-
-  let updateValue = ({
+  // console.log(req.advertImageUrls);
+  // console.log(_id, provider_id);
+  let {
     advertTitle,
     whereToShow,
     advertCategory,
@@ -115,27 +118,57 @@ const updateAdvert = async (req, res, next) => {
     advertDescription,
     advertPostalCode,
     advertImages,
-  } = req.body);
+  } = req.body;
+
+  // ...
+  console.log(advertImages);
+
+  let updateValue = {
+    advertTitle,
+    whereToShow,
+    advertCategory,
+    advertSubCategory,
+    advertLocation,
+    advertPrice,
+    advertDescription,
+    advertPostalCode,
+    advertImages,
+  };
+
+  if (req.advertImageUrls !== undefined && req.advertImageUrls.length > 0) {
+    updateValue.advertImages = req.advertImageUrls;
+  }
+
+  console.log(updateValue, "update value");
+
+  // ...
+
+  // console.log(updateValue);
 
   let filter = {
     _id: _id,
     advertProvider_id: provider_id,
   };
-
   try {
-    let Updateadvert = await AdvertModal.findOneAndUpdate(filter, updateValue, {
-      returnDocument: "after",
-    });
+    let Updateadvert = await AdvertModal.findOneAndUpdate(
+      filter,
+      { $set: updateValue },
+      {
+        returnDocument: "after",
+      }
+    );
 
+    // console.log(Updateadvert);
     if (!Updateadvert) {
-      return res.status(OK).json({
+      return res.status(400).json({
         status: "error",
         message: "Something went wrong; please try again later.",
       });
     } else {
       return res.status(OK).json({
         status: "success",
-        data: Updateadvert,
+        Updateadvert,
+        message: "Updated Successfully",
       });
     }
   } catch (error) {
@@ -155,6 +188,8 @@ const updateAdvert = async (req, res, next) => {
 const deleteAdvert = async (req, res, next) => {
   try {
     const { _id, provider_id } = req.body;
+
+    // console.log(_id, provider_id);
 
     if (!_id || !provider_id) {
       return res.status(BAD_REQUEST).json({

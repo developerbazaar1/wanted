@@ -21,14 +21,16 @@ const signup = async (req, res) => {
 
   let createdUser;
   let portfolio_id; // Declare a variable to store the created user
+  let provider;
 
   try {
     const userExists = await ProviderUser.findOne({ email });
 
     if (userExists) {
-      return res
-        .status(BAD_REQUEST)
-        .json("User already exists with this email address!");
+      return res.status(BAD_REQUEST).json({
+        message: "User already exists with this email address!",
+        status: false,
+      });
     }
 
     const hashPassword = await encryptPassword(password);
@@ -47,7 +49,7 @@ const signup = async (req, res) => {
 
       if (!user) {
         await session.abortTransaction();
-        console.log("Failed to create account");
+        // console.log("Failed to create account");
         throw new Error("Failed to Create account");
       }
 
@@ -70,6 +72,7 @@ const signup = async (req, res) => {
       }
 
       portfolio_id = providerPortfolioCreation[0]._id;
+      provider = providerPortfolioCreation[0];
     }, transactionOptions);
 
     if (providerCreationStart) {
@@ -80,17 +83,16 @@ const signup = async (req, res) => {
           userName: createdUser.userName,
           email: createdUser.email,
           phoneNumber: createdUser.phoneNumber,
-          _id: createdUser._id,
+          id: createdUser._id,
         }, // Include the created user in the response
         portfolio_id,
         token: token,
+        provider,
       });
     }
-  } catch (error) {
-    console.log(error, "in provider signup router");
-    return res
-      .status(INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal server error" });
+  } catch (e) {
+    // console.log("in provider signup router", e.message);
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: e.message });
   } finally {
     await session.endSession();
   }

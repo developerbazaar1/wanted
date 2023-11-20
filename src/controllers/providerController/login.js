@@ -39,7 +39,10 @@ const login = async (req, res) => {
     });
 
     if (!portfolio) {
-      throw new Error("Server error");
+      return res.status(BAD_REQUEST).json({
+        message: "Something went wrong try later",
+      });
+      // throw new Error("Server error");
     }
 
     const token = jwt.sign({ _id: userExists._id }, process.env.JWT_SECRET);
@@ -53,6 +56,7 @@ const login = async (req, res) => {
       },
       portfolio_id: portfolio._id,
       token,
+      portfolio,
     });
   } catch (error) {
     console.log(error, "erro in login");

@@ -43,6 +43,10 @@ const providerPortfolioModal = new mongoose.Schema({
     ref: "ProviderUser",
     // required: true,
   },
+  isCompleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("ProviderPortfolio", providerPortfolioModal);

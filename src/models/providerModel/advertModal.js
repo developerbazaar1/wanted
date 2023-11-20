@@ -4,20 +4,26 @@ const advertModal = new mongoose.Schema(
   {
     advertProvider_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ProviderPortfolio",
+      ref: "ProviderUser",
     },
     advertProviderPortfolio_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "ProviderUser",
+      ref: "ProviderPortfolio",
     },
     advertTitle: {
       type: String,
       required: true,
     },
-    advertStatus: {
+    advertVisibility: {
       type: Boolean,
       required: true,
-      default: true,
+      default: false,
+    },
+    advertStatus: {
+      type: String,
+      required: true,
+      enum: ["active", "expired"],
+      default: "active",
     },
     advertCategory: {
       type: String,
@@ -53,6 +59,14 @@ const advertModal = new mongoose.Schema(
         type: String,
       },
     ],
+    advertExpiryDate: {
+      type: Date,
+    },
+    subscription_plan_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SubscriptionModal",
+      required: true,
+    },
   },
   { timestamps: true }
 );

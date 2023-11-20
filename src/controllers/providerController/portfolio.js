@@ -3,11 +3,14 @@ const {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
   OK,
+  CONFLICT,
 } = require("../../httpStatusCode");
 const providerPortfolio = require("../../models/providerModel/providerPortfolio");
 const ProviderPortfolio = require("../../models/providerModel/providerPortfolio");
 
 const createPortofolio = async (req, res, next) => {
+  console.log(req.portfolioImageUrls);
+
   const {
     storeName,
     storeEmail,
@@ -21,21 +24,30 @@ const createPortofolio = async (req, res, next) => {
     _id,
   } = req.body;
 
+  let updateData = {
+    storeName,
+    storeEmail,
+    storeCategory,
+    storeAddress,
+    storeDescription,
+    storeWebsite,
+    storeContactDetails,
+    storeSubCategory,
+    storeThumbNail,
+    isCompleted: true,
+  };
+
+  if (
+    req.portfolioImageUrls !== undefined &&
+    req.portfolioImageUrls.length > 0
+  ) {
+    updateData.storeThumbNail = req.portfolioImageUrls;
+  }
+
   try {
     const providerPortfolio = await ProviderPortfolio.findOneAndUpdate(
       { providerId: _id },
-
-      {
-        storeName,
-        storeEmail,
-        storeCategory,
-        storeAddress,
-        storeDescription,
-        storeWebsite,
-        storeContactDetails,
-        storeSubCategory,
-        storeThumbNail,
-      },
+      updateData,
       { returnDocument: "after" }
     );
 
@@ -44,7 +56,10 @@ const createPortofolio = async (req, res, next) => {
         .status(CONFLICT)
         .json({ message: "Failed to create portfolio" });
     } else {
-      return res.status(OK).json(providerPortfolio);
+      return res.status(OK).json({
+        message: "portfolio updated successfully!",
+        data: providerPortfolio,
+      });
     }
   } catch (error) {
     console.log(error);
