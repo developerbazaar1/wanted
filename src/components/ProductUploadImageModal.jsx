@@ -1,27 +1,56 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
-// import reviewImage from "../assets/CustomerEnquryTop.png";
+import { toast } from "react-toastify";
+import { ImgSizeCheck } from "../helper/imageSizeCheck";
+import { ProctedApi } from "../config/axiosUtils";
+import { useAuth } from "../service/auth";
+import Spiner from "./Spiner";
 
 const ProductUploadImageModal = ({
   showProductImgModal,
   setshowProductImgModal,
+  editProductImgData,
 }) => {
+  const [loading, setLoading] = useState(false);
   const [imagesPrveiw, setimagesPrveiw] = useState([]);
-  const handleClose = () => setshowProductImgModal(false);
-  const numEmptyDivs = 5 - (imagesPrveiw ? imagesPrveiw.length : 0);
+  const [img, setImg] = useState([]);
+  const handleClose = () => {
+    setimagesPrveiw([]);
+    setImg([]);
+    setshowProductImgModal(false);
+  };
 
+  const numEmptyDivs = 3 - (imagesPrveiw ? imagesPrveiw.length : 0);
+  const { token, user } = useAuth();
   // handele image select by user
   const handleImageSelect = (e) => {
     const files = e.target.files;
     const selected = [];
 
     for (let i = 0; i < files.length; i++) {
-      if (imagesPrveiw.length === 5) {
+      if (!files[i].type.startsWith("image/")) {
+        toast.error("Selected file is not an image");
+        // if (fileInputRef.current) {
+        //   fileInputRef.current.value = "";
+        // }
+        return;
+      }
+
+      if (!ImgSizeCheck(files[i].size)) {
+        toast.error("File size exceeds the limit of 5 MB");
+        // if (fileInputRef.current) {
+        //   fileInputRef.current.value = "";
+        // }
+        return;
+      }
+
+      if (imagesPrveiw.length > 2) {
         return alert("No More images allowed !");
       }
       if (files[i] && files[i].type.startsWith("image/")) {
+        setImg([...img, files[i]]);
         const reader = new FileReader();
         reader.onload = (e) => {
           selected.push(e.target.result);
@@ -40,7 +69,22 @@ const ProductUploadImageModal = ({
     console.log(files);
 
     for (let i = 0; i < files.length; i++) {
-      console.log(files[i]);
+      if (!files[i].type.startsWith("image/")) {
+        toast.error("Selected file is not an image");
+        // if (fileInputRef.current) {
+        //   fileInputRef.current.value = "";
+        // }
+        return;
+      }
+
+      if (!ImgSizeCheck(files[i].size)) {
+        toast.error("File size exceeds the limit of 5 MB");
+        // if (fileInputRef.current) {
+        //   fileInputRef.current.value = "";
+        // }
+        return;
+      }
+      setImg([...img, files[i]]);
       if (files[i] && files[i].type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (data) => {
@@ -51,11 +95,43 @@ const ProductUploadImageModal = ({
     }
   };
 
+  const handeImageUpdate = () => {
+    setLoading(true);
+    let data = new FormData();
+    data.append("_id", editProductImgData?._id);
+    data.append("provider_id", user.id);
+    data.append("productImages", editProductImgData?.productImages[0]);
+    data.append("productImages", editProductImgData?.productImages[1]);
+    data.append("productImages", editProductImgData?.productImages[2]);
+    img.forEach((file) => {
+      data.append("img", file);
+    });
+    // console.log(data);
+    // console.log(img, "images");
+    // return;
+    ProctedApi.updateProductImg(data, token)
+      .then((res) => {
+        console.log(res);
+        toast.success(res?.data?.message);
+        handleClose();
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error("Something Went wrong try later");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const preventDefault = (e) => {
     e.preventDefault();
   };
+  useEffect(() => {}, [editProductImgData]);
+
   return (
     <>
+      <Spiner loading={loading} />
       <div>
         <div className="div">
           <Modal
@@ -76,7 +152,7 @@ const ProductUploadImageModal = ({
                 {/* //drag and drop image container start */}
                 <div className="add_prduct_img_container">
                   <label className="form-head mb-2" htmlFor="file_upload">
-                    Your Can add 5 images
+                    Your Can add 3 images
                   </label>
                   <div
                     onDragOver={preventDefault}
@@ -87,8 +163,7 @@ const ProductUploadImageModal = ({
                       name="file1"
                       type="file"
                       className=" protfilo_image_input_field"
-                      data-height="100"
-                      data-allowed-file-extensions="jpg jpeg png"
+                      multiple
                       id="file_upload"
                       onChange={handleImageSelect}
                     />
@@ -135,7 +210,33 @@ const ProductUploadImageModal = ({
                 {/* products image review products start */}
 
                 <div className="add_productImgrewive_container mt-3">
-                  {imagesPrveiw?.map((img, index) => (
+                  {Array.from({ length: 3 }, (_, index) => (
+                    <div key={index}>
+                      <img
+                        src={
+                          imagesPrveiw[index]
+                            ? imagesPrveiw[index]
+                            : editProductImgData?.productImages[index] // Replace with your placeholder image path
+                        }
+                        alt={`preview-${index}`}
+                      />
+                    </div>
+                  ))}
+                  {/* {editProductImgData?.productImages?.map(
+                    (productimg, index) => (
+                      <div key={index}>
+                        <img
+                          src={
+                            imagesPrveiw[index]
+                              ? imagesPrveiw[index]
+                              : productimg
+                          }
+                          alt="img"
+                        />
+                      </div>
+                    )
+                  )} */}
+                  {/* {imagesPrveiw?.map((img, index) => (
                     <div key={index}>
                       <img src={img} alt={`preview-${index}`} className="" />
                     </div>
@@ -143,14 +244,15 @@ const ProductUploadImageModal = ({
 
                   {Array.from({ length: numEmptyDivs }, (_, index) => (
                     <div key={index}></div>
-                  ))}
+                  ))} */}
                 </div>
+
                 {/* products image review products end */}
 
                 <div className="text-center mt-4">
                   <button
                     className="edit_product_modal_btn"
-                    onClick={handleClose}
+                    onClick={handeImageUpdate}
                   >
                     Upload Images
                   </button>

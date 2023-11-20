@@ -1,33 +1,125 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
-  const [imagesPrveiw, setimagesPrveiw] = useState([]);
-  const numEmptyDivs = 5 - (imagesPrveiw ? imagesPrveiw.length : 0);
-  const handleImageSelect = (e) => {
-    const files = e.target.files;
-    const selected = [];
+import { useForm } from "react-hook-form";
+import { ProctedApi } from "../config/axiosUtils";
+import { useAuth } from "../service/auth";
+import Spiner from "./Spiner";
+import { toast } from "react-toastify";
+import { castEditadvertData } from "../helper/castAddAdvert";
+import { ImgSizeCheck } from "../helper/imageSizeCheck";
+import { useCategory, useSubCategory } from "../service/categoryhelper";
+const AdvertEditModal = ({
+  showAdvertModal,
+  setshowAdvertModal,
+  editAdvertData,
+  setRefresh,
+}) => {
+  console.log("edit advert data", editAdvertData);
+  const [imagesPrveiw, setimagesPrveiw] = useState();
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  // const numEmptyDivs = 5 - (imagesPrveiw ? imagesPrveiw.length : 0);
+  const { subcategory } = useSubCategory();
+  const { category } = useCategory();
+  const { register, handleSubmit, setValue } = useForm();
+  const { token, user } = useAuth();
 
-    for (let i = 0; i < files.length; i++) {
-      if (imagesPrveiw.length === 5) {
-        return alert("No More images allowed !");
+  /**
+   *
+   * functin to handle category change
+   * @returns
+   */
+
+  const handleCategoryChange = (event) => {
+    console.log("inside the subCategory");
+    const selectedValue = event.target.value;
+    const selectedCat = category.find(
+      (cat) => cat.categoryName === selectedValue
+    );
+    setSelectedCategory(selectedCat);
+  };
+
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
       }
-      if (files[i] && files[i].type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          selected.push(e.target.result);
-          setimagesPrveiw([...imagesPrveiw, selected]); // Update the state with all selected images.
-        };
-        reader.readAsDataURL(files[i]);
-      }
+      return;
     }
+
+    if (!ImgSizeCheck(file.size)) {
+      toast.error("File size exceeds the limit of 5 MB");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    if (file && file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setimagesPrveiw(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      setValue("img", file);
+    }
+  };
+
+  const handleAdvertEdit = (formData) => {
+    console.log(formData);
+    // return;
+    // formData.append("_id", editAdvertData?._id);
+    // formData.append("provider_id", user?.id);
+    setLoading(true);
+
+    const data = castEditadvertData(formData, editAdvertData?._id, user?.id);
+    // console.log(data);
+    // return;
+    ProctedApi.updateAdvert(data, token)
+      .then((res) => {
+        // console.log(res);
+        setRefresh((setval) => !setval);
+        toast.success(res?.data?.message);
+        handleCloseadvetModal();
+      })
+      .catch((e) => {
+        // console.log(e);
+        toast.error(e?.response?.data?.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleCloseadvetModal = () => {
     setshowAdvertModal(false);
   };
+
+  useEffect(() => {
+    setValue("adverttitle", editAdvertData?.advertTitle);
+    setValue("advertcategory", editAdvertData?.advertCategory);
+    setValue("advertsubCategory", editAdvertData?.advertSubCategory);
+    setValue("advertdescription", editAdvertData?.advertDescription);
+    setValue("advertplanprice", editAdvertData?.advertPrice);
+    setValue("wheretshow", editAdvertData?.whereToShow);
+  });
+
+  useEffect(() => {
+    console.log("portfoloio category", editAdvertData?.advertCategory);
+    let subCat = category?.find(
+      (element) => element?.categoryName === editAdvertData?.advertCategory
+    );
+    setSelectedCategory(subCat);
+  }, [editAdvertData]);
+
   return (
     <>
+      <Spiner loading={loading} />
       <div>
         <div className="div">
           <Modal
@@ -40,15 +132,17 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
               <div className="advert-edit-modal d-flex justify-content-between">
                 <div className="text-center head">Advert Details</div>
                 <div className="d-flex">
-                  <button className="advert-mange-post-again-btn">
-                    <Link to="/postagain">Post Again</Link>
-                  </button>
+                  <Link to="/postagain" state={{ advertData: editAdvertData }}>
+                    <button className="advert-mange-post-again-btn">
+                      Post Again
+                    </button>
+                  </Link>
                 </div>
               </div>
 
-              <div>
+              <form onSubmit={handleSubmit(handleAdvertEdit)}>
                 <div className="manage-advert-input-grup d-flex gap-4 flex-column flex-md-row">
-                  <div className="left-input">
+                  <div className="left-input-input-group">
                     <div className="advert-title-input">
                       <label
                         htmlFor="adverttitle"
@@ -76,7 +170,8 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                         rows="2"
                         name="adverttitle"
                         id="adverttitle"
-                        placeholder="Up to 37% Off on Nail Spa/Salon - Shellac / No-Chip / Gel"
+                        // placeholder="Up to 37% Off on Nail Spa/Salon - Shellac / No-Chip / Gel"
+                        {...register("adverttitle")}
                       />
                     </div>
                     <div className="advert-subCategory-input d-flex flex-column">
@@ -101,13 +196,24 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                           </svg>
                         </span>
                       </label>
-                      <input
+                      <select
                         className="editadevert_input w-100"
                         type="text"
                         id="advertcategory"
                         name="advertcategory"
-                        placeholder="Beauty & Spa"
-                      />
+                        // placeholder="Beauty & Spa"
+                        {...register("advertcategory")}
+                        onChange={handleCategoryChange}
+                      >
+                        {category?.map((element) => (
+                          <option
+                            key={element?._id}
+                            value={element?.categoryName}
+                          >
+                            {element?.categoryName}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label
@@ -116,13 +222,19 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                       >
                         Where To Show:
                       </label>
-                      <input
-                        type="text"
-                        id="wheretshow"
-                        placeholder="Live Ads"
-                        name="wheretshow"
+
+                      <select
+                        name="pets"
+                        id="pet-select"
+                        {...register("wheretshow")}
                         className="w-100 editadevert_input"
-                      />
+                      >
+                        {/* <option value=""></option> */}
+                        {/* <option value="">--Please choose an option--</option> */}
+                        <option value="liveAds">liveAds</option>
+                        <option value="latesOffer">latesOffer</option>
+                        <option value="service">service</option>
+                      </select>
                     </div>
                   </div>
                   <div className="right-input">
@@ -155,7 +267,8 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                         rows="2"
                         name="advertdescription"
                         id="advertdescription"
-                        placeholder="Up to 37% Off on Nail Spa/Salon - Shellac / No-Chip / Gel"
+                        {...register("advertdescription")}
+                        // placeholder="Up to 37% Off on Nail Spa/Salon - Shellac / No-Chip / Gel"
                       />
                     </div>
                     <div className="advert-subCategory-input d-flex flex-column">
@@ -182,12 +295,28 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                           </svg>
                         </span>
                       </label>
-                      <input
+                      <select
                         className="editadevert_input w-100"
                         type="text"
                         id="advertsubCategory"
-                        placeholder="Beauty & Spa"
-                      />
+                        // placeholder="Beauty & Spa"
+                        {...register("advertsubCategory")}
+                      >
+                        {selectedCategory &&
+                          subcategory
+                            ?.filter(
+                              (item) =>
+                                item.category_id === selectedCategory?._id
+                            )
+                            .map((subcate) => (
+                              <option
+                                key={subcate._id}
+                                value={`${subcate?.subCategoryName}`}
+                              >
+                                {subcate?.subCategoryName}
+                              </option>
+                            ))}
+                      </select>
                     </div>
                     <div>
                       <label
@@ -199,9 +328,11 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                       <input
                         type="text"
                         id="advertplanprice"
-                        placeholder="Live Ads"
+                        // placeholder="Live Ads"
+                        readOnly
                         name="advertplanprice"
                         className="w-100 editadevert_input"
+                        {...register("advertplanprice")}
                       />
                     </div>
                   </div>
@@ -218,6 +349,7 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                         id="advertmanageimg"
                         className="advert_edit_imag_picker"
                         onChange={handleImageSelect}
+                        ref={fileInputRef}
                       />
                       <svg
                         className="pointer"
@@ -235,26 +367,35 @@ const AdvertEditModal = ({ showAdvertModal, setshowAdvertModal }) => {
                     </span>
                   </label>
                   <div>
-                    {imagesPrveiw?.map((img, index) => (
+                    {/* {imagesPrveiw?.map((img, index) => (
                       <div key={index}>
                         <img src={img} alt={`preview-${index}`} className="" />
                       </div>
-                    ))}
+                    ))} */}
 
-                    {Array.from({ length: numEmptyDivs }, (_, index) => (
+                    <div>
+                      {imagesPrveiw ? (
+                        <img src={imagesPrveiw} alt={`preview`} className="" />
+                      ) : (
+                        <img
+                          src={editAdvertData?.advertImages[0]}
+                          alt={`already`}
+                          className=""
+                        />
+                      )}
+                    </div>
+
+                    {/* {Array.from({ length: numEmptyDivs }, (_, index) => (
                       <div key={index}></div>
-                    ))}
+                    ))} */}
                   </div>
                 </div>
                 <div className="text-center">
-                  <button
-                    className="mt-3 edit_product_modal_btn"
-                    onClick={handleCloseadvetModal}
-                  >
+                  <button className="mt-3 edit_product_modal_btn">
                     Save Details
                   </button>
                 </div>
-              </div>
+              </form>
             </Modal.Body>
           </Modal>
         </div>

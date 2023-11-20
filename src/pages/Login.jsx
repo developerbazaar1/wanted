@@ -7,11 +7,12 @@ import { useForm } from "react-hook-form";
 // import "../css/login.css";
 import { Link } from "react-router-dom";
 import { AuthApi } from "../config/axiosUtils.js";
-import { loginSignup } from "../features/authSlice.js";
+import { loginSignup, updateProtfolio } from "../features/authSlice.js";
 import { useDispatch } from "react-redux";
 import Spiner from "../components/Spiner.jsx";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+// import { updateProtfolio } from "../features/portfolioSlice.js";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const Login = () => {
     };
     AuthApi.Login(data)
       .then((response) => {
-        console.log(response.data.portfolio_id);
+        // console.log(response.data);
 
         dispatch(
           loginSignup({
@@ -45,6 +46,12 @@ const Login = () => {
             portfolio_id: response.data.portfolio_id,
           })
         );
+        dispatch(
+          updateProtfolio({
+            portfolioProfile: response.data.portfolio,
+          })
+        );
+
         localStorage.setItem("wantedPtoken", response.data.token);
         // navigate("/");
       })

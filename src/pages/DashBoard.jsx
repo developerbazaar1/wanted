@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import PageTopImg from "../assets/page-top-img.png";
+import { useAuth } from "../service/auth";
 const DashBoard = () => {
+  const { portfolio } = useAuth();
   return (
     <>
       <main className="app-content">
@@ -28,31 +30,37 @@ const DashBoard = () => {
             </div>
           </div>
         </div>
-        <div className="row mt-3">
-          <div className="col-md-12">
-            <div
-              className="alert alert-dismissible fade show"
-              style={{
-                padding: " 10px 30px",
-              }}
-              role="alert"
-            >
-              Your Provider Profile Is Incomplete. Please Complete It
-              <Link to="/provider_portfolio" className="link-text f-right mx-4">
-                Click here
-              </Link>
-              <button
+        {!portfolio?.isCompleted && (
+          <div className="row mt-3">
+            <div className="col-md-12">
+              <div
+                className="alert alert-dismissible fade show"
                 style={{
-                  top: "-5px",
+                  padding: " 10px 30px",
                 }}
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
+                role="alert"
+              >
+                Your Provider Profile Is Incomplete. Please Complete It
+                <Link
+                  to="/provider_portfolio"
+                  className="link-text f-right mx-4"
+                >
+                  Click here
+                </Link>
+                <button
+                  style={{
+                    top: "-5px",
+                  }}
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
         {/* <!-- :: card row start here --> */}
         <div className="row">
           {/* <!-- :: card 01 --> */}

@@ -7,7 +7,7 @@ import Avatar from "../assets/Avatar.svg";
 import { AuthApi } from "../config/axiosUtils.js";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { loginSignup } from "../features/authSlice.js";
+import { loginSignup, updateProtfolio } from "../features/authSlice.js";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import Spiner from "../components/Spiner.jsx";
@@ -42,6 +42,11 @@ const SignUp = () => {
           })
         );
         localStorage.setItem("wantedPtoken", response.data.token);
+        dispatch(
+          updateProtfolio({
+            portfolioProfile: response.data.provider,
+          })
+        );
         // navigate("/");
       })
       .catch((e) => {

@@ -1,4 +1,22 @@
 import { api } from "./ApiConfig";
+import { openapi } from "./ApiConfig";
+
+export const categoriesApi = {
+  getCategory: async () => {
+    const response = await openapi.request({
+      url: `/getcategory`,
+      method: "GET",
+    });
+    return response;
+  },
+  subgetCategory: async () => {
+    const response = await openapi.request({
+      url: `/getsubcategory`,
+      method: "GET",
+    });
+    return response;
+  },
+};
 
 export const AuthApi = {
   Signup: async (data) => {
@@ -34,9 +52,9 @@ export const ProctedApi = {
       method: "PUT",
       headers: {
         Authorization: `${token}`,
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
       },
-      data: JSON.stringify(data),
+      data: data,
     });
 
     return response;
@@ -48,15 +66,14 @@ export const ProctedApi = {
       method: "POST",
       headers: {
         Authorization: `${token}`,
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
       },
-      data: JSON.stringify(data),
+      data: data,
     });
     return response;
   },
 
   /**
-   *
    * @param {*} data
    * @param {*} token
    * @returns {*return the user data}
@@ -102,6 +119,86 @@ export const ProctedApi = {
         "Content-Type": "application/json",
       },
       data: JSON.stringify(data),
+    });
+    return response;
+  },
+  updateAdvert: async (data, token) => {
+    const response = await api.request({
+      url: `/updateAdvert`,
+      method: "PUT",
+      headers: {
+        Authorization: `${token}`,
+        // "Content-Type": "application/json",
+      },
+      data: data,
+    });
+    return response;
+  },
+
+  /**
+   * @param {*} data
+   * @param {*} token
+   * @returns {*return the user data}
+   */
+  getProduct: async (id, token) => {
+    const response = await api.request({
+      url: `/getproduct?_id=${id}`,
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  },
+
+  addProduct: async (data, token) => {
+    const response = await api.request({
+      url: `/addproduct`,
+      method: "POST",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+    return response;
+  },
+  deleteProduct: async (data, token) => {
+    const response = await api.request({
+      url: `/deleteproduct`,
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  updateProduct: async (data, token) => {
+    const response = await api.request({
+      url: `/updateproduct`,
+      method: `PUT`,
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  updateProductImg: async (data, token) => {
+    const response = await api.request({
+      url: `/addimages`,
+      method: `PUT`,
+      headers: {
+        Authorization: `${token}`,
+        // "Content-Type": "application/json",
+      },
+      data: data,
     });
     return response;
   },

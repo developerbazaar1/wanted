@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import addCardIma1 from "../assets/plan-card01.png";
 import addCardIma2 from "../assets/plan-card02.png";
@@ -11,22 +11,45 @@ import { useAuth } from "../service/auth";
 import { castAddAdvert } from "../helper/castAddAdvert";
 import { toast } from "react-toastify";
 import Spiner from "../components/Spiner";
+import { ImgSizeCheck } from "../helper/imageSizeCheck";
+import { useCategory, useSubCategory } from "../service/categoryhelper";
+import { getCurrentLocation } from "../helper/getCurrentLocation";
 const AddAdvert = () => {
   const [loading, setLoading] = useState(false);
   const { token, user, portfolio_id } = useAuth();
   const [selectedImage, setSelectedImage] = useState(null);
   const [fileName, setfileName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const fileInputRef = useRef(null);
+  const { subcategory } = useSubCategory();
+  const { category } = useCategory();
 
+  // console.log(1);
+  // console.log("this is category", category);
+  // console.log("this is subcategory", subcategory);
   const {
     register,
     handleSubmit,
+    // watch,
     formState: { errors },
+    setValue,
   } = useForm();
 
+  const handleCategoryChange = (event) => {
+    const selectedValue = event.target.value;
+    const selectedCat = category.find(
+      (cat) => cat.categoryName === selectedValue
+    );
+    setSelectedCategory(selectedCat);
+  };
+
+  // console.log(selectedCategory);
   const HandleAddadvertSubmit = (formData) => {
+    console.log(formData.img);
+    // return;
     setLoading(true);
     const data = castAddAdvert(formData, user, portfolio_id);
-
+    console.log(data);
     ProctedApi.AddAdvert(data, token)
       .then((response) => {
         console.log(response);
@@ -35,7 +58,7 @@ const AddAdvert = () => {
         }
       })
       .catch((e) => {
-        // console.log(e, "error");
+        console.log(e, "error");
         // console.log(e.response.statusText);
         return toast.error(e.response.statusText);
       })
@@ -50,7 +73,18 @@ const AddAdvert = () => {
   const handleImageDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
+    if (!ImgSizeCheck(file.size)) {
+      toast.error("File size exceeds the limit of 5 MB");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
+      return;
+    }
+
     setfileName(file.name);
+    setValue("img", e.dataTransfer.files[0]);
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -62,9 +96,27 @@ const AddAdvert = () => {
 
   //functin to select image
   const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    if (!ImgSizeCheck(file.size)) {
+      toast.error("File size exceeds the limit of 5 MB");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    setValue("img", e?.target?.files[0]);
+    console.log("image is receving");
     const filename = e?.target?.files[0].name;
     setfileName(filename);
-    const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -75,12 +127,34 @@ const AddAdvert = () => {
   };
 
   const removeImagePreview = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setSelectedImage(null);
+    setfileName("");
   };
 
   const preventDefault = (e) => {
     e.preventDefault();
   };
+
+  useEffect(() => {
+    getCurrentLocation()
+      .then((res) => {
+        console.log(res);
+        if (res?.formattedAddress?.postalCode) {
+          setValue("ad_location", res?.formattedAddress?.formattedAddress);
+        } else {
+          let addres = `${res?.formattedAddress?.placeLabel} , ${res?.formattedAddress?.formattedAddress}`;
+          setValue("ad_location", addres);
+        }
+        // setValue("ad_location", res.address);
+      })
+      .catch((e) => {
+        alert("Failed to Load current Location Try Including manually");
+      });
+  }, []);
+
   return (
     <>
       <Spiner loading={loading} />
@@ -253,17 +327,28 @@ const AddAdvert = () => {
                       <label className="form-head" htmlFor="category">
                         Advert Category
                       </label>
-                      <input
-                        type="text"
+                      <select
                         className="form-control"
                         id="adcategory"
-                        placeholder="Enter your advert Category"
                         {...register("adcategory", {
                           required: true,
                         })}
-                      />
+                        onChange={handleCategoryChange}
+                      >
+                        <option value="">Select Advert Category</option>
+
+                        {category?.map((cat) => (
+                          <option key={cat._id} value={`${cat?.categoryName}`}>
+                            {cat?.categoryName}
+                          </option>
+                        ))}
+
+                        {/* <option value="category2">Category 2</option> */}
+                        {/* Add more options as needed */}
+                      </select>
                     </div>
                   </div>
+
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 04 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
@@ -275,17 +360,33 @@ const AddAdvert = () => {
                       <label className="form-head" htmlFor="sub-ad">
                         Advert Sub Category
                       </label>
-                      <input
-                        type="text"
+                      <select
                         className="form-control"
                         id="subCategory"
                         placeholder="Enter your advert Sub Category"
                         {...register("subCategory", {
                           required: true,
                         })}
-                      />
+                      >
+                        <option value="">Select Advert Sub Category</option>
+                        {selectedCategory &&
+                          subcategory
+                            ?.filter(
+                              (item) =>
+                                item.category_id === selectedCategory?._id
+                            )
+                            .map((subcate) => (
+                              <option
+                                key={subcate._id}
+                                value={`${subcate?.subCategoryName}`}
+                              >
+                                {subcate?.subCategoryName}
+                              </option>
+                            ))}
+                      </select>
                     </div>
                   </div>
+
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
@@ -408,15 +509,20 @@ const AddAdvert = () => {
                         onDragOver={preventDefault}
                         onDragEnter={preventDefault}
                         onDrop={handleImageDrop}
+                        // className={`
+                        //  ${errors?.img ? "input_filed_error" : ""}
+                        // `}
                       >
                         <input
                           name="file1"
                           type="file"
                           className=" protfilo_image_input_field"
-                          data-height="100"
-                          data-allowed-file-extensions="jpg jpeg png"
                           id="file_upload"
+                          ref={fileInputRef}
                           onChange={handleImageSelect}
+                          // {...register("img", {
+                          //   required: true,
+                          // })}
                         />
                         {/* message to show when no image have has been selected start */}
                         {!selectedImage && (
@@ -456,7 +562,7 @@ const AddAdvert = () => {
                       </div>
 
                       <small className="form-text text-muted upload-info mt-1">
-                        PNG or JPG no bigger than 800px wide and tall.
+                        PNG or JPG no bigger than 5MB and 800px wide and tall.
                       </small>
                     </div>
 

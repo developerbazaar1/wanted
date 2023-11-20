@@ -35,7 +35,7 @@ const Account = () => {
   // ]);
 
   const updateProfile = (FormData) => {
-    console.log(FormData, "This is Form Data");
+    // console.log(FormData, "This is Form Data");
     const data = {
       userName: FormData.userName,
       password: FormData?.password,
@@ -45,7 +45,7 @@ const Account = () => {
       _id: user.id,
     };
 
-    console.log();
+    // console.log();
     // if (
     //   fromData.password ||
     //   fromData.newPassword ||
@@ -71,7 +71,7 @@ const Account = () => {
     // }
 
     // console.log(passwordError);
-
+    console.log(data);
     setLoading(true);
     ProctedApi.updateProfile(data, token)
       .then((res) => {

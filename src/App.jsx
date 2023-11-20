@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ForgotPassword from "./pages/ForgotPassword";
 import SignUp from "./pages/Signup";
-import Test from "./Test";
+// import Test from "./Test";
 import NavBar from "./components/Layout/NavBar";
 import DashBoard from "./pages/DashBoard";
 import Reward from "./pages/Reward";
@@ -17,8 +17,57 @@ import AddAdvert from "./pages/AddAdvert";
 import PostAgain from "./pages/PostAgain";
 import ProtectedRoutes from "./components/withAuthorization";
 import { useAuth } from "./service/auth";
+import { useDispatch } from "react-redux";
+import FileUpload from "./FileUpload";
+import { useEffect } from "react";
+import { categoriesApi } from "./config/axiosUtils";
+import { setcategory } from "./features/categorySlice";
+import { setsubcategory } from "./features/subcategorySlice";
 function App() {
   const { isLoggedIn } = useAuth();
+  const dispatch = useDispatch();
+  /**
+   * this function fetch the categories and set it
+   */
+  const fetchCategories = async () => {
+    categoriesApi
+      .getCategory()
+      .then((res) => {
+        // console.log(res);
+        dispatch(
+          setcategory({
+            category: res?.data?.category,
+          })
+        );
+      })
+      .catch((e) => {
+        // console.log(e);
+      });
+  };
+
+  /**
+   * this function fetch the sub categories and set it
+   */
+  const fetchsubCategories = async () => {
+    categoriesApi
+      .subgetCategory()
+      .then((res) => {
+        // console.log(res);
+        dispatch(
+          setsubcategory({
+            subcategory: res?.data?.subcategory,
+          })
+        );
+      })
+      .catch((e) => {
+        // console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchsubCategories();
+  });
   return (
     <>
       <BrowserRouter>
@@ -36,7 +85,7 @@ function App() {
           />
           <Route path="/forgotassword" element={<ForgotPassword />} />
           <Route path="/resetsucess" element={<ResetPassworConform />} />
-          <Route path="/test" element={<Test />} />
+          <Route path="/test" element={<FileUpload />} />
 
           <Route element={<NavBar />}>
             <Route

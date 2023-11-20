@@ -1,50 +1,109 @@
 import ProviderTop from "../assets/provider-top-img.png";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ProctedApi } from "../config/axiosUtils";
 import { useAuth } from "../service/auth";
+import { useDispatch } from "react-redux";
+import { updateProtfolio } from "../features/authSlice";
+import { toast } from "react-toastify";
+import Spiner from "../components/Spiner";
+import { castPortfolioData } from "../helper/castAddAdvert";
+import { ImgSizeCheck } from "../helper/imageSizeCheck";
+import ImagePreview from "../components/ImagePreview";
+import { useCategory, useSubCategory } from "../service/categoryhelper";
+import { getCurrentLocation } from "../helper/getCurrentLocation";
 const ProviderProtfilo = () => {
-  const { user, token } = useAuth();
+  const { subcategory } = useSubCategory();
+  const { category } = useCategory();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const { user, token, portfolio } = useAuth();
+  // console.log("portfolio", portfolio);
+  const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [fileName, setfileName] = useState("");
   // const [portfolioData, setPortPolioData] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState();
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm();
-  // handle drag and drop
+  } = useForm({
+    defaultValues: {
+      store_name: portfolio?.storeName,
+      store_website: portfolio?.storeWebsite,
+      store_email: portfolio?.storeEmail,
+      store_contact: portfolio?.storeContactDetails,
+      store_category: portfolio?.storeCategory,
+      store_subcategory: portfolio?.storeSubCategory,
+      store_address: portfolio?.storeAddress,
+      store_description: portfolio?.storeDescription,
+      storeThumbNail: portfolio?.storeThumbNail,
+    },
+  });
 
+  /**
+   *
+   * @param {function to handle categoryChange}
+   */
+
+  const handleCategoryChange = (event) => {
+    console.log("inside the subCategory");
+    const selectedValue = event.target.value;
+    const selectedCat = category.find(
+      (cat) => cat.categoryName === selectedValue
+    );
+    setSelectedCategory(selectedCat);
+  };
+
+  // handle drag and drop
   const handlePortfolio = (formData) => {
-    console.log(formData);
-    const data = {
-      _id: user.id,
-      storeName: formData?.store_name,
-      storeEmail: formData?.store_email,
-      storeCategory: formData?.store_category,
-      storeAddress: formData?.store_address,
-      storeDescription: formData?.store_description,
-      storeWebsite: formData?.store_website,
-      storeContactDetails: formData?.store_contact,
-      storeSubCategory: formData?.store_subcategory,
-      storeThumbNail:
-        "https://images.unsplash.com/photo-1422565096762-bdb997a56a84?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    };
+    // console.log(formData);
+    let data = castPortfolioData(formData, user.id);
+
+    console.log(data);
+    setLoading(true);
+    // return;
     ProctedApi.CreatPortfolio(data, token)
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
+        dispatch(
+          updateProtfolio({
+            portfolioProfile: response?.data?.data,
+          })
+        );
+        toast.success(response?.data?.message);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
+        if (error?.message === "Network Error") {
+          return toast.error(error?.message);
+        }
+        toast.success(error?.response?.data?.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   const handleImageDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
+    if (!ImgSizeCheck(file.size)) {
+      toast.error("File size exceeds the limit of 5 MB");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
+      return;
+    }
+
     setfileName(file.name);
+    setValue("img", e.dataTransfer.files[0]);
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -56,11 +115,27 @@ const ProviderProtfilo = () => {
 
   //functin to select image
   const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    if (!ImgSizeCheck(file.size)) {
+      toast.error("File size exceeds the limit of 5 MB");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    setValue("img", e?.target?.files[0]);
+    console.log("image is receving");
     const filename = e?.target?.files[0].name;
     setfileName(filename);
-    console.log(filename);
-
-    const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -71,15 +146,47 @@ const ProviderProtfilo = () => {
   };
 
   const removeImagePreview = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setSelectedImage(null);
+    setfileName("");
   };
 
   const preventDefault = (e) => {
     e.preventDefault();
   };
 
+  useEffect(() => {
+    if (!portfolio?.storeAddress) {
+      getCurrentLocation()
+        .then((res) => {
+          // console.log(res);
+          if (res?.formattedAddress?.postalCode) {
+            setValue("store_address", res?.formattedAddress?.formattedAddress);
+          } else {
+            let addres = `${res?.formattedAddress?.placeLabel} , ${res?.formattedAddress?.formattedAddress}`;
+            setValue("store_address", addres);
+          }
+          // setValue("ad_location", res.address);
+        })
+        .catch((e) => {
+          alert("Failed to Load current Location Try Including manually");
+        });
+    }
+  });
+
+  useEffect(() => {
+    console.log("portfoloio category", portfolio?.storeCategory);
+    let subCat = category?.find(
+      (element) => element?.categoryName === portfolio?.storeCategory
+    );
+    setSelectedCategory(subCat);
+  }, [portfolio]);
+  console.log("This is selected category", selectedCategory);
   return (
     <>
+      <Spiner loading={loading} />
       <main className="app-content">
         <div className="row">
           <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -289,7 +396,7 @@ const ProviderProtfilo = () => {
                       <label className="form-head" htmlFor="store_category">
                         Store Category
                       </label>
-                      <input
+                      <select
                         type="text"
                         className="form-control"
                         id="store_category"
@@ -297,7 +404,17 @@ const ProviderProtfilo = () => {
                         {...register("store_category", {
                           required: true,
                         })}
-                      />
+                        onChange={handleCategoryChange}
+                      >
+                        {category?.map((element) => (
+                          <option
+                            key={element?._id}
+                            value={element?.categoryName}
+                          >
+                            {element?.categoryName}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
@@ -311,7 +428,7 @@ const ProviderProtfilo = () => {
                       <label className="form-head" htmlFor="store_subcategory">
                         Store Sub-Category
                       </label>
-                      <input
+                      <select
                         type="text"
                         className="form-control"
                         id="store_subcategory"
@@ -319,7 +436,22 @@ const ProviderProtfilo = () => {
                         {...register("store_subcategory", {
                           required: true,
                         })}
-                      />
+                      >
+                        {selectedCategory &&
+                          subcategory
+                            ?.filter(
+                              (item) =>
+                                item.category_id === selectedCategory?._id
+                            )
+                            .map((subcate) => (
+                              <option
+                                key={subcate._id}
+                                value={`${subcate?.subCategoryName}`}
+                              >
+                                {subcate?.subCategoryName}
+                              </option>
+                            ))}
+                      </select>
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
@@ -392,6 +524,7 @@ const ProviderProtfilo = () => {
                           // data-height="100"
                           // data-allowed-file-extensions="jpg jpeg png"
                           id="file_upload"
+                          ref={fileInputRef}
                           onChange={handleImageSelect}
                           // {...register("file_upload", {
                           //   required: true,
@@ -410,7 +543,7 @@ const ProviderProtfilo = () => {
                         {/* message to show when no image have has been selected end */}
                         {/* image preview container  start */}
 
-                        {selectedImage && (
+                        {/* {selectedImage && (
                           <div className="protfilo_image_preview_container">
                             <div className="preview_image_div">
                               <img
@@ -430,12 +563,19 @@ const ProviderProtfilo = () => {
                               {fileName}
                             </span>
                           </div>
-                        )}
+                        )} */}
+
+                        <ImagePreview
+                          selectedImage={selectedImage}
+                          fileName={fileName}
+                          removeImagePreview={removeImagePreview}
+                          advertUrl={portfolio?.storeThumbNail}
+                        />
                         {/* image preview container start end */}
                       </div>
 
                       <small className="form-text text-muted upload-info mt-1">
-                        PNG or JPG no bigger than 800px wide and tall.
+                        PNG or JPG no bigger than 5MB and 800px wide and tall.
                       </small>
                     </div>
 

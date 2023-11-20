@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   portfolio_id: null,
+  portfolio: null,
 };
 
 export const authSlice = createSlice({
@@ -30,9 +31,16 @@ export const authSlice = createSlice({
         user: action.payload.user,
       };
     },
+    updateProtfolio: (state, action) => {
+      return {
+        ...state,
+        portfolio: action.payload.portfolioProfile,
+      };
+    },
   },
 });
 
-export const { loginSignup, logout, update, deleteImage } = authSlice.actions;
+export const { loginSignup, logout, update, updateProtfolio } =
+  authSlice.actions;
 
 export default authSlice.reducer;

@@ -29,12 +29,18 @@ function DragAndDropImageInput() {
   const preventDefault = (e) => {
     e.preventDefault();
   };
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(e.target.input);
+  };
   return (
     <div>
-      <input type="file" />
+      <form onSubmit={handleSubmit}>
+        <input type="file" />
+        <button>Submit</button>
+      </form>
 
-      <div className="  d-flex flex-column flex-md-row justify-content-between where_to_show_group">
+      {/* <div className="  d-flex flex-column flex-md-row justify-content-between where_to_show_group">
         <div className="d-flex align-items-center gap-3 justify-content-between">
           <label className="form-head mb-0 " htmlFor="liveads">
             Live Ads
@@ -69,7 +75,7 @@ function DragAndDropImageInput() {
             id="service"
           />
         </div>
-      </div>
+      </div> */}
 
       {/* <div
         id="drop-container"

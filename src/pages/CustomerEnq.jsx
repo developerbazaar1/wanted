@@ -151,9 +151,26 @@ const CustomerEnq = () => {
                   <tr>
                     <td></td>
                     <td className="serial">01</td>
-                    <td className="">12/09/2023</td>
-                    <td className="">Beauty & Spa</td>
-                    <td className="">Face Massage</td>
+                    <td className="">16/11/2023</td>
+                    <td className="">food & Beverage</td>
+                    <td className="">Bars</td>
+                    <td className="">
+                      <button
+                        onClick={() => setshowinquiryModal(true)}
+                        className="show-enq text-green"
+                      >
+                        See Inquiry Details{" "}
+                      </button>
+                    </td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td className="serial">01</td>
+                    <td className="">17/11/2023</td>
+                    <td className="">Health & Fitness</td>
+                    <td className="">Gyms</td>
                     <td className="">
                       <button
                         onClick={() => setshowinquiryModal(true)}

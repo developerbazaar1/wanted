@@ -31,7 +31,7 @@ const CustomerinquiryModal = ({ showinquiryModal, setshowinquiryModal }) => {
                 >
                   Customer Name:
                 </label>
-                <div className="inq_modal_label_font">Allyson Rollins</div>
+                <div className="inq_modal_label_font">Test Customer</div>
               </div>
               <div className="vendor_inq_modal_phone_container">
                 <label
@@ -40,7 +40,7 @@ const CustomerinquiryModal = ({ showinquiryModal, setshowinquiryModal }) => {
                 >
                   Phone N.:
                 </label>
-                <div className="inq_modal_label_font">90009-90009</div>
+                <div className="inq_modal_label_font">1234138986</div>
               </div>
             </div>
             <div className="col-6 d-flex flex-column gap-3">
@@ -51,9 +51,7 @@ const CustomerinquiryModal = ({ showinquiryModal, setshowinquiryModal }) => {
                 >
                   Date & Time:
                 </label>
-                <div className="inq_modal_label_font">
-                  Tuesday, 12 Sept 2023
-                </div>
+                <div className="inq_modal_label_font">Tuesday, 16 Nov 2023</div>
               </div>
               <div className="vendor_inq_modal_email_container">
                 <label
@@ -62,7 +60,9 @@ const CustomerinquiryModal = ({ showinquiryModal, setshowinquiryModal }) => {
                 >
                   Email Address:
                 </label>
-                <div className="inq_modal_label_font">abc@gmail.com</div>
+                <div className="inq_modal_label_font">
+                  testEnquiry@gmail.com
+                </div>
               </div>
             </div>
           </Modal.Body>

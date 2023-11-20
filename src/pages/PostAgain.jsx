@@ -1,21 +1,75 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import addCardIma1 from "../assets/plan-card01.png";
 import addCardIma2 from "../assets/plan-card02.png";
 import addCardIma3 from "../assets/plan-card03.png";
 import paymentsucess from "../assets/pay-secure-img.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import Spiner from "../components/Spiner";
+import { ProctedApi } from "../config/axiosUtils";
+import { castPostAgainAdvert } from "../helper/castAddAdvert";
+import { useAuth } from "../service/auth";
+import { toast } from "react-toastify";
+import ImagePreview from "../components/ImagePreview";
+import { ImgSizeCheck } from "../helper/imageSizeCheck";
+import { useCategory, useSubCategory } from "../service/categoryhelper";
 
 const PostAgain = () => {
+  let { state } = useLocation();
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const [fileName, setfileName] = useState("");
-
+  const { user, token } = useAuth();
+  const fileInputRef = useRef(null);
+  const [selectedCategory, setSelectedCategory] = useState();
+  const { subcategory } = useSubCategory();
+  const { category } = useCategory();
   // handle drag and drop
+  // console.log(state);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      advert_title: state?.advertData?.advertTitle,
+      userSearch: state?.advertData?.whereToShow,
+      adcategory: state?.advertData?.advertCategory,
+      subCategory: state?.advertData?.advertSubCategory,
+      adPostalCode: state?.advertData?.advertPostalCode,
+      adPrice: state?.advertData?.advertPrice,
+      advertLocation: state?.advertData?.advertLocation,
+      advertDescription: state?.advertData?.advertDescription,
+    },
+  });
+
+  //function to handle category change
+  const handleCategoryChange = (event) => {
+    console.log("inside the subCategory");
+    const selectedValue = event.target.value;
+    const selectedCat = category.find(
+      (cat) => cat.categoryName === selectedValue
+    );
+    setSelectedCategory(selectedCat);
+  };
 
   const handleImageDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
+    if (!ImgSizeCheck(file.size)) {
+      toast.error("File size exceeds the limit of 5 MB");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
+      return;
+    }
+    setValue("img", e.dataTransfer.files[0]);
     setfileName(file.name);
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
@@ -29,9 +83,24 @@ const PostAgain = () => {
   //functin to select image
   const handleImageSelect = (e) => {
     const filename = e?.target?.files[0].name;
-    setfileName(filename);
 
     const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+    if (!ImgSizeCheck(file.size)) {
+      toast.error("File size exceeds the limit of 5 MB");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+    setValue("img", e.target.files[0]);
+    setfileName(filename);
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -40,16 +109,57 @@ const PostAgain = () => {
       reader.readAsDataURL(file);
     }
   };
-
   const removeImagePreview = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
     setSelectedImage(null);
+    setfileName("");
+    // reset("img", "");
+    // reset();
   };
 
   const preventDefault = (e) => {
     e.preventDefault();
   };
+
+  const handlePostAgainAdvert = (formData) => {
+    // console.log(formData);
+    // return;
+    setLoading(true);
+    const data = castPostAgainAdvert(
+      formData,
+      state?.advertData?._id,
+      user?.id
+    );
+    console.log(data);
+    // return;
+    ProctedApi.updateAdvert(data, token)
+      .then((res) => {
+        console.log(res);
+        toast.success(res?.data?.message);
+      })
+      .catch((e) => {
+        // console.log(e);
+        toast.error(e?.response?.data?.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  console.log(subcategory);
+
+  useEffect(() => {
+    let subCat = category?.find(
+      (element) => element?.categoryName === state?.advertData?.advertCategory
+    );
+    setSelectedCategory(subCat);
+  }, [state]);
+  console.log("default selected sub category", selectedCategory);
   return (
     <>
+      <Spiner loading={loading} />
       <main className="app-content">
         <div className="row">
           <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -88,7 +198,7 @@ const PostAgain = () => {
               </div>
               <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
                 <div className="top-heading mt-3">
-                  <h1>Post Again Your Advert</h1>
+                  <h1>Add New Advert</h1>
                 </div>
               </div>
               {/* <!-- top image --> */}
@@ -102,12 +212,20 @@ const PostAgain = () => {
           <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div id="form" className="form-container">
               {/* <!-- add book form start--> */}
-              <form action="" className="w-100" id="add-advert-form">
+              <form
+                onSubmit={handleSubmit(handlePostAgainAdvert)}
+                className="w-100"
+                id="add-advert-form"
+              >
                 {/* <!-- form row start at lower div --> */}
                 <div className=" cst-add-new-form row">
                   {/* <!-- field col 01 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.advert_title ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="title">
                         Advert Title
                       </label>
@@ -116,6 +234,16 @@ const PostAgain = () => {
                         className="form-control"
                         id="advert_title"
                         placeholder="Enter your advert title"
+                        {...register("advert_title", {
+                          pattern: {
+                            value: /^[ A-Za-z0-9._%+-]*$/,
+                            message: "Invalid String",
+                          },
+                          required: {
+                            value: true,
+                            message: "Title is Required",
+                          },
+                        })}
                       />
                     </div>
                   </div>
@@ -126,39 +254,65 @@ const PostAgain = () => {
                       <label className="form-head" htmlFor="show-ad">
                         Where To Show:
                       </label>
-                      <div className="  d-flex flex-column flex-md-row justify-content-between where_to_show_group">
+                      <div
+                        className={`d-flex flex-column flex-md-row justify-content-between where_to_show_group ${
+                          errors?.userSearch ? "whrer_To_show_error" : ""
+                        }`}
+                      >
                         <div className="d-flex align-items-center gap-3 justify-content-between">
-                          <label className="form-head mb-0" htmlFor="show-ad">
+                          <label
+                            className="form-head mb-0 custom_advert_label"
+                            htmlFor="liveads"
+                          >
                             Live Ads
                           </label>
                           <input
                             className="radioColor"
                             type="radio"
                             name="userSearch"
-                            id="ads"
+                            value="liveAds"
+                            id="liveads"
+                            {...register("userSearch", {
+                              required: true,
+                            })}
                           />
                         </div>
                         <div className="d-flex align-items-center gap-3 justify-content-between">
-                          <label className="form-head mb-0" htmlFor="show-ad">
+                          <label
+                            className="form-head mb-0 custom_advert_label"
+                            htmlFor="latestoffer"
+                          >
                             Latest Offer
                           </label>
+
                           <input
+                            {...register("userSearch", {
+                              required: true,
+                            })}
                             className="radioColor"
                             type="radio"
                             name="userSearch"
                             id="latestoffer"
+                            value="latesOffer"
                           />
                         </div>
 
                         <div className="d-flex align-items-center gap-3 justify-content-between">
-                          <label className="form-head mb-0" htmlFor="show-ad">
+                          <label
+                            className="form-head mb-0 custom_advert_label"
+                            htmlFor="service"
+                          >
                             Services
                           </label>
                           <input
+                            {...register("userSearch", {
+                              required: true,
+                            })}
                             className="radioColor"
                             type="radio"
                             name="userSearch"
                             id="service"
+                            value="service"
                           />
                         </div>
                       </div>
@@ -167,79 +321,171 @@ const PostAgain = () => {
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 03 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.adcategory ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="category">
                         Advert Category
                       </label>
-                      <input
+                      <select
                         type="text"
                         className="form-control"
-                        id="ad-category"
+                        id="adcategory"
                         placeholder="Enter your advert Category"
-                      />
+                        {...register("adcategory", {
+                          required: true,
+                        })}
+                        onChange={handleCategoryChange}
+                      >
+                        {category?.map((cat) => (
+                          <option key={cat._id} value={`${cat?.categoryName}`}>
+                            {cat?.categoryName}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 04 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.subCategory ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="sub-ad">
                         Advert Sub Category
                       </label>
-                      <input
+                      <select
                         type="text"
                         className="form-control"
-                        id="sub-category"
-                        placeholder="Enter your advert Sub Category"
-                        required=""
-                      />
+                        id="subCategory"
+                        {...register("subCategory", {
+                          required: true,
+                        })}
+                      >
+                        {selectedCategory &&
+                          subcategory
+                            ?.filter(
+                              (item) =>
+                                item.category_id === selectedCategory?._id
+                            )
+                            .map((subcate) => (
+                              <option
+                                key={subcate._id}
+                                value={`${subcate?.subCategoryName}`}
+                              >
+                                {subcate?.subCategoryName}
+                              </option>
+                            ))}
+                        {/* <option value={`Cafe & Treats`}>Cafe & Treats</option> */}
+                      </select>
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
-                      <label className="form-head" htmlFor="location">
-                        Location
+                    <div
+                      className={`form-group ${
+                        errors?.adPostalCode ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="adPostalCode">
+                        Postal Code
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="ad_location"
-                        placeholder="Enter location"
-                        required
+                        id="adPostalCode"
+                        placeholder="Enter your advert Postal Code"
+                        {...register("adPostalCode", {
+                          pattern: {
+                            value: /^\d+$/,
+                            message: "Enter a Valid Postal Code",
+                          },
+                          required: {
+                            value: true,
+                            message: "Postal Code is Required",
+                          },
+                        })}
                       />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.adPrice ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="price">
                         Advert Price
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="ad-price"
+                        id="adPrice"
                         placeholder="Enter your advert price"
-                        required
+                        {...register("adPrice", {
+                          pattern: {
+                            value: /^\d+$/,
+                            message: "Enter Valid Price",
+                          },
+                          required: {
+                            value: true,
+                            message: "Price is Required",
+                          },
+                        })}
                       />
                     </div>
                   </div>
+
+                  {/* post code feild section */}
+
+                  <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.advertLocation ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="advertLocation">
+                        Location
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="advertLocation"
+                        placeholder="Enter location"
+                        {...register("advertLocation", {
+                          required: true,
+                        })}
+                      />
+                    </div>
+                  </div>
+
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 07 start --> */}
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
-                    <div className="form-group">
+                    <div
+                      className={`form-group ${
+                        errors?.advertDescription ? "error_pesudo" : ""
+                      }`}
+                    >
                       <label className="form-head" htmlFor="description">
                         Advert Description
                       </label>
                       <textarea
                         className="form-control"
                         placeholder="Enter your store description"
-                        id="exampleTextarea"
+                        id="advertDescription"
                         rows="6"
                         name="answer"
+                        {...register("advertDescription", {
+                          required: true,
+                        })}
                       ></textarea>
                       <div className="text-end">
                         <small className="text-muted " id="wordCount">
@@ -267,15 +513,20 @@ const PostAgain = () => {
                           className=" protfilo_image_input_field"
                           data-height="100"
                           data-allowed-file-extensions="jpg jpeg png"
+                          ref={fileInputRef}
                           id="file_upload"
                           onChange={handleImageSelect}
                         />
                         {/* message to show when no image have has been selected start */}
                         {!selectedImage && (
-                          <div className="protfilo_image_icons">
+                          <div className="protfilo_image_icons ">
                             <AiOutlineCloudUpload />
 
-                            <span>
+                            <span
+                              style={{
+                                zIndex: "999",
+                              }}
+                            >
                               Drag Or Upload Your Thumbnail Image Here
                             </span>
                           </div>
@@ -283,7 +534,7 @@ const PostAgain = () => {
                         {/* message to show when no image have has been selected end */}
                         {/* image preview container  start */}
 
-                        {selectedImage && (
+                        {/* {selectedImage && (
                           <div className="protfilo_image_preview_container">
                             <div className="preview_image_div">
                               <img
@@ -303,12 +554,19 @@ const PostAgain = () => {
                               {fileName}
                             </span>
                           </div>
-                        )}
+                        )} */}
+
+                        <ImagePreview
+                          selectedImage={selectedImage}
+                          fileName={fileName}
+                          removeImagePreview={removeImagePreview}
+                          advertUrl={state?.advertData?.advertImages[0]}
+                        />
                         {/* image preview container start end */}
                       </div>
 
                       <small className="form-text text-muted upload-info mt-1">
-                        PNG or JPG no bigger than 800px wide and tall.
+                        PNG or JPG no bigger than 5MB and 800px wide and tall.
                       </small>
                     </div>
 
@@ -316,6 +574,13 @@ const PostAgain = () => {
                   </div>
                   {/* <!-- field col end --> */}
                 </div>
+
+                {/* <button
+                  className="payment_final_submission_btn mt-2"
+                  type="submit"
+                >
+                  Submit
+                </button> */}
               </form>
               {/* <!-- add book form up end --> */}
             </div>
@@ -327,9 +592,9 @@ const PostAgain = () => {
           <div className="row justify-content-center mt-5 pb-5">
             <div className="col-md-12 col-sm-12 col-xs-12 justify-content-center">
               <div className="select-plan-head">
-                <h4>Choose Plan</h4>
+                <h4 className="text-center">Choose Plan</h4>
               </div>
-              <div className="  text-center d-flex flex-column flex-md-row gap-4  justify-content-center">
+              <div className="text-center d-flex flex-column flex-md-row gap-4  justify-content-center align-items-center">
                 {/* <!-- card-01 --> */}
                 <div className="card-plan pointer">
                   <div className="plan-card-image ">
@@ -452,7 +717,12 @@ const PostAgain = () => {
                 </p>
               </div>
               <div>
-                <button className="payment_final_submission_btn mt-2">
+                <button
+                  className="payment_final_submission_btn mt-2"
+                  type="submit"
+                  form="add-advert-form"
+                  disabled={loading}
+                >
                   Submit
                 </button>
               </div>
