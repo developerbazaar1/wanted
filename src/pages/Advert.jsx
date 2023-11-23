@@ -247,7 +247,29 @@ const Advert = () => {
                     <td className="user">{advert?.whereToShow}</td>
                     <td className="">£{advert?.advertPrice}</td>
                     <td className="">{DatedFormated(advert?.createdAt)}</td>
-                    <td>{DatedFormated(advert?.createdAt)}</td>
+                    <td>
+                      {advert?.advertExpiryDate
+                        ? DatedFormated(advert?.advertExpiryDate)
+                        : DatedFormated(advert?.createdAt)}
+                    </td>
+
+                    {/* {DatedFormated(advert?.advertExpiryDate) < new Date() ? (
+                      <td
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        expired
+                      </td>
+                    ) : (
+                      <td
+                        style={{
+                          color: "#2df54f",
+                        }}
+                      >
+                        Active
+                      </td>
+                    )} */}
                     {advert.advertStatus === "active" ? (
                       <td
                         style={{

@@ -574,14 +574,19 @@ a.add-product-model {
   -o-border-radius: 5px;
   transition: all ease-out 1s 0.2s;
 }
-.card-plan:hover {
+/* .card-plan:hover {
   transform: scale(0.95);
+} */
+
+.selected-plan {
+  border: 3px solid #333;
+  background-color: rgba(201, 255, 211, 0.2);
 }
 .add_advert_select_plan_btn:hover {
   background: #a2f6b1;
 }
 .plan-card-image {
-  background-color: #ffffff;
+  background-color: inherit;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -659,6 +664,12 @@ span.plan-month {
   font-style: normal;
   font-weight: 600;
   line-height: 24px;
+}
+
+.bySubscription-btn {
+  align-items: center;
+  display: flex;
+  justify-content: end;
 }
 .advert-edit-modal,
 .head {

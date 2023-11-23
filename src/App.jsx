@@ -20,11 +20,13 @@ import { useAuth } from "./service/auth";
 import { useDispatch } from "react-redux";
 import FileUpload from "./FileUpload";
 import { useEffect } from "react";
-import { categoriesApi } from "./config/axiosUtils";
+import { categoriesApi, getUserSubscription } from "./config/axiosUtils";
 import { setcategory } from "./features/categorySlice";
 import { setsubcategory } from "./features/subcategorySlice";
+import { setSubscription } from "./features/subscriptionSlice";
+import Plans from "./components/Plans";
 function App() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, token, portfolio_id, user } = useAuth();
   const dispatch = useDispatch();
   /**
    * this function fetch the categories and set it
@@ -64,9 +66,26 @@ function App() {
       });
   };
 
+  const fetchsubscription = async () => {
+    getUserSubscription(token, user?.id, portfolio_id)
+      .then((res) => {
+        console.log(res.data.result);
+        // let sub = res.data.result;
+        dispatch(
+          setSubscription({
+            subscriptions: res.data.result,
+          })
+        );
+      })
+      .catch(() => {
+        // console.log(e);
+      });
+  };
+
   useEffect(() => {
     fetchCategories();
     fetchsubCategories();
+    fetchsubscription();
   });
   return (
     <>
@@ -133,6 +152,17 @@ function App() {
                 />
               }
             />
+
+            <Route
+              path="plans"
+              element={
+                <ProtectedRoutes
+                  isLoggedIn={isLoggedIn}
+                  component={<Plans />}
+                />
+              }
+            />
+
             <Route
               path="provider_portfolio"
               element={

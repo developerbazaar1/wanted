@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "../features/authSlice";
 import { categorySlice } from "../features/categorySlice";
 import { subcategorySlice } from "../features/subcategorySlice";
+import { subscriptionSlice } from "../features/subscriptionSlice";
 import {
   persistStore,
   persistReducer,
@@ -23,7 +24,7 @@ const rootReducer = combineReducers({
   auth: authSlice.reducer,
   category: categorySlice.reducer,
   subcategory: subcategorySlice.reducer,
-  // Add other reducers here
+  subscription: subscriptionSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

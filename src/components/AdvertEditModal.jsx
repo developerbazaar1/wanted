@@ -31,7 +31,6 @@ const AdvertEditModal = ({
    * functin to handle category change
    * @returns
    */
-
   const handleCategoryChange = (event) => {
     console.log("inside the subCategory");
     const selectedValue = event.target.value;

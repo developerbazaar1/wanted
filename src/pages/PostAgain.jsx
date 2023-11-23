@@ -1,9 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import addCardIma1 from "../assets/plan-card01.png";
-import addCardIma2 from "../assets/plan-card02.png";
-import addCardIma3 from "../assets/plan-card03.png";
-import paymentsucess from "../assets/pay-secure-img.png";
 import { Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Spiner from "../components/Spiner";
@@ -14,6 +10,7 @@ import { toast } from "react-toastify";
 import ImagePreview from "../components/ImagePreview";
 import { ImgSizeCheck } from "../helper/imageSizeCheck";
 import { useCategory, useSubCategory } from "../service/categoryhelper";
+import Subscriptions from "../components/Subscriptions";
 
 const PostAgain = () => {
   let { state } = useLocation();
@@ -22,17 +19,18 @@ const PostAgain = () => {
   const [fileName, setfileName] = useState("");
   const { user, token } = useAuth();
   const fileInputRef = useRef(null);
+  const [selectedSubscription, setselectedSubscription] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState();
   const { subcategory } = useSubCategory();
   const { category } = useCategory();
   // handle drag and drop
-  // console.log(state);
+  console.log(state);
 
   const {
     register,
     handleSubmit,
     setValue,
-    reset,
+    // reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -126,6 +124,7 @@ const PostAgain = () => {
   const handlePostAgainAdvert = (formData) => {
     // console.log(formData);
     // return;
+    formData["subscription_plan_id"] = selectedSubscription._id;
     setLoading(true);
     const data = castPostAgainAdvert(
       formData,
@@ -148,7 +147,11 @@ const PostAgain = () => {
       });
   };
 
-  console.log(subcategory);
+  const handleSelectsub = (sub) => {
+    setselectedSubscription(sub);
+  };
+
+  // console.log(subcategory);
 
   useEffect(() => {
     let subCat = category?.find(
@@ -198,7 +201,7 @@ const PostAgain = () => {
               </div>
               <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
                 <div className="top-heading mt-3">
-                  <h1>Add New Advert</h1>
+                  <h1>Post Again Your Advert</h1>
                 </div>
               </div>
               {/* <!-- top image --> */}
@@ -564,172 +567,25 @@ const PostAgain = () => {
                         />
                         {/* image preview container start end */}
                       </div>
-
                       <small className="form-text text-muted upload-info mt-1">
                         PNG or JPG no bigger than 5MB and 800px wide and tall.
                       </small>
                     </div>
-
                     {/* <!-- field col  enc :: dropify--> */}
                   </div>
                   {/* <!-- field col end --> */}
                 </div>
-
-                {/* <button
-                  className="payment_final_submission_btn mt-2"
-                  type="submit"
-                >
-                  Submit
-                </button> */}
               </form>
               {/* <!-- add book form up end --> */}
             </div>
           </div>
         </div>
         {/* <!-- form section end here --> */}
-        {/* <!-- card section --> */}
-        <section className="card-section">
-          <div className="row justify-content-center mt-5 pb-5">
-            <div className="col-md-12 col-sm-12 col-xs-12 justify-content-center">
-              <div className="select-plan-head">
-                <h4 className="text-center">Choose Plan</h4>
-              </div>
-              <div className="text-center d-flex flex-column flex-md-row gap-4  justify-content-center align-items-center">
-                {/* <!-- card-01 --> */}
-                <div className="card-plan pointer">
-                  <div className="plan-card-image ">
-                    <img
-                      className="w-50px"
-                      src={addCardIma1}
-                      alt="Image for Plan Card"
-                    />
-                  </div>
-                  <h2 className="p-card-title mt-2">Starter Plan</h2>
-                  <div className="plan-price-status mt-2 d-flex flex-column">
-                    <h2 className="mb-0">&euro; 399</h2>
-                    <span className=" plan-month"> PER MONTH </span>
-                  </div>
-
-                  <div className="d-flex flex-column gap-1 my-1">
-                    <div className="d-flex justify-content-between">
-                      <span className="add_advert_show">Ads You Show</span>
-                      <span className="add-advert_day">3 Ads</span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <span className="add_advert_show">Validity For Days</span>
-                      <span className="add-advert_day">3 Days</span>
-                    </div>
-                  </div>
-                  <div>
-                    <button className="add_advert_select_plan_btn mt-1">
-                      Select Plan
-                    </button>
-                  </div>
-                </div>
-                {/* <!-- card-02 --> */}
-
-                <div className="card-plan pointer">
-                  <div className="plan-card-image ">
-                    <img
-                      className="w-50px"
-                      src={addCardIma2}
-                      alt="Image for Plan Card"
-                    />
-                  </div>
-                  <h2 className="p-card-title mt-2">Starter Plan</h2>
-                  <div className="plan-price-status mt-2 d-flex flex-column">
-                    <h2 className="mb-0">&euro; 699</h2>
-                    <span className=" plan-month"> PER MONTH </span>
-                  </div>
-
-                  <div className="d-flex flex-column gap-1 my-1">
-                    <div className="d-flex justify-content-between">
-                      <span className="add_advert_show">Ads You Show</span>
-                      <span className="add-advert_day">5 Ads</span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <span className="add_advert_show">Validity For Days</span>
-                      <span className="add-advert_day">5 Days</span>
-                    </div>
-                  </div>
-                  <div>
-                    <button className="add_advert_select_plan_btn mt-1">
-                      Select Plan
-                    </button>
-                  </div>
-                </div>
-                {/* <!-- card-03 --> */}
-                <div className="card-plan pointer">
-                  <div className="plan-card-image ">
-                    <img
-                      className="w-50px"
-                      src={addCardIma3}
-                      alt="Image for Plan Card"
-                    />
-                  </div>
-                  <h2 className="p-card-title mt-2">Starter Plan</h2>
-                  <div className="plan-price-status mt-2 d-flex flex-column">
-                    <h2 className="mb-0">&euro; 999</h2>
-                    <span className=" plan-month"> PER MONTH </span>
-                  </div>
-
-                  <div className="d-flex flex-column gap-1 my-1">
-                    <div className="d-flex justify-content-between">
-                      <span className="add_advert_show">Ads You Show</span>
-                      <span className="add-advert_day">10 Ads</span>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                      <span className="add_advert_show">Validity For Days</span>
-                      <span className="add-advert_day">15 Days</span>
-                    </div>
-                  </div>
-                  <div>
-                    <button className="add_advert_select_plan_btn mt-1">
-                      Select Plan
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="text-center">
-              <button className="mt-4 advert_pay_btn">
-                Pay £399 To Purchase
-              </button>
-            </div>
-          </div>
-        </section>
-        <section className="payment-conform-section">
-          <div className="row justify-content-center">
-            <div className="col col-md-8 col-lg-6 text-center">
-              <div
-                className="bg "
-                style={{
-                  background: "#ffffff 0% 0% no-repeat padding-box",
-                }}
-              >
-                <div className="payment-sucess-img text-center mx-auto">
-                  <img src={paymentsucess} alt="" />
-                </div>
-                <h3 className="payment-recived-head">Payment Received</h3>
-                <p className="payment-description">
-                  Please Note: Advert Details Above Cannot Be Modified After
-                  Submission.
-                </p>
-              </div>
-              <div>
-                <button
-                  className="payment_final_submission_btn mt-2"
-                  type="submit"
-                  form="add-advert-form"
-                  disabled={loading}
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* <!-- card section end here --> */}
+        <Subscriptions
+          handleSelectsub={handleSelectsub}
+          selectedSubscription={selectedSubscription}
+          loading={loading}
+        />
       </main>
     </>
   );

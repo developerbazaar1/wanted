@@ -1,6 +1,6 @@
+import axios from "axios";
 import { api } from "./ApiConfig";
 import { openapi } from "./ApiConfig";
-
 export const categoriesApi = {
   getCategory: async () => {
     const response = await openapi.request({
@@ -202,4 +202,60 @@ export const ProctedApi = {
     });
     return response;
   },
+
+  addSubscription: async (data, token) => {
+    const response = await api.request({
+      url: `/addsubscription`,
+      method: `POST`,
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  getPaymentHistory: async (token, id, portfolio_id) => {
+    const response = await api.request({
+      url: `/paymenthistory?provider_id=${id}&portfolio_id=${portfolio_id}`,
+      method: `GET`,
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  },
 };
+
+//this function is used to get all the plan
+export async function GetAllPlan() {
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: "http://localhost:3000/admin/getplan",
+    headers: {},
+  };
+
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const response = await axios.request(config);
+    // console.log(response.data);
+    return response.data; // or return something else if needed
+  } catch (error) {
+    throw error; // rethrow the error or handle it as needed
+  }
+}
+//this function is used to get the all plan that a user subscribed
+export async function getUserSubscription(token, id, provider_id) {
+  const response = await api.request({
+    url: `/getactivesubscription?provider_id=${id}&provider_portfolio_id=${provider_id}`,
+    method: `GET`,
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+}
