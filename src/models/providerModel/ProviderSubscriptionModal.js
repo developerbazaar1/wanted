@@ -24,7 +24,16 @@ const subscriptionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    remaningAds: {
+    remainingAds: {
+      type: String,
+      required: true,
+    },
+    subscriptionPlanName: {
+      type: String,
+      required: true,
+    },
+
+    subscriptionPlanPrice: {
       type: String,
       required: true,
     },
@@ -32,7 +41,9 @@ const subscriptionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const SubscriptionModal = mongoose.modal(
+const SubscriptionModal = mongoose.model(
   "SubscriptionModal",
   subscriptionSchema
 );
+
+module.exports = SubscriptionModal;

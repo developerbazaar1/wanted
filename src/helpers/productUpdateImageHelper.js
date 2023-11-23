@@ -18,6 +18,7 @@ const productUpdateImg = (fieldName) => async (req, res, next) => {
         allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
         public_id: "wantedvendor/" + uniqueFilename,
       });
+      console.log("products image", uploadedImage);
       fileUrls.push(uploadedImage.url);
     }
     req[fieldName] = fileUrls;

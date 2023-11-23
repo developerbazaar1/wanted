@@ -13,6 +13,7 @@ const {
   portfolioValidator,
   advertValidator,
   updateAdvertValidator,
+  postAdvertAgainValidator,
 } = require("../../controllers/providerController/validator");
 const { login } = require("../../controllers/providerController/login");
 const { signup } = require("../../controllers/providerController/signup");
@@ -26,6 +27,7 @@ const {
   getAdvert,
   updateAdvert,
   deleteAdvert,
+  postAgainAdvert,
 } = require("../../controllers/providerController/advertController");
 const {
   updateProfile,
@@ -40,6 +42,13 @@ const {
 const { advertUpdateImg } = require("../../helpers/advertUpdateImg");
 const { handlePortfolioImg } = require("../../helpers/handlePortfolioImg");
 const { productUpdateImg } = require("../../helpers/productUpdateImageHelper");
+const subscriptionValidator = require("../../validations/subscriptionValidator");
+const {
+  getProviderSubscription,
+  addsubscriptionController,
+} = require("../../controllers/adminController/subscriptionController");
+const fetchedPaymentController = require("../../controllers/providerController/fetchePayment");
+require("../../validations/subscriptionValidator");
 
 /**
  * provider auth route
@@ -67,7 +76,7 @@ ProviderRouter.put(
 ).get("/portfolio", auth, getPortfolio);
 
 /**
- * @advertroute
+ * @advertroute routes
  */
 
 ProviderRouter.post(
@@ -87,7 +96,15 @@ ProviderRouter.post(
     advertUpdateImg("advertImageUrls"),
     updateAdvert
   )
-  .delete("/deleteAdvert", auth, deleteAdvert);
+  .delete("/deleteAdvert", auth, deleteAdvert)
+  .put(
+    "/postagainadvert",
+    auth,
+    upload.array("img"),
+    postAdvertAgainValidator,
+    advertUpdateImg("advertImageUrls"),
+    postAgainAdvert
+  );
 
 /**
  * @products routes
@@ -104,5 +121,22 @@ ProviderRouter.post("/addproduct", auth, addProductController)
     productUpdateImg("productImages"),
     updateProductImageController
   );
+
+// This route is used to add created user subscription
+ProviderRouter.post(
+  "/addsubscription",
+  auth,
+  subscriptionValidator,
+  addsubscriptionController
+);
+
+//this route is used to fetched the vendor-payment- hisotory
+/**
+ * req body (provider_id, portfolio_id)
+ */
+ProviderRouter.get("/paymenthistory", auth, fetchedPaymentController);
+
+// This route fetch only active subscription of user
+ProviderRouter.get("/getactivesubscription", auth, getProviderSubscription);
 
 module.exports = ProviderRouter;

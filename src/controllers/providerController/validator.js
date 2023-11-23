@@ -147,6 +147,7 @@ const advertValidator = async (req, res, next) => {
     advertPostalCode,
     provider_portfolio_id,
     provider_id,
+    subscription_plan_id,
   } = req.body;
 
   // console.log(req.body, "advert validator");
@@ -189,10 +190,9 @@ const advertValidator = async (req, res, next) => {
 /**
  * @updateadvertvaladition
  */
-
 const updateAdvertValidator = async (req, res, next) => {
   let { _id, provider_id } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     if (!_id || !provider_id) {
       return res.status(BAD_REQUEST).json({
@@ -209,10 +209,69 @@ const updateAdvertValidator = async (req, res, next) => {
   }
 };
 
+const postAdvertAgainValidator = async (req, res, next) => {
+  const {
+    id,
+    advertTitle,
+    whereToShow,
+    advertCategory,
+    advertSubCategory,
+    advertLocation,
+    advertPrice,
+    advertDescription,
+    advertPostalCode,
+    provider_portfolio_id,
+    provider_id,
+    subscription_plan_id,
+  } = req.body;
+
+  // console.log(req.body, "advert validator");
+  try {
+    if (
+      !id ||
+      !advertTitle ||
+      !whereToShow ||
+      !advertCategory ||
+      !advertSubCategory ||
+      !advertLocation ||
+      !advertPrice ||
+      !advertDescription ||
+      !advertPostalCode
+    ) {
+      return res.status(BAD_REQUEST).json({
+        status: "Error",
+        message: "Please Filled the All required Field!",
+      });
+      a;
+    }
+
+    if (!subscription_plan_id) {
+      return res.status(BAD_REQUEST).json({
+        status: "error",
+        message: "Please Select a Subscription!",
+      });
+    }
+    if (!provider_portfolio_id || !provider_id) {
+      return res.status(UNAUTHORIZED).json({
+        status: "error",
+        message: "You Are not authorized!",
+      });
+    }
+    next();
+  } catch (error) {
+    console.log("error inside the validator");
+    return res.status(INTERNAL_SERVER_ERROR).json({
+      status: "error",
+      error: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   providersignupValidator,
   loginValidator,
   portfolioValidator,
   advertValidator,
   updateAdvertValidator,
+  postAdvertAgainValidator,
 };

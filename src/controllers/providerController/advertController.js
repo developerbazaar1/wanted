@@ -8,6 +8,7 @@ const {
   CONFLICT,
   CREATED,
 } = require("../../httpStatusCode");
+const SubscriptionModal = require("../../models/providerModel/ProviderSubscriptionModal");
 
 /**
  *
@@ -27,12 +28,32 @@ const addAdvert = async (req, res, next) => {
     advertDescription,
     advertPostalCode,
     advertImages,
+    subscription_plan_id,
     provider_portfolio_id,
     provider_id,
   } = req.body;
-  let { advertImageUrls } = req;
+
   try {
-    let advertCreated = await AdvertModal.create({
+    // Find the subscription
+    const subscription = await SubscriptionModal.findById(subscription_plan_id);
+
+    if (!subscription) {
+      return res.status(NOT_FOUND).json({
+        status: "error",
+        message: "Subscription not found",
+      });
+    }
+
+    // Check if there are remaining ads
+    if (subscription.remainingAds <= 0) {
+      return res.status(CONFLICT).json({
+        status: "error",
+        message: "No remaining ads in the subscription",
+      });
+    }
+
+    // Create the advertisement
+    const advertCreated = await AdvertModal.create({
       advertTitle,
       whereToShow,
       advertCategory,
@@ -41,22 +62,22 @@ const addAdvert = async (req, res, next) => {
       advertPrice,
       advertDescription,
       advertPostalCode,
-      advertImages: advertImageUrls,
+      advertImages: req.advertImageUrls,
       advertProviderPortfolio_id: provider_portfolio_id,
       advertProvider_id: provider_id,
+      subscription_plan_id,
+      advertExpiryDate: subscription.expiryDate,
     });
 
-    if (!advertCreated) {
-      return res.status(CONFLICT).json({
-        status: "error",
-        message: "Failed to create advertisement",
-      });
-    } else {
-      return res.status(CREATED).json({
-        status: "success",
-        data: advertCreated,
-      });
-    }
+    // Decrement the remaining ads by 1
+    subscription.remainingAds -= 1;
+    await subscription.save();
+
+    return res.status(CREATED).json({
+      status: "success",
+      message: "Successfully Created Advert",
+      data: advertCreated,
+    });
   } catch (error) {
     console.error(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
@@ -121,7 +142,7 @@ const updateAdvert = async (req, res, next) => {
   } = req.body;
 
   // ...
-  console.log(advertImages);
+  // console.log(advertImages);
 
   let updateValue = {
     advertTitle,
@@ -224,4 +245,109 @@ const deleteAdvert = async (req, res, next) => {
   }
 };
 
-module.exports = { addAdvert, getAdvert, updateAdvert, deleteAdvert };
+/**
+ * route to handle Post Agani advert
+ */
+
+const postAgainAdvert = async (req, res, next) => {
+  const {
+    advertTitle,
+    whereToShow,
+    advertCategory,
+    advertSubCategory,
+    advertLocation,
+    advertPrice,
+    advertDescription,
+    advertPostalCode,
+    provider_portfolio_id,
+    provider_id,
+    subscription_plan_id,
+    advertImages,
+    id,
+  } = req.body;
+
+  try {
+    const subscription = await SubscriptionModal.findById(subscription_plan_id);
+    if (!subscription) {
+      return res.status(NOT_FOUND).json({
+        status: "error",
+        message: "Subscription not found",
+      });
+    }
+
+    // Check if there are remaining ads
+    if (subscription.remainingAds <= 0) {
+      return res.status(CONFLICT).json({
+        status: "error",
+        message: "No remaining ads in the subscription",
+      });
+    }
+
+    const postAgainValue = {
+      advertTitle,
+      whereToShow,
+      advertCategory,
+      advertSubCategory,
+      advertLocation,
+      advertPrice,
+      advertDescription,
+      advertPostalCode,
+      advertImages,
+      advertProviderPortfolio_id: provider_portfolio_id,
+      advertProvider_id: provider_id,
+      subscription_plan_id,
+      advertExpiryDate: subscription.expiryDate,
+      createdAt: new Date(),
+    };
+
+    console.log(postAgainValue);
+
+    if (req.advertImageUrls !== undefined && req.advertImageUrls.length > 0) {
+      postAgainValue.advertImages = req.advertImageUrls;
+    }
+
+    let filter = {
+      _id: id,
+      advertProvider_id: provider_id,
+    };
+
+    let postAgain = await AdvertModal.findOneAndUpdate(
+      filter,
+      { $set: postAgainValue },
+      {
+        returnDocument: "after",
+      }
+    );
+
+    // console.log(Updateadvert);
+    if (!postAgain) {
+      return res.status(400).json({
+        status: "error",
+        message: "Something went wrong; please try again later.",
+      });
+    } else {
+      // Decrement the remaining ads by 1
+      subscription.remainingAds -= 1;
+      await subscription.save();
+
+      return res.status(OK).json({
+        status: "success",
+        postAgain,
+        message: "Successfully Posted Advert",
+      });
+    }
+  } catch (error) {
+    return res.status(INTERNAL_SERVER_ERROR).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+};
+
+module.exports = {
+  addAdvert,
+  getAdvert,
+  updateAdvert,
+  deleteAdvert,
+  postAgainAdvert,
+};
