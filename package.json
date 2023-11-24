@@ -4,10 +4,14 @@
   "description": "wanted e-commerce",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start:prod": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
   "author": "DbTech",
   "license": "ISC",
+  "engines": {
+    "node": ">=18.17.1"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.0",

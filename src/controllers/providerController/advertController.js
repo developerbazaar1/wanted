@@ -160,7 +160,7 @@ const updateAdvert = async (req, res, next) => {
     updateValue.advertImages = req.advertImageUrls;
   }
 
-  console.log(updateValue, "update value");
+  // console.log(updateValue, "update value");
 
   // ...
 
@@ -300,7 +300,7 @@ const postAgainAdvert = async (req, res, next) => {
       createdAt: new Date(),
     };
 
-    console.log(postAgainValue);
+    // console.log(postAgainValue);
 
     if (req.advertImageUrls !== undefined && req.advertImageUrls.length > 0) {
       postAgainValue.advertImages = req.advertImageUrls;

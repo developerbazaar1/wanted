@@ -66,7 +66,7 @@ const addProductController = async (req, res, next) => {
 
 const getProductController = async (req, res, next) => {
   const { _id } = req.query;
-  console.log(_id, "in get product controller id");
+  // console.log(_id, "in get product controller id");
   try {
     const product = await ProductsModal.find({ productProvider_id: _id });
 
@@ -203,7 +203,7 @@ const updateProductImageController = async (req, res) => {
   try {
     let { _id, provider_id, productImages } = req.body;
 
-    console.log(productImages, "user provided images");
+    // console.log(productImages, "user provided images");
 
     let updateImgUrl = req.productImages;
     if (!_id || !provider_id) {

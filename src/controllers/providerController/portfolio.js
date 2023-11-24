@@ -83,7 +83,7 @@ const getPortfolio = async (req, res, next) => {
     const providerPortfolio = await ProviderPortfolio.findOne({
       providerId: _id,
     });
-    console.log(providerPortfolio);
+    // console.log(providerPortfolio);
     if (providerPortfolio) {
       return res.status(OK).json({
         providerPortfolio,
@@ -96,7 +96,7 @@ const getPortfolio = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",

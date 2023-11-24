@@ -58,11 +58,11 @@ const loginValidator = async (req, res, next) => {
     if (!validator.isEmail(email)) {
       return res.status(BAD_REQUEST).json({ error: "Invalid email address" });
     }
-    console.log("in login");
+    // console.log("in login");
 
     next();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(INTERNAL_SERVER_ERROR).json({ error: error });
   }
 };
@@ -84,17 +84,17 @@ const portfolioValidator = async (req, res, next) => {
     _id,
   } = req.body;
   // console.log(_id);
-  console.log(
-    storeName,
-    storeEmail,
-    storeCategory,
-    storeAddress,
-    storeDescription,
-    storeWebsite,
-    storeContactDetails,
-    storeSubCategory,
-    _id
-  );
+  // console.log(
+  //   storeName,
+  //   storeEmail,
+  //   storeCategory,
+  //   storeAddress,
+  //   storeDescription,
+  //   storeWebsite,
+  //   storeContactDetails,
+  //   storeSubCategory,
+  //   _id
+  // );
   try {
     if (!_id) {
       return res.status(UNAUTHORIZED).json({
@@ -179,7 +179,7 @@ const advertValidator = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    console.log("error inside the validator");
+    // console.log("error inside the validator");
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       error: "Internal server error",
@@ -259,7 +259,7 @@ const postAdvertAgainValidator = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    console.log("error inside the validator");
+    // console.log("error inside the validator");
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       error: "Internal server error",

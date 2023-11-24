@@ -3,7 +3,7 @@ const cloudinary = require("../config/cloudinary");
 // Middleware for handling file upload
 
 const handleFileUpload = (fieldName) => async (req, res, next) => {
-  console.log(req.files, "files");
+  // console.log(req.files, "files");
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No files uploaded" });

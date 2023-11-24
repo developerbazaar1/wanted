@@ -8,7 +8,7 @@ const PaymentModal = require("../../models/adminModel/Payment");
 
 async function fetchedPaymentController(req, res) {
   let { provider_id, portfolio_id } = req.query;
-  console.log(provider_id, portfolio_id);
+  // console.log(provider_id, portfolio_id);
 
   try {
     if (!provider_id || !portfolio_id) {
