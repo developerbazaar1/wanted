@@ -1,8 +1,7 @@
 const cloudinary = require("./src/config/cloudinary");
 
 const imageUrl =
-  "https://res.cloudinary.com/djoenye05/image/upload/v1700743844/wantedvendor/wantedvendor/1700743619076-110telephone.png";
-
+  "http://res.cloudinary.com/djoenye05/image/upload/v1700817963/wantedvendor/wantedvendor/1700817738390-507No%20data-pana%201.png.png";
 // Extract the public_id from the URL
 const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)$/);
 

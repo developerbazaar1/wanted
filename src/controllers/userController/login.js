@@ -10,8 +10,9 @@ const {
 
 const UserModal = require("../../models/userModels/userModal");
 
-const login = async (req, res) => {
+const userLoginController = async (req, res) => {
   const { email, password } = req.body;
+  console.log("inside user login controler");
 
   try {
     const userExists = await UserModal.findOne({ email });
@@ -36,13 +37,13 @@ const login = async (req, res) => {
     const token = jwt.sign({ _id: userExists._id }, process.env.JWT_SECRET);
     return res.status(OK).json({
       status: "success",
-      data: {
+      user: {
         id: userExists._id,
         userName: userExists.userName,
         email: userExists.email,
-        phoneNumber: userExists.phoneNumber,
-        userProfilePic: userExists.userProfilePic,
-        userQRcode: userExists.userQRcode,
+        phoneNumber: userExists?.phoneNumber,
+        userProfilePic: userExists?.userProfilePic,
+        userQRcode: userExists?.userQRcode,
       },
       token,
     });
@@ -54,4 +55,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { login };
+module.exports = { userLoginController };

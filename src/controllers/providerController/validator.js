@@ -225,7 +225,6 @@ const postAdvertAgainValidator = async (req, res, next) => {
     subscription_plan_id,
   } = req.body;
 
-  // console.log(req.body, "advert validator");
   try {
     if (
       !id ||

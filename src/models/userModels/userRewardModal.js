@@ -21,6 +21,7 @@ const userRewardSchema = new mongoose.Schema({
     },
     date: {
       type: Date,
+      default: Date.now,
     },
     pointCollected: {
       type: Number,

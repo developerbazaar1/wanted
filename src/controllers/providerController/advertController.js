@@ -250,6 +250,7 @@ const deleteAdvert = async (req, res, next) => {
  */
 
 const postAgainAdvert = async (req, res, next) => {
+  // console.log("request in postAgainAdvert");
   const {
     advertTitle,
     whereToShow,
@@ -297,6 +298,7 @@ const postAgainAdvert = async (req, res, next) => {
       advertProvider_id: provider_id,
       subscription_plan_id,
       advertExpiryDate: subscription.expiryDate,
+      advertStatus: "active",
       createdAt: new Date(),
     };
 
