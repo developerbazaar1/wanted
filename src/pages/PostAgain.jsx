@@ -17,14 +17,14 @@ const PostAgain = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fileName, setfileName] = useState("");
-  const { user, token } = useAuth();
+  const { user, token, portfolio_id } = useAuth();
   const fileInputRef = useRef(null);
   const [selectedSubscription, setselectedSubscription] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState();
   const { subcategory } = useSubCategory();
   const { category } = useCategory();
   // handle drag and drop
-  console.log(state);
+  // console.log(state);
 
   const {
     register,
@@ -129,17 +129,19 @@ const PostAgain = () => {
     const data = castPostAgainAdvert(
       formData,
       state?.advertData?._id,
-      user?.id
+      user?.id,
+      portfolio_id
     );
-    console.log(data);
+
+    // console.log(data, "post again data");
     // return;
-    ProctedApi.updateAdvert(data, token)
+    ProctedApi.postAgainAdvert(data, token)
       .then((res) => {
         console.log(res);
         toast.success(res?.data?.message);
       })
       .catch((e) => {
-        // console.log(e);
+        console.log(e);
         toast.error(e?.response?.data?.message);
       })
       .finally(() => {
@@ -159,7 +161,8 @@ const PostAgain = () => {
     );
     setSelectedCategory(subCat);
   }, [state]);
-  console.log("default selected sub category", selectedCategory);
+
+  // console.log("default selected sub category", selectedCategory);
   return (
     <>
       <Spiner loading={loading} />

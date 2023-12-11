@@ -346,6 +346,8 @@ const Viewproducts = () => {
         showProductImgModal={showProductImgModal}
         setshowProductImgModal={setshowProductImgModal}
         editProductImgData={editProductImgData}
+        setRefresh={setRefresh}
+        setProduct={setProduct}
       />
       {/* add img modal end*/}
     </>

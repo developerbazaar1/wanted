@@ -97,7 +97,16 @@ const AdvertEditModal = ({
 
   const handleCloseadvetModal = () => {
     setshowAdvertModal(false);
+    // setSelectedCategory(null);
   };
+
+  useEffect(() => {
+    console.log("in default setup useeffects");
+    let subCat = category?.find(
+      (element) => element?.categoryName === editAdvertData?.advertCategory
+    );
+    setSelectedCategory(subCat);
+  }, [editAdvertData]);
 
   useEffect(() => {
     setValue("adverttitle", editAdvertData?.advertTitle);
@@ -106,15 +115,9 @@ const AdvertEditModal = ({
     setValue("advertdescription", editAdvertData?.advertDescription);
     setValue("advertplanprice", editAdvertData?.advertPrice);
     setValue("wheretshow", editAdvertData?.whereToShow);
-  });
-
-  useEffect(() => {
-    console.log("portfoloio category", editAdvertData?.advertCategory);
-    let subCat = category?.find(
-      (element) => element?.categoryName === editAdvertData?.advertCategory
-    );
-    setSelectedCategory(subCat);
   }, [editAdvertData]);
+
+  // useEffect(() => {}, [editAdvertData]);
 
   return (
     <>
@@ -301,6 +304,10 @@ const AdvertEditModal = ({
                         // placeholder="Beauty & Spa"
                         {...register("advertsubCategory")}
                       >
+                        {/* <option value="" key="defaultsubcat">
+                          Select Advert Sub Category
+                        </option> */}
+
                         {selectedCategory &&
                           subcategory
                             ?.filter(

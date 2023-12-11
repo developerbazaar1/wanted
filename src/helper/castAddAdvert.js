@@ -32,10 +32,11 @@ export function castEditadvertData(formData, _id, provider_id) {
   }
   return data;
 }
-
-export function castPostAgainAdvert(formData, id, provider_id) {
+//this function is used to cast
+export function castPostAgainAdvert(formData, id, provider_id, portfolio_id) {
   let data = new FormData();
-  data.append("_id", id);
+  data.append("id", id);
+  data.append("provider_portfolio_id", portfolio_id);
   data.append("provider_id", provider_id);
   data.append("advertTitle", formData?.advert_title);
   data.append("whereToShow", formData?.userSearch);
@@ -43,7 +44,7 @@ export function castPostAgainAdvert(formData, id, provider_id) {
   data.append("advertSubCategory", formData?.subCategory);
   data.append("advertDescription", formData?.advertDescription);
   data.append("advertLocation", formData?.advertLocation);
-  data.append("advertPostalCod", formData?.adPostalCode);
+  data.append("advertPostalCode", formData?.adPostalCode);
   data.append("advertPrice", formData?.adPrice);
   data.append("subscription_plan_id", formData.subscription_plan_id);
   if (formData?.img) {

@@ -158,6 +158,7 @@ const ProviderProtfilo = () => {
   };
 
   useEffect(() => {
+    //This is Used to set the store address for new user
     if (!portfolio?.storeAddress) {
       getCurrentLocation()
         .then((res) => {
@@ -178,9 +179,15 @@ const ProviderProtfilo = () => {
 
   useEffect(() => {
     console.log("portfoloio category", portfolio?.storeCategory);
-    let subCat = category?.find(
-      (element) => element?.categoryName === portfolio?.storeCategory
-    );
+    let subCat;
+
+    if (portfolio?.storeCategory === undefined) {
+      subCat = category?.[0];
+    } else {
+      subCat = category?.find(
+        (element) => element?.categoryName === portfolio?.storeCategory
+      );
+    }
     setSelectedCategory(subCat);
   }, [portfolio]);
   console.log("This is selected category", selectedCategory);

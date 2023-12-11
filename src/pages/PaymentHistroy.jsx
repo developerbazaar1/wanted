@@ -32,7 +32,15 @@ const PaymentHistroy = () => {
   if (payments?.length === 0) {
     return (
       <>
-        <h6>It looks like You haven&#39;t made any Payment yet</h6>
+        <main
+          style={{
+            height: "300px",
+            textAlign: "center",
+          }}
+          className="d-flex justify-content-center align-items-center"
+        >
+          <h5>It looks like You haven&#39;t made any Payment yet</h5>
+        </main>
       </>
     );
   }

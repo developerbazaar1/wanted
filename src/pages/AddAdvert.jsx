@@ -13,7 +13,6 @@ import { ImgSizeCheck } from "../helper/imageSizeCheck";
 import { useCategory, useSubCategory } from "../service/categoryhelper";
 import { getCurrentLocation } from "../helper/getCurrentLocation";
 import AddAdvertTopHead from "../components/AddAdvertTopHead";
-import { useSubscription } from "../service/planhelper";
 import Subscriptions from "../components/Subscriptions";
 const AddAdvert = () => {
   const [loading, setLoading] = useState(false);
@@ -290,8 +289,9 @@ const AddAdvert = () => {
                         })}
                         onChange={handleCategoryChange}
                       >
-                        <option value="">Select Advert Category</option>
-
+                        <option value="" key="defaultcat">
+                          Select Advert Category
+                        </option>
                         {category?.map((cat) => (
                           <option key={cat._id} value={`${cat?.categoryName}`}>
                             {cat?.categoryName}
@@ -323,7 +323,9 @@ const AddAdvert = () => {
                           required: true,
                         })}
                       >
-                        <option value="">Select Advert Sub Category</option>
+                        <option value="" key="defaultsubcat">
+                          Select Advert Sub Category
+                        </option>
                         {selectedCategory &&
                           subcategory
                             ?.filter(

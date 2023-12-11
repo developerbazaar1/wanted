@@ -26,10 +26,10 @@ const Advert = () => {
     ProctedApi.getAdvert(user.id, token)
       .then((res) => {
         setAdvert(res.data.adverts);
-        console.log(res.data.adverts);
+        // console.log(res.data.adverts);
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         if (e?.message === "Network Error") {
           return toast.error(e?.message);
         }
@@ -56,12 +56,12 @@ const Advert = () => {
     // console.log(data);
     ProctedApi.deleteAdvert(data, token)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setAdvert(adverts.filter((advert) => advert._id !== advertId));
         toast.success(res?.data?.message);
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         if (e?.message === "Network Error") {
           return toast.error(e?.message);
         }
@@ -94,7 +94,7 @@ const Advert = () => {
         toast.success(res?.data?.message);
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         toast.error("Failed to update advert visibility. Please try again.");
 
         // Revert the state back to its original state due to the failed API update

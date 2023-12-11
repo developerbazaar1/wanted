@@ -104,7 +104,8 @@ function App() {
           />
           <Route path="/forgotassword" element={<ForgotPassword />} />
           <Route path="/resetsucess" element={<ResetPassworConform />} />
-          <Route path="/test" element={<FileUpload />} />
+          {/* <Route path="/test" element={<FileUpload />} /> */}
+          <Route path="test" element={<ProviderProtfilo />} />
 
           <Route element={<NavBar />}>
             <Route

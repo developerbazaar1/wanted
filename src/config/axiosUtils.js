@@ -102,6 +102,31 @@ export const ProctedApi = {
     });
     return response;
   },
+  updateAdvert: async (data, token) => {
+    const response = await api.request({
+      url: `/updateAdvert`,
+      method: "PUT",
+      headers: {
+        Authorization: `${token}`,
+        // "Content-Type": "application/json",
+      },
+      data: data,
+    });
+    return response;
+  },
+
+  //Route to handle PostAgain Advert
+  postAgainAdvert: async (data, token) => {
+    const response = await api.request({
+      url: `/postagainadvert`,
+      method: "PUT",
+      headers: {
+        Authorization: `${token}`,
+      },
+      data: data,
+    });
+    return response;
+  },
 
   /**
    *
@@ -119,18 +144,6 @@ export const ProctedApi = {
         "Content-Type": "application/json",
       },
       data: JSON.stringify(data),
-    });
-    return response;
-  },
-  updateAdvert: async (data, token) => {
-    const response = await api.request({
-      url: `/updateAdvert`,
-      method: "PUT",
-      headers: {
-        Authorization: `${token}`,
-        // "Content-Type": "application/json",
-      },
-      data: data,
     });
     return response;
   },

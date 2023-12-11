@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
@@ -12,6 +12,8 @@ const ProductUploadImageModal = ({
   showProductImgModal,
   setshowProductImgModal,
   editProductImgData,
+  setRefresh,
+  setProduct,
 }) => {
   const [loading, setLoading] = useState(false);
   const [imagesPrveiw, setimagesPrveiw] = useState([]);
@@ -22,39 +24,30 @@ const ProductUploadImageModal = ({
     setshowProductImgModal(false);
   };
 
-  const numEmptyDivs = 3 - (imagesPrveiw ? imagesPrveiw.length : 0);
+  // const numEmptyDivs = 3 - (imagesPrveiw ? imagesPrveiw.length : 0);
   const { token, user } = useAuth();
   // handele image select by user
   const handleImageSelect = (e) => {
     const files = e.target.files;
     const selected = [];
-
     for (let i = 0; i < files.length; i++) {
       if (!files[i].type.startsWith("image/")) {
         toast.error("Selected file is not an image");
-        // if (fileInputRef.current) {
-        //   fileInputRef.current.value = "";
-        // }
         return;
       }
-
       if (!ImgSizeCheck(files[i].size)) {
         toast.error("File size exceeds the limit of 5 MB");
-        // if (fileInputRef.current) {
-        //   fileInputRef.current.value = "";
-        // }
         return;
       }
-
       if (imagesPrveiw.length > 2) {
         return alert("No More images allowed !");
       }
       if (files[i] && files[i].type.startsWith("image/")) {
-        setImg([...img, files[i]]);
+        setImg((img) => [...img, files[i]]);
         const reader = new FileReader();
         reader.onload = (e) => {
           selected.push(e.target.result);
-          setimagesPrveiw([...imagesPrveiw, selected]); // Update the state with all selected images.
+          setimagesPrveiw((prevImages) => [...prevImages, e.target.result]);
         };
         reader.readAsDataURL(files[i]);
       }
@@ -71,20 +64,15 @@ const ProductUploadImageModal = ({
     for (let i = 0; i < files.length; i++) {
       if (!files[i].type.startsWith("image/")) {
         toast.error("Selected file is not an image");
-        // if (fileInputRef.current) {
-        //   fileInputRef.current.value = "";
-        // }
         return;
       }
 
       if (!ImgSizeCheck(files[i].size)) {
         toast.error("File size exceeds the limit of 5 MB");
-        // if (fileInputRef.current) {
-        //   fileInputRef.current.value = "";
-        // }
         return;
       }
-      setImg([...img, files[i]]);
+      // setImg([...img, files[i]]);
+      setImg((img) => [...img, files[i]]);
       if (files[i] && files[i].type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (data) => {
@@ -98,6 +86,8 @@ const ProductUploadImageModal = ({
   const handeImageUpdate = () => {
     setLoading(true);
     let data = new FormData();
+    // console.log("This is the images", img);
+    // return;
     data.append("_id", editProductImgData?._id);
     data.append("provider_id", user.id);
     data.append("productImages", editProductImgData?.productImages[0]);
@@ -111,9 +101,15 @@ const ProductUploadImageModal = ({
     // return;
     ProctedApi.updateProductImg(data, token)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         toast.success(res?.data?.message);
+        let updateProduct = res?.data?.Updateproduct;
         handleClose();
+        setProduct((prevProducts) =>
+          prevProducts?.map((product) =>
+            product._id === updateProduct._id ? updateProduct : product
+          )
+        );
       })
       .catch((e) => {
         console.log(e);
@@ -127,7 +123,7 @@ const ProductUploadImageModal = ({
   const preventDefault = (e) => {
     e.preventDefault();
   };
-  useEffect(() => {}, [editProductImgData]);
+  // useEffect(() => {}, [editProductImgData]);
 
   return (
     <>
@@ -253,6 +249,7 @@ const ProductUploadImageModal = ({
                   <button
                     className="edit_product_modal_btn"
                     onClick={handeImageUpdate}
+                    disabled={loading}
                   >
                     Upload Images
                   </button>
