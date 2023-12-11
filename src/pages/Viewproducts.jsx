@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ProductUploadImageModal from "../components/productUploadImageModal";
+import ProductUploadImageModal from "../components/ProductUploadImageModal";
 import { ProctedApi } from "../config/axiosUtils";
 import { useAuth } from "../service/auth";
 import Spiner from "../components/Spiner";
