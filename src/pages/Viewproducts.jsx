@@ -20,11 +20,7 @@ const Viewproducts = () => {
   const [products, setProduct] = useState([]);
   const [EditProduct, setEditProduct] = useState(null);
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
+  const { register, formState: handleSubmit } = useForm();
 
   const {
     register: registerForm2,
@@ -54,7 +50,7 @@ const Viewproducts = () => {
         console.log(res.data.product);
         setProduct(res.data.product);
       })
-      .catch((e) => {
+      .catch(() => {
         // console.log(e);
       })
       .finally(() => {
@@ -172,7 +168,7 @@ const Viewproducts = () => {
                 </div>
                 <div className="head-search mt-4">
                   <form
-                    onSubmit={handleSubmit(addProduct)}
+                    onSubmit={handleSubmitForm2(addProduct)}
                     className="input-group justify-content-center"
                   >
                     <input
