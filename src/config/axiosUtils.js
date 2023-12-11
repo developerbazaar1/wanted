@@ -247,7 +247,7 @@ export async function GetAllPlan() {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://localhost:3000/admin/getplan",
+    url: `${import.meta.env.VITE_Admin_Live_url}/getplan`,
     headers: {},
   };
 
