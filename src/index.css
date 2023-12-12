@@ -3016,7 +3016,7 @@ button:not(:disabled) {
 .tile-head-text {
   color: #000;
   font-family: Quicksand;
-  font-size: 22px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 500;
   line-height: 30px;
@@ -3032,13 +3032,17 @@ button:not(:disabled) {
 }
 
 .card-icon {
-  background: #c9ffd3;
-  padding: 0px;
+  background-color: #c9ffd3;
   border-radius: 70px;
+  width: 51px;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .d-card-icon {
-  padding: 15px;
+  padding: 11px;
 }
 
 .tile-body {

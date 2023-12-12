@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export default function ProtectedRoutes({ isLoggedIn, component }) {
   const token = localStorage.getItem("wantedPtoken");
   if (!isLoggedIn || !token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/signup" />;
   }
 
   return component;
