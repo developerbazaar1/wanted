@@ -20,17 +20,13 @@ const Viewproducts = () => {
   const [products, setProduct] = useState([]);
   const [EditProduct, setEditProduct] = useState(null);
 
-  const { register, formState: handleSubmit } = useForm();
+  // const { register, formState: handleSubmit } = useForm();
 
   const {
-    register: registerForm2,
+    register,
     // formState: { errors: errorsForm2 },
     handleSubmit: handleSubmitForm2,
-  } = useForm({
-    defaultValues: {
-      prduct_name: EditProduct?.productname,
-    },
-  });
+  } = useForm();
 
   const handleProductEditModal = (product) => {
     console.log("rahul");
@@ -47,7 +43,7 @@ const Viewproducts = () => {
     setLoading(true);
     ProctedApi.getProduct(user.id, token)
       .then((res) => {
-        console.log(res.data.product);
+        // console.log(res.data.product);
         setProduct(res.data.product);
       })
       .catch(() => {
@@ -60,12 +56,12 @@ const Viewproducts = () => {
 
   const addProduct = async (formData) => {
     setLoading(false);
+    console.log("add product", formData);
     let data = {
       ...formData,
       productProvider_id: user.id,
       producProviderPortfolio_id: portfolio_id,
     };
-    // console.log(data);
     ProctedApi.addProduct(data, token)
       .then((res) => {
         console.log(res);

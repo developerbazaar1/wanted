@@ -470,7 +470,7 @@ const ProviderProtfilo = () => {
                       }`}
                     >
                       <label className="form-head" htmlFor="store_address">
-                        Store Address
+                        Location
                       </label>
                       <input
                         type="text"
