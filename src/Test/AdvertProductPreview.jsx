@@ -1,10 +1,5 @@
-import BeautySpaIcon from "../assets/development/BeautyAndSpa.png";
-// import FaceAndSkin from "../assets/development/BeauthyAndSpaBack.jpg";
 import "./AdvertProductPreview.css";
-
-// import FaceMassage1 from "../assets/development/FacilaMassage1.png";
-// import FaceMassage2 from "../assets/development/FacilaMassage2.png";
-// import FaceMassage3 from "../assets/development/FacilaMassage3.png";
+import BeautySpaIcon from "../assets/Development/BeautyAndSpa.png";
 import { useAuth } from "../service/auth";
 import { useEffect, useState } from "react";
 import { getPreviewAdvertData } from "../config/axiosUtils";
