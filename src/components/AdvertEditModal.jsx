@@ -15,7 +15,7 @@ const AdvertEditModal = ({
   editAdvertData,
   setRefresh,
 }) => {
-  console.log("edit advert data", editAdvertData);
+  // console.log("edit advert data", editAdvertData);
   const [imagesPrveiw, setimagesPrveiw] = useState();
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -101,7 +101,7 @@ const AdvertEditModal = ({
   };
 
   useEffect(() => {
-    console.log("in default setup useeffects");
+    // console.log("in default setup useeffects");
     let subCat = category?.find(
       (element) => element?.categoryName === editAdvertData?.advertCategory
     );

@@ -1,5 +1,6 @@
 import ProviderTop from "../assets/provider-top-img.png";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { IoIosArrowDown } from "react-icons/io";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -182,7 +183,7 @@ const ProviderProtfilo = () => {
     let subCat;
 
     if (portfolio?.storeCategory === undefined) {
-      subCat = category?.[0];
+      // subCat = category?.[0];
     } else {
       subCat = category?.find(
         (element) => element?.categoryName === portfolio?.storeCategory
@@ -413,6 +414,7 @@ const ProviderProtfilo = () => {
                         })}
                         onChange={handleCategoryChange}
                       >
+                        <option> Select Category </option>
                         {category?.map((element) => (
                           <option
                             key={element?._id}
@@ -422,6 +424,7 @@ const ProviderProtfilo = () => {
                           </option>
                         ))}
                       </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
@@ -444,6 +447,7 @@ const ProviderProtfilo = () => {
                           required: true,
                         })}
                       >
+                        {/* <option>Select Sub Category</option> */}
                         {selectedCategory &&
                           subcategory
                             ?.filter(
@@ -459,6 +463,7 @@ const ProviderProtfilo = () => {
                               </option>
                             ))}
                       </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}

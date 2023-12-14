@@ -10,6 +10,7 @@ import { DatedFormated } from "../helper/ToDate";
 import Swal from "sweetalert2";
 import NoDataFound from "../components/NoDataFound";
 import NoAdvertImg from "../assets/NoAdvert.png";
+import { FaEye } from "react-icons/fa";
 // const MySwal = withReactContent(Swal);
 const Advert = () => {
   const [showAdvertModal, setshowAdvertModal] = useState(false);
@@ -17,6 +18,7 @@ const Advert = () => {
   // const [checkBox, setcheckBox] = useState(true);
   const [loading, setLoading] = useState(false);
   const [adverts, setAdvert] = useState([]);
+  // console.log(adverts);
   const { user, token } = useAuth();
   const [refresh, setRefresh] = useState(true);
 
@@ -252,24 +254,6 @@ const Advert = () => {
                         ? DatedFormated(advert?.advertExpiryDate)
                         : DatedFormated(advert?.createdAt)}
                     </td>
-
-                    {/* {DatedFormated(advert?.advertExpiryDate) < new Date() ? (
-                      <td
-                        style={{
-                          color: "red",
-                        }}
-                      >
-                        expired
-                      </td>
-                    ) : (
-                      <td
-                        style={{
-                          color: "#2df54f",
-                        }}
-                      >
-                        Active
-                      </td>
-                    )} */}
                     {advert.advertStatus === "active" ? (
                       <td
                         style={{
@@ -299,6 +283,25 @@ const Advert = () => {
                           Manage Advert
                         </button>
                         <ul className="dropdown-menu">
+                          <li className="pointer text-center">
+                            <Link
+                              to={`/${advert._id}`}
+                              className="advert-preview"
+                            >
+                              <FaEye />
+                              <span>Preview</span>
+                            </Link>
+                          </li>
+                          <li className="pointer text-center my-1">
+                            <Link
+                              to="/postagain"
+                              state={{ advertData: advert }}
+                              className="postAgain-ling"
+                            >
+                              Post Again
+                            </Link>
+                          </li>
+
                           <li
                             className="pointer text-center advert_edit"
                             onClick={() => handleAdvertEditModal(advert)}
@@ -346,7 +349,6 @@ const Advert = () => {
                         <input
                           type="checkbox"
                           checked={advert.advertVisibility}
-                          // value={true}
                           onChange={() => toggleCheckbox(advert)}
                         />
                         <span className="slider round"></span>

@@ -25,6 +25,7 @@ import { setcategory } from "./features/categorySlice";
 import { setsubcategory } from "./features/subcategorySlice";
 import { setSubscription } from "./features/subscriptionSlice";
 import Plans from "./components/Plans";
+import AdvertProductPreview from "./Test/AdvertProductPreview";
 function App() {
   const { isLoggedIn, token, portfolio_id, user } = useAuth();
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ function App() {
   const fetchsubscription = async () => {
     getUserSubscription(token, user?.id, portfolio_id)
       .then((res) => {
-        console.log(res.data.result);
+        // console.log(res.data.result);
         // let sub = res.data.result;
         dispatch(
           setSubscription({
@@ -114,6 +115,16 @@ function App() {
                 <ProtectedRoutes
                   isLoggedIn={isLoggedIn}
                   component={<DashBoard />}
+                />
+              }
+            />
+            {/* advert Product Preview */}
+            <Route
+              path=":advertid"
+              element={
+                <ProtectedRoutes
+                  isLoggedIn={isLoggedIn}
+                  component={<AdvertProductPreview />}
                 />
               }
             />

@@ -3,6 +3,8 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 // import addCardIma1 from "../assets/plan-card01.png";
 // import addCardIma2 from "../assets/plan-card02.png";
 // import addCardIma3 from "../assets/plan-card03.png";
+import { IoIosArrowDown } from "react-icons/io";
+
 import { useForm } from "react-hook-form";
 import { ProctedApi } from "../config/axiosUtils";
 import { useAuth } from "../service/auth";
@@ -301,6 +303,8 @@ const AddAdvert = () => {
                         {/* <option value="category2">Category 2</option> */}
                         {/* Add more options as needed */}
                       </select>
+
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
 
@@ -341,6 +345,7 @@ const AddAdvert = () => {
                               </option>
                             ))}
                       </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
 

@@ -272,3 +272,21 @@ export async function getUserSubscription(token, id, provider_id) {
   });
   return response;
 }
+
+//This utils function will return advert preview data and products
+
+export async function getPreviewAdvertData(
+  token,
+  advert_id,
+  advertProvider_id
+) {
+  const response = await api.request({
+    url: `/advert-preview?advert_id=${advert_id}&advertProvider_id=${advertProvider_id}`,
+    method: `GET`,
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+}

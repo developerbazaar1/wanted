@@ -1117,3 +1117,21 @@ input:checked + .slider:before {
 }
 
 /* footer style end from here  */
+
+.advert-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  text-decoration: underline !important;
+  padding: 2px 0px;
+}
+
+/* style for category dropdown toogle start */
+
+.category-dropw-down-toogle {
+  position: absolute;
+  right: 18px;
+  top: 47px;
+}
+/* style for category dropdown toogle end*/

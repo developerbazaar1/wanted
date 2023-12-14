@@ -1,0 +1,370 @@
+.details_image_div {
+  /* width: 100vw; */
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.details_image_div > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.details .detail_icon {
+  width: 18px;
+  height: 18px;
+}
+.detail_icon {
+  width: 100%;
+  object-fit: cover;
+  height: 100%;
+}
+.detail_icon > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: flex;
+}
+
+.icon_cat_container {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.details_provider_favoruite {
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  top: 0;
+  right: 5px;
+  cursor: pointer;
+}
+
+.favoruite_grey {
+  /* color: #17c737; */
+  fill: #b5b5b5;
+}
+
+.detail_provider {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  position: relative;
+}
+.detail_provider > h3 {
+  margin: 0;
+}
+
+.details_location {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.details_contact {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.details_contact .contact_us {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 2.5px;
+  border: 2px solid #17c737;
+  background: #17c737;
+  gap: 9px;
+  cursor: pointer;
+}
+
+.contact_us > button,
+.visit_our_web_site > button {
+  border: none;
+  background-color: inherit;
+}
+.details_contact .visit_our_web_site {
+  display: flex;
+  padding: 5px 10px;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+  gap: 10px;
+  border-radius: 2.5px;
+  border: 2px solid var(--parrot-color);
+  width: auto;
+}
+
+.details_provider_products {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.details_contact .visit_our_web_site:hover {
+  background-color: var(--hover-parrot-button);
+  border-color: var(--hover-parrot-button);
+}
+.details_contact .contact_us:hover {
+  background-color: var(--hover-parrot-button);
+  border-color: var(--hover-parrot-button);
+}
+.details .details_description {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detial_product_image > div {
+  width: 33%;
+  height: 200px;
+}
+
+.carousel_imge {
+  /* width: 400px; */
+  height: 400px;
+}
+
+.carousel-item > img {
+  border-radius: 5px;
+}
+
+/* Revert the color of the carousel control icons */
+/* .carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #ff0000;
+} */
+
+.detial_product_image {
+  gap: 35px;
+}
+.detial_product_image > div > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+
+  object-fit: cover;
+}
+.details_description > h3 {
+  margin: 0;
+}
+.details_description > p {
+  text-align: justify;
+  font-family: Lato;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+}
+
+.social_head {
+  font-family: Quicksand;
+  font-size: 20px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.social_group > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.details_read_more {
+  color: var(--parrot-color);
+  cursor: pointer;
+}
+
+.detials_provider_img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.details_provider_ads {
+  width: 100%;
+  color: black;
+}
+
+.details_ads {
+  display: flex;
+  gap: 31px;
+  flex-wrap: wrap;
+  /* justify-content: center; */
+  color: black !important;
+}
+
+.detials_provider_img {
+  height: 75px;
+  position: relative;
+}
+
+.details_favoruite {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 2px;
+  right: 10px;
+}
+.details_provider_ads {
+  border: 1px solid #d1d1d1;
+  border-radius: 2.5px;
+}
+
+.details_ads_description {
+  margin: 7px 5px 0 5px;
+}
+
+.container_ads_button {
+  font-family: Lato;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; /* 160% */
+  border: none;
+  border-radius: 30px;
+  border-style: 49px;
+  padding: 2.5px 5px;
+  color: red;
+  background-color: #c9ffd3;
+}
+
+.container_ads_button ~ p {
+  margin-bottom: 0;
+  font-family: Lato;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.details_ads_description_provider {
+  color: #333;
+
+  font-family: Quicksand;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  /* line-height: 10px; */
+}
+
+.show_more_ads_btn {
+  border: none;
+  background-color: unset;
+  margin: 20px 0px;
+  color: #17c737;
+
+  font-family: Quicksand;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+@media screen and (min-width: 331px) {
+  .details_provider_ads {
+    width: 45%;
+  }
+}
+@media screen and (min-width: 536px) {
+  .details_provider_ads {
+    width: 47%;
+  }
+  .details_provider_ads {
+    width: 36%;
+  }
+  .details_ads {
+    gap: 37px;
+  }
+
+  .show_more_ads_btn {
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 736px) {
+  .details_provider_ads {
+    width: 29%;
+  }
+
+  .detials_provider_img {
+    height: 100px;
+  }
+}
+@media screen and (min-width: 888px) {
+  .details_provider_ads {
+    width: 21%;
+  }
+}
+@media screen and (min-width: 1020px) {
+  .details_provider_ads {
+    width: 18%;
+  }
+  .details_ads {
+    gap: 31px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .details_contact .visit_our_web_site {
+    padding: 10px 20px;
+  }
+
+  .details_contact .contact_us {
+    padding: 10px 20px;
+  }
+  .detial_img_main_div {
+    display: flex;
+    gap: 32px;
+  }
+
+  .details_location {
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .details_image_div {
+    width: 60%;
+    height: 600px;
+    height: 363px;
+  }
+
+  .details .details_description {
+    width: 50%;
+  }
+  .details .details_description > p {
+    line-height: 26px;
+    font-style: normal;
+    text-align: left;
+    font-size: 18px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .detail_provider {
+    width: 53%;
+  }
+
+  .details_provider_favoruite {
+    width: 31px;
+    height: 23px;
+    right: 0px;
+  }
+
+  .advert-preview-container {
+    width: 92%;
+  }
+}
+
+.postAgain-ling {
+  text-decoration: underline !important;
+}
