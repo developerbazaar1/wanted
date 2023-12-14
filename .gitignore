@@ -23,3 +23,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#test fitles
+/imageDeletetest.js
+/test.js
+/test2.js

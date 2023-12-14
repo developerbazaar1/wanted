@@ -7,17 +7,20 @@ const publicIdMatch = imageUrl.match(/\/v\d+\/(.+)$/);
 
 if (publicIdMatch && publicIdMatch[1]) {
   const public_id = publicIdMatch[1];
-  console.log(public_id);
+  // console.log(public_id);
 
   // Now you can use the public_id to delete the image
-  cloudinary.uploader.destroy(public_id, (error, result) => {
-    if (error) {
-      console.error("Error deleting image from Cloudinary:", error);
-    } else {
-      console.log("Image deleted from Cloudinary:", result);
-      // You can now remove the URL from your database
+  cloudinary.uploader.destroy(
+    "wantedvendor/1702208775862-542image (3)",
+    (error, result) => {
+      if (error) {
+        console.error("Error deleting image from Cloudinary:", error);
+      } else {
+        console.log("Image deleted from Cloudinary:", result);
+        // You can now remove the URL from your database
+      }
     }
-  });
+  );
 } else {
   console.error("Unable to extract public_id from the URL");
 }
