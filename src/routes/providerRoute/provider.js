@@ -48,7 +48,11 @@ const {
   addsubscriptionController,
 } = require("../../controllers/adminController/subscriptionController");
 const fetchedPaymentController = require("../../controllers/providerController/fetchePayment");
-const AdvertProductPreviewController = require("../../controllers/providerController/AdvertProductPreviewController");
+
+const {
+  AdvertProductPreviewController,
+  GetOnlyAdvertPreview,
+} = require("../../controllers/providerController/AdvertProductPreviewController");
 require("../../validations/subscriptionValidator");
 
 /**
@@ -139,7 +143,10 @@ ProviderRouter.get("/paymenthistory", auth, fetchedPaymentController);
 
 // This route fetch only active subscription of user
 ProviderRouter.get("/getactivesubscription", auth, getProviderSubscription);
-
+//this route get all advert , all product and portfolo
 ProviderRouter.get("/advert-preview", auth, AdvertProductPreviewController);
+
+//this route get all advert , all product , portfolo and particular advert
+ProviderRouter.get("/getonly-AdvertPreview", auth, GetOnlyAdvertPreview);
 
 module.exports = ProviderRouter;

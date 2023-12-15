@@ -46,7 +46,7 @@ async function addsubscriptionController(req, res, next) {
         subscriptionPlanPrice: plan?.plan_price,
       })
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         return res.status(OK).json({
           message: "subscription added successfully",
           status: "success",
@@ -54,14 +54,14 @@ async function addsubscriptionController(req, res, next) {
         });
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         return res.status(BAD_REQUEST).json({
           message: e._message,
           status: "error",
         });
       });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res
       .status(INTERNAL_SERVER_ERROR)
       .json({ message: "Internal Server Error" });
@@ -93,7 +93,7 @@ async function getProviderSubscription(req, res, next) {
         });
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         return res.status(BAD_REQUEST).json({
           status: "error",
           message: "subscription not found",
