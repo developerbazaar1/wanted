@@ -26,6 +26,7 @@ import { setsubcategory } from "./features/subcategorySlice";
 import { setSubscription } from "./features/subscriptionSlice";
 import Plans from "./components/Plans";
 import AdvertProductPreview from "./Test/AdvertProductPreview";
+import OnlyAdvertProductPreview from "./Test/OnlyPreviewPage";
 function App() {
   const { isLoggedIn, token, portfolio_id, user } = useAuth();
   const dispatch = useDispatch();
@@ -118,7 +119,7 @@ function App() {
                 />
               }
             />
-            {/* advert Product Preview */}
+            {/*profile advert Product Preview */}
             <Route
               path=":advertid"
               element={
@@ -128,6 +129,18 @@ function App() {
                 />
               }
             />
+
+            {/* this route show particular preview  Page */}
+            <Route
+              path="advertpreview/:advertid"
+              element={
+                <ProtectedRoutes
+                  isLoggedIn={isLoggedIn}
+                  component={<OnlyAdvertProductPreview />}
+                />
+              }
+            />
+
             <Route
               path="advert"
               element={

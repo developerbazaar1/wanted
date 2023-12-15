@@ -2,12 +2,12 @@ import "./AdvertProductPreview.css";
 import BeautySpaIcon from "../assets/Development/BeautyAndSpa.png";
 import { useAuth } from "../service/auth";
 import { useEffect, useState } from "react";
-import { getPreviewAdvertData } from "../config/axiosUtils";
+import { getOnlyAdvertPreviewData } from "../config/axiosUtils";
 import { Link, useParams } from "react-router-dom";
 import Spiner from "../components/Spiner";
 import ProductCrasuel from "./Components/ProductCrasuel";
 
-const AdvertProductPreview = () => {
+const OnlyAdvertProductPreview = () => {
   const [previewData, setpreviewData] = useState({
     data: {},
     status: "",
@@ -24,9 +24,9 @@ const AdvertProductPreview = () => {
 
   useEffect(() => {
     setLoading(true);
-    getPreviewAdvertData(token, advertid, user?.id)
+    getOnlyAdvertPreviewData(token, advertid, user?.id)
       .then((res) => {
-        // console.log(res);
+        // console.log(res?.data?.advertPreview);
         setpreviewData({
           data: res?.data?.advertPreview,
           status: "successfull",
@@ -42,7 +42,7 @@ const AdvertProductPreview = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [advertid]);
 
   if (loading) {
     return (
@@ -78,15 +78,15 @@ const AdvertProductPreview = () => {
           {/* // mobile None div */}
           <div className="details_location  d-none d-md-flex">
             <div className="detail_provider">
-              <h3>{previewData?.data?.Portfolio?.storeName}</h3>
-              <div>{previewData?.data?.Portfolio?.storeAddress}</div>
+              <h3>{previewData?.data?.advert?.advertTitle}</h3>
+              <div>{previewData?.data?.advert?.advertLocation}</div>
               <div className="icon_cat_container">
                 <div className="detail_icon">
                   <img src={BeautySpaIcon} alt="Ico" />
                 </div>
                 <div>
-                  {previewData?.data?.Portfolio?.storeCategory}/
-                  {previewData?.data?.Portfolio?.storeSubCategory}
+                  {previewData?.data?.advert?.advertCategory}/
+                  {previewData?.data?.advert?.advertSubCategory}
                 </div>
               </div>
 
@@ -180,7 +180,7 @@ const AdvertProductPreview = () => {
           <div className="detial_img_main_div">
             <div className="details_image_div ">
               <img
-                src={previewData?.data?.Portfolio?.storeThumbNail}
+                src={previewData?.data?.advert?.advertImages[0]}
                 alt="FaceAndSkin"
               />
             </div>
@@ -189,7 +189,7 @@ const AdvertProductPreview = () => {
             <div className="details_description  d-none d-md-flex ">
               <h3>About This Service</h3>
               <p>
-                {previewData?.data?.Portfolio?.storeDescription}
+                {previewData?.data?.advert?.advertDescription}
                 <span className="details_read_more">Read More</span>
               </p>
               <div className="social_head">Share This Deal</div>
@@ -257,15 +257,15 @@ const AdvertProductPreview = () => {
           </div>
           <div className="details_location  d-md-none">
             <div className="detail_provider">
-              <h3>{previewData?.data?.Portfolio?.storeName}</h3>
-              <div>{previewData?.data?.Portfolio?.storeAddress}</div>
+              <h3>{previewData?.data?.advert?.advertTitle}</h3>
+              <div>{previewData?.data?.advert?.advertLocation}</div>
               <div className="icon_cat_container">
                 <div className="detail_icon">
                   <img src={BeautySpaIcon} alt="Ico" />
                 </div>
                 <div>
-                  {previewData?.data?.Portfolio?.storeCategory}/
-                  {previewData?.data?.Portfolio?.storeSubCategory}
+                  {previewData?.data?.advert?.advertCategory}/
+                  {previewData?.data?.advert?.advertSubCategory}
                 </div>
               </div>
               <div className="details_provider_favoruite">
@@ -359,7 +359,7 @@ const AdvertProductPreview = () => {
           <div className="details_description  d-md-none">
             <h3>About This Service</h3>
             <p>
-              {previewData?.data?.Portfolio?.storeDescription}
+              {previewData?.data?.advert?.advertDescription}
               <span className="details_read_more">Read More</span>
             </p>
             <div className="social_head">Share This Deal</div>
@@ -473,4 +473,4 @@ const AdvertProductPreview = () => {
   );
 };
 
-export default AdvertProductPreview;
+export default OnlyAdvertProductPreview;

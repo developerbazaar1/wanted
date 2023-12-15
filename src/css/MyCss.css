@@ -487,6 +487,17 @@ th {
   background-color: var(--hover-parrot-button);
 }
 
+.update-discard-btns {
+  display: flex;
+  gap: 26px;
+  justify-content: center;
+  margin-left: 29px;
+}
+
+.update-discard-btns > div {
+  cursor: pointer;
+}
+
 .password_container {
   margin-top: 30px !important;
 }

@@ -179,7 +179,7 @@ const ProviderProtfilo = () => {
   });
 
   useEffect(() => {
-    console.log("portfoloio category", portfolio?.storeCategory);
+    // console.log("portfoloio category", portfolio?.storeCategory);
     let subCat;
 
     if (portfolio?.storeCategory === undefined) {
@@ -191,7 +191,7 @@ const ProviderProtfilo = () => {
     }
     setSelectedCategory(subCat);
   }, [portfolio]);
-  console.log("This is selected category", selectedCategory);
+  // console.log("This is selected category", selectedCategory);
   return (
     <>
       <Spiner loading={loading} />
@@ -448,6 +448,9 @@ const ProviderProtfilo = () => {
                         })}
                       >
                         {/* <option>Select Sub Category</option> */}
+                        {!portfolio?.storeSubCategory && (
+                          <option>Select Sub Category</option>
+                        )}
                         {selectedCategory &&
                           subcategory
                             ?.filter(
@@ -554,29 +557,6 @@ const ProviderProtfilo = () => {
                         )}
                         {/* message to show when no image have has been selected end */}
                         {/* image preview container  start */}
-
-                        {/* {selectedImage && (
-                          <div className="protfilo_image_preview_container">
-                            <div className="preview_image_div">
-                              <img
-                                src={selectedImage}
-                                alt="loading"
-                                className="protfilo_prew_image"
-                              />
-                            </div>
-                            <button
-                              className="protfilo_prew_image_remove_button"
-                              onClick={removeImagePreview}
-                            >
-                              Remove
-                            </button>
-
-                            <span className="protfilo_preview_image_name">
-                              {fileName}
-                            </span>
-                          </div>
-                        )} */}
-
                         <ImagePreview
                           selectedImage={selectedImage}
                           fileName={fileName}

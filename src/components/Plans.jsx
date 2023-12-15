@@ -58,7 +58,7 @@ const Plans = () => {
     function fetchPlans() {
       GetAllPlan()
         .then((res) => {
-          console.log(res?.plan);
+          // console.log(res?.plan);
           const filteredPlans = res?.plan.filter(
             (plan) => !storeSubscription.some((sub) => sub.plan_id === plan._id)
           );
@@ -66,7 +66,7 @@ const Plans = () => {
           // setPlans(res?.plan);
         })
         .catch((e) => {
-          console.error(e);
+          // console.error(e);
           setError("Failed to load plans. Please try again.");
         });
     }

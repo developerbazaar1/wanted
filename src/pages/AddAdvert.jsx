@@ -49,7 +49,7 @@ const AddAdvert = () => {
     const data = castAddAdvert(formData, user, portfolio_id);
     ProctedApi.AddAdvert(data, token)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 201) {
           return toast.success("created");
         }

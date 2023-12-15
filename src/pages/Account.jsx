@@ -14,13 +14,20 @@ const Account = () => {
   const { user, token } = useAuth();
   const [loading, setLoading] = useState(false);
 
+  console.log("updated value", user);
+
   const dispatch = useDispatch();
   // const [passwordError, setpasswordError] = useState({
   //   password: false,
   //   newPassword: false,
   //   confirmnewPassword: false,
   // });
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty },
+    reset,
+  } = useForm({
     defaultValues: {
       userEmail: user?.email,
       userName: user?.userName,
@@ -28,14 +35,27 @@ const Account = () => {
     },
   });
 
+  console.log("isDirty", isDirty);
   // const { password, newPassword, confirmnewPassword } = watch([
   //   "password",
   //   "newPassword",
   //   "confirmnewPassword",
   // ]);
 
+  // function to discard the changes
+  function discardChanges(e) {
+    e.preventDefault();
+    reset({
+      userEmail: user?.email,
+      userName: user?.userName,
+      userPhone: user?.phoneNumber,
+      password: "",
+      newPassword: "",
+      confirmnewPassword: "",
+    });
+  }
+
   const updateProfile = (FormData) => {
-    // console.log(FormData, "This is Form Data");
     const data = {
       userName: FormData.userName,
       password: FormData?.password,
@@ -75,7 +95,7 @@ const Account = () => {
     setLoading(true);
     ProctedApi.updateProfile(data, token)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
         dispatch(
           update({
@@ -86,10 +106,24 @@ const Account = () => {
         if (res?.status === 200) {
           toast.success(res.data.message);
         }
+
+        reset({
+          password: "",
+          newPassword: "",
+          confirmnewPassword: "",
+        });
       })
       .catch((e) => {
         // console.log(e);
         toast.error(e?.response?.data?.message);
+        reset({
+          userEmail: user?.email,
+          userName: user?.userName,
+          userPhone: user?.phoneNumber,
+          password: "",
+          newPassword: "",
+          confirmnewPassword: "",
+        });
       })
       .finally(() => {
         setLoading(false);
@@ -261,8 +295,13 @@ const Account = () => {
                   </div>
                 </div>
               </div>
-              <div className="text-center my-4">
-                <button className="save_update_button ">Save Updates</button>
+              <div className="text-center update-discard-btns my-4">
+                <button className="save_update_button">Save Updates</button>
+                {isDirty && (
+                  <div className="save_update_button" onClick={discardChanges}>
+                    Discard Changes
+                  </div>
+                )}
               </div>
             </form>
           </div>

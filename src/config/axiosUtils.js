@@ -273,7 +273,7 @@ export async function getUserSubscription(token, id, provider_id) {
   return response;
 }
 
-//This utils function will return advert preview data and products
+//This utils function will return portfolio preview data and products and advert
 
 export async function getPreviewAdvertData(
   token,
@@ -282,6 +282,24 @@ export async function getPreviewAdvertData(
 ) {
   const response = await api.request({
     url: `/advert-preview?advert_id=${advert_id}&advertProvider_id=${advertProvider_id}`,
+    method: `GET`,
+    headers: {
+      Authorization: `${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+}
+
+//This utils function will return only advert preview data and products and portfolio
+
+export async function getOnlyAdvertPreviewData(
+  token,
+  advert_id,
+  advertProvider_id
+) {
+  const response = await api.request({
+    url: `/getonly-AdvertPreview?advert_id=${advert_id}&advertProvider_id=${advertProvider_id}`,
     method: `GET`,
     headers: {
       Authorization: `${token}`,
