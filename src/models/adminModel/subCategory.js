@@ -9,6 +9,9 @@ const subcategoryScehma = new mongoose.Schema(
     subCategoryName: {
       type: String,
     },
+    subCatImg: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

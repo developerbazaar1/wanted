@@ -62,6 +62,7 @@ const GetOnlyAdvertPreview = async (req, res, next) => {
 
     const product = await productsModal.find({
       productProvider_id: advertProvider_id,
+      advert_id: advert_id,
     });
 
     let advertPreview = {

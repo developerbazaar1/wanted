@@ -16,7 +16,9 @@ const {
 
 const addCategoryController = async (req, res, next) => {
   let { categoryName } = req.body;
-  console.log(categoryName);
+  const ImgIcon = req.catImgAndIcon;
+  // console.log("upload urls inside the", ImgIcon);
+  // console.log(categoryName);
   try {
     if (!categoryName) {
       return res.status(BAD_REQUEST).json({
@@ -24,7 +26,11 @@ const addCategoryController = async (req, res, next) => {
       });
     }
 
-    let result = await categroyModal.create({ categoryName });
+    let result = await categroyModal.create({
+      categoryName,
+      categoryIcon: ImgIcon.categoryIcon,
+      categoryImage: ImgIcon.categoryImage,
+    });
 
     if (!result) {
       return res.status(INTERNAL_SERVER_ERROR).json({
@@ -37,7 +43,7 @@ const addCategoryController = async (req, res, next) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       message: "Internal Server Error",
     });
@@ -54,6 +60,7 @@ const addCategoryController = async (req, res, next) => {
 
 const updateCategoryController = async (req, res, next) => {
   let { categoryName, _id } = req.body;
+  const ImgIcon = req?.catImgAndIcon;
 
   try {
     if (!_id) {
@@ -70,9 +77,13 @@ const updateCategoryController = async (req, res, next) => {
     let result = await categroyModal.findByIdAndUpdate(
       _id,
       {
-        categoryName: categoryName,
+        $set: {
+          categoryName: categoryName,
+          categoryIcon: ImgIcon?.categoryIcon,
+          categoryImage: ImgIcon?.categoryImage,
+        },
       },
-      (returnDocument = "after")
+      { returnDocument: "after" }
     );
 
     if (!result) {
@@ -86,6 +97,7 @@ const updateCategoryController = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       message: "Internal Server Error",
     });

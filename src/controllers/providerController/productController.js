@@ -144,7 +144,8 @@ const deleteProductController = async (req, res, next) => {
 
 const updateProductController = async (req, res) => {
   try {
-    let { _id, provider_id, productname } = req.body;
+    let { _id, provider_id, productname, advert_id, productPrice } = req.body;
+    // console.log(advert_id, productPrice);
 
     if (!_id || !provider_id) {
       return res.status(BAD_REQUEST).json({
@@ -166,6 +167,8 @@ const updateProductController = async (req, res) => {
 
     let updateValue = {
       productname,
+      advert_id,
+      productPrice,
     };
 
     // console.log(filter);
@@ -192,6 +195,7 @@ const updateProductController = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",

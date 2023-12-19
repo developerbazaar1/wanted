@@ -5,6 +5,12 @@ const categoryScehma = new mongoose.Schema(
     categoryName: {
       type: String,
     },
+    categoryIcon: {
+      type: String,
+    },
+    categoryImage: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

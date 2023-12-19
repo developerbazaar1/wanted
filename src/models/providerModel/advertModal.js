@@ -53,6 +53,9 @@ const advertModal = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  advertOfferPrice: {
+    type: Number,
+  },
   advertImages: [
     {
       type: String,

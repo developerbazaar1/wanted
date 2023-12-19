@@ -5,6 +5,9 @@ const productsModal = new mongoose.Schema(
     productname: {
       type: String,
     },
+    productPrice: {
+      type: Number,
+    },
     productProvider_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ProviderUser",
@@ -12,6 +15,10 @@ const productsModal = new mongoose.Schema(
     producProviderPortfolio_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ProviderPortfolio",
+    },
+    advert_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "AdvertModal",
     },
     productImages: [
       {
