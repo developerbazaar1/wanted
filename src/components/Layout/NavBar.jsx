@@ -35,7 +35,7 @@ const NavBar = () => {
 
           <div className="vendor_profile_container hover_black">
             {toekn && (
-              <Link to="/account" className="vendor_profile_name text-light">
+              <Link to="../" className="vendor_profile_name text-light">
                 <BiUser className="vendor_profile_icon" />
 
                 <div>{user?.userName}</div>

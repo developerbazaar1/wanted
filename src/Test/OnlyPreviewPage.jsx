@@ -6,6 +6,7 @@ import { getOnlyAdvertPreviewData } from "../config/axiosUtils";
 import { Link, useParams } from "react-router-dom";
 import Spiner from "../components/Spiner";
 import ProductCrasuel from "./Components/ProductCrasuel";
+import { useCategory } from "../service/categoryhelper";
 
 const OnlyAdvertProductPreview = () => {
   const [previewData, setpreviewData] = useState({
@@ -17,6 +18,8 @@ const OnlyAdvertProductPreview = () => {
   const [loading, setLoading] = useState(false);
   let { advertid } = useParams();
   const { user, token } = useAuth();
+  const { category } = useCategory();
+  // console.log(category);
   //   console.log(token);
 
   //   console.log("preview data", previewData?.data?.adverts);
@@ -427,8 +430,12 @@ const OnlyAdvertProductPreview = () => {
         </div>
         <h2>Provider Products</h2>
 
-        {previewData?.data?.product?.map((product) => (
-          <ProductCrasuel key={product?._id} product={product} />
+        {previewData?.data?.product?.map((product, index) => (
+          <ProductCrasuel
+            key={product?._id}
+            product={product}
+            unique={index + 1}
+          />
         ))}
         {/* {crasule("No-Chip Manicure")} */}
         <h5>More Ads from this provider</h5>

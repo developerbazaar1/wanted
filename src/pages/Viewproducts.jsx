@@ -29,7 +29,7 @@ const Viewproducts = () => {
   } = useForm();
 
   const handleProductEditModal = (product) => {
-    console.log("rahul");
+    // console.log("rahul");
     setEditProduct(product);
     setshowEditProductModal(true);
   };
@@ -43,7 +43,7 @@ const Viewproducts = () => {
     setLoading(true);
     ProctedApi.getProduct(user.id, token)
       .then((res) => {
-        // console.log(res.data.product);
+        console.log(res.data.product);
         setProduct(res.data.product);
       })
       .catch(() => {
@@ -81,7 +81,6 @@ const Viewproducts = () => {
       });
   };
 
-  //function to delete the product
   let removeProduct = (productId) => {
     setLoading(true);
     let data = {
@@ -107,13 +106,6 @@ const Viewproducts = () => {
         setLoading(false);
       });
   };
-
-  //function to handle functionality
-
-  // let editProduct = (editproduct) => {
-  //   setEditProduct(editproduct);
-  //   setshowEditProduct(true);
-  // };
 
   useEffect(() => {
     getProduct();

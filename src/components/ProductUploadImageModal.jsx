@@ -168,7 +168,7 @@ const ProductUploadImageModal = ({
                     <div className="protfilo_image_icons">
                       <AiOutlineCloudUpload />
 
-                      <span>Drag Or Upload Your Thumbnail Image Here</span>
+                      <span>Drag Or Upload Your Product Images Here</span>
                     </div>
 
                     {/* message to show when no image have has been selected end */}

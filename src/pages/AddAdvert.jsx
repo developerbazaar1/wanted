@@ -465,7 +465,7 @@ const AddAdvert = () => {
                     {/* <!-- field col  start :: dropify--> */}
                     <div className="form-group protfilo_image_upload">
                       <label className="form-head mb-2" htmlFor="file_upload">
-                        Upload Advert Images
+                        Upload main image
                       </label>
                       <div
                         onDragOver={preventDefault}
@@ -490,10 +490,7 @@ const AddAdvert = () => {
                         {!selectedImage && (
                           <div className="protfilo_image_icons">
                             <AiOutlineCloudUpload />
-
-                            <span>
-                              Drag Or Upload Your Thumbnail Image Here
-                            </span>
+                            <span>Drag Or Upload Advert Product Images</span>
                           </div>
                         )}
                         {/* message to show when no image have has been selected end */}
