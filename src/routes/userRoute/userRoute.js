@@ -32,4 +32,6 @@ UserRoutes.put(
   profileImageHelper("profilePic")
 );
 
+UserRoutes.get("/service");
+
 module.exports = UserRoutes;

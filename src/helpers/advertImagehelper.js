@@ -4,6 +4,13 @@ const cloudinary = require("../config/cloudinary");
 
 const handleFileUpload = (fieldName) => async (req, res, next) => {
   // console.log(req.files, "files");
+  // console.log(typeof req.body.portfolioImageCheckbox);
+  if (req.body.portfolioImageCheckbox === "true") {
+    // console.log(req.body.portfolioImageCheckbox);
+    next();
+    return;
+  }
+  // console.log("After next");
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "No files uploaded" });

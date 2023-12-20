@@ -207,8 +207,6 @@ const updateProductImageController = async (req, res) => {
   try {
     let { _id, provider_id, productImages } = req.body;
 
-    // console.log(productImages, "user provided images");
-
     let updateImgUrl = req.productImages;
     if (!_id || !provider_id) {
       return res.status(BAD_REQUEST).json({

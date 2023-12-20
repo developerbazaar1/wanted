@@ -18,6 +18,11 @@ const providerModel = new mongoose.Schema(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      enum: ["user", "vendor", "admin"],
+      // required: true,
+    },
   },
   { timestamps: true }
 );

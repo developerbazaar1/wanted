@@ -9,6 +9,7 @@ const {
   CREATED,
 } = require("../../httpStatusCode");
 const SubscriptionModal = require("../../models/providerModel/ProviderSubscriptionModal");
+const providerPortfolio = require("../../models/providerModel/providerPortfolio");
 
 /**
  *
@@ -50,6 +51,22 @@ const addAdvert = async (req, res, next) => {
         status: "error",
         message: "No remaining ads in the subscription",
       });
+    }
+
+    //check to use portfolio image as the advert main images
+    if (req.body.portfolioImageCheckbox === "true") {
+      console.log(provider_portfolio_id);
+      let portfolio = await providerPortfolio.findById(provider_portfolio_id);
+
+      if (!portfolio) {
+        return res
+          .status(BAD_REQUEST)
+          .json({ message: "Something Went Wrong!" });
+      }
+
+      console.log(portfolio);
+
+      req["advertImageUrls"] = portfolio.storeThumbNail;
     }
 
     // Create the advertisement
