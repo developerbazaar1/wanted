@@ -192,7 +192,7 @@ const ProductEditModal = ({
                         {advert?.advertTitle}
                       </option>
                     ))}
-                    <option value="">Advert 1</option>
+                    {/* <option value="">Advert 1</option> */}
                   </select>
                   <label htmlFor="advert_id">
                     <svg
