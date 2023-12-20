@@ -44,6 +44,8 @@ const AddAdvert = () => {
   };
 
   const HandleAddadvertSubmit = (formData) => {
+    // console.log(formData);
+    // return;
     formData["subscription_plan_id"] = selectedSubscription._id;
     setLoading(true);
     const data = castAddAdvert(formData, user, portfolio_id);
@@ -464,9 +466,23 @@ const AddAdvert = () => {
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                     {/* <!-- field col  start :: dropify--> */}
                     <div className="form-group protfilo_image_upload">
-                      <label className="form-head mb-2" htmlFor="file_upload">
-                        Upload main image
+                      <label className="form-head mb-2 row">
+                        <span className="col-12 col-lg-4">
+                          Upload main image
+                        </span>
+                        <label
+                          htmlFor="portfolioImageCheckbox"
+                          className="col-12 col-lg-8 text-lg-end"
+                        >
+                          <input
+                            type="checkbox"
+                            id="portfolioImageCheckbox"
+                            {...register("portfolioImageCheckbox", {})}
+                          />{" "}
+                          Select Portfolio Image As Mian Image
+                        </label>
                       </label>
+
                       <div
                         onDragOver={preventDefault}
                         onDragEnter={preventDefault}
@@ -490,7 +506,7 @@ const AddAdvert = () => {
                         {!selectedImage && (
                           <div className="protfilo_image_icons">
                             <AiOutlineCloudUpload />
-                            <span>Drag Or Upload Advert Product Images</span>
+                            <span>Drag Or Upload Advert Main Images</span>
                           </div>
                         )}
                         {/* message to show when no image have has been selected end */}
@@ -529,13 +545,6 @@ const AddAdvert = () => {
                   </div>
                   {/* <!-- field col end --> */}
                 </div>
-
-                {/* <button
-                  className="payment_final_submission_btn mt-2"
-                  type="submit"
-                >
-                  Submit
-                </button> */}
               </form>
               {/* <!-- add book form up end --> */}
             </div>
@@ -549,107 +558,6 @@ const AddAdvert = () => {
           selectedSubscription={selectedSubscription}
           loading={loading}
         />
-        {/* <section className="card-section">
-          <div className="row justify-content-center mt-5 pb-5">
-            <div className="col-md-12 col-sm-12 col-xs-12 justify-content-center">
-              <div className="select-plan-head">
-                <h4 className="text-center">Available Subscription</h4>
-              </div>
-              <div className="text-center d-flex flex-column flex-md-row gap-4  justify-content-center align-items-center">
-                {subscription ? (
-                  subscription?.map((sub) => (
-                    <div
-                      key={sub?._id}
-                      className={`card-plan pointer`}
-                      onClick={() => handleSelectsub(sub)}
-                    >
-                      <div className="plan-card-image ">
-                        <img
-                          className="w-50px"
-                          src={addCardIma1}
-                          alt="Image for Plan Card"
-                        />
-                      </div>
-                      <h2 className="p-card-title mt-2">
-                        {sub?.subscriptionPlanName}
-                      </h2>
-                      <div className="plan-price-status mt-2 d-flex flex-column">
-                        <h2 className="mb-0">
-                          &euro; {sub?.subscriptionPlanPrice}
-                        </h2>
-                      </div>
-                      <div className="d-flex flex-column gap-1 my-1">
-                        <div className="d-flex justify-content-between">
-                          <span className="add_advert_show">Ads Lefts</span>
-                          <span className="add-advert_day">
-                            {sub?.remainingAds} Ads
-                          </span>
-                        </div>
-                        <div className="d-flex justify-content-between">
-                          <span className="add_advert_show">Expired On</span>
-                          <span className="add-advert_day">
-                            {DatedFormated(sub?.expiryDate)}
-                          </span>
-                        </div>
-                      </div>
-                      <div>
-                        <button className="add_advert_select_plan_btn mt-1">
-                          {selectedSubscription === sub
-                            ? "Selected"
-                            : "Select Plan"}
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <>
-                    <h5>
-                      Oops! It looks like your subscription is inactive Or You
-                      don&#39;t ads left in It. To continue Publishing Your ads,
-                      please consider purchasing a Plan. Thank you
-                    </h5>
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="text-center">
-              {subscription ? (
-                <button
-                  className="mt-2 advert_pay_btn"
-                  disabled={!selectedSubscription}
-                >
-                  {selectedSubscription
-                    ? `You have selected ${selectedSubscription.subscriptionPlanName}`
-                    : "Select a Plan"}
-                </button>
-              ) : (
-                <Link>
-                  <button className="mt-2 advert_pay_btn">Buy Now</button>
-                </Link>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {selectedSubscription && (
-          <section className="payment-conform-section">
-            <div className="row justify-content-center">
-              <div className="col col-md-8 col-lg-6 text-center">
-                <div>
-                  <button
-                    className="payment_final_submission_btn mt-2"
-                    type="submit"
-                    form="add-advert-form"
-                    disabled={loading}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-        )} */}
       </main>
     </>
   );

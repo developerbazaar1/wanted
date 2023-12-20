@@ -285,7 +285,7 @@ const Advert = () => {
                         <ul className="dropdown-menu">
                           <li className="pointer text-center">
                             <Link
-                              to={`/${advert._id}`}
+                              to={`/advertpreview/${advert._id}`}
                               className="advert-preview"
                             >
                               <FaEye />

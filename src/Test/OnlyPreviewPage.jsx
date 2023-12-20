@@ -6,9 +6,14 @@ import { getOnlyAdvertPreviewData } from "../config/axiosUtils";
 import { Link, useParams } from "react-router-dom";
 import Spiner from "../components/Spiner";
 import ProductCrasuel from "./Components/ProductCrasuel";
-import { useCategory } from "../service/categoryhelper";
+// import { useCategory } from "../service/categoryhelper";
+import { FaInfoCircle } from "react-icons/fa";
+import ProviderDetailsModal from "./Components/ProviderDetailsModal";
 
 const OnlyAdvertProductPreview = () => {
+  const [showProviderDetialsModal, setShowProviderDetialsModal] =
+    useState(false);
+
   const [previewData, setpreviewData] = useState({
     data: {},
     status: "",
@@ -18,7 +23,7 @@ const OnlyAdvertProductPreview = () => {
   const [loading, setLoading] = useState(false);
   let { advertid } = useParams();
   const { user, token } = useAuth();
-  const { category } = useCategory();
+  // const { category } = useCategory();
   // console.log(category);
   //   console.log(token);
 
@@ -35,7 +40,7 @@ const OnlyAdvertProductPreview = () => {
           status: "successfull",
         });
       })
-      .catch((e) => {
+      .catch(() => {
         // console.log(e);
         setpreviewData({
           error: "something Went Wrong Try Later!",
@@ -81,7 +86,14 @@ const OnlyAdvertProductPreview = () => {
           {/* // mobile None div */}
           <div className="details_location  d-none d-md-flex">
             <div className="detail_provider">
-              <h3>{previewData?.data?.advert?.advertTitle}</h3>
+              <div className="advert-title-info-icon">
+                <h3>{previewData?.data?.advert?.advertTitle}</h3>
+                <FaInfoCircle
+                  color="#17c737"
+                  size={22}
+                  onClick={() => setShowProviderDetialsModal(true)}
+                />
+              </div>
               <div>{previewData?.data?.advert?.advertLocation}</div>
               <div className="icon_cat_container">
                 <div className="detail_icon">
@@ -92,7 +104,6 @@ const OnlyAdvertProductPreview = () => {
                   {previewData?.data?.advert?.advertSubCategory}
                 </div>
               </div>
-
               <div className="details_provider_favoruite">
                 <svg
                   viewBox="0 0 24 24"
@@ -173,7 +184,10 @@ const OnlyAdvertProductPreview = () => {
                   </defs>
                 </svg>
                 <button>
-                  <Link to={previewData?.data?.Portfolio?.storeWebsite}>
+                  <Link
+                    to={previewData?.data?.Portfolio?.storeWebsite}
+                    target="_blank"
+                  >
                     Visit Our Websites
                   </Link>
                 </button>
@@ -260,7 +274,14 @@ const OnlyAdvertProductPreview = () => {
           </div>
           <div className="details_location  d-md-none">
             <div className="detail_provider">
-              <h3>{previewData?.data?.advert?.advertTitle}</h3>
+              <div className="advert-title-info-icon">
+                <h3>{previewData?.data?.advert?.advertTitle}</h3>{" "}
+                <FaInfoCircle
+                  color="#17c737"
+                  size={20}
+                  onClick={() => setShowProviderDetialsModal(true)}
+                />
+              </div>
               <div>{previewData?.data?.advert?.advertLocation}</div>
               <div className="icon_cat_container">
                 <div className="detail_icon">
@@ -352,7 +373,10 @@ const OnlyAdvertProductPreview = () => {
                 </svg>
                 <button>
                   {" "}
-                  <Link to={previewData?.data?.Portfolio?.storeWebsite}>
+                  <Link
+                    to={previewData?.data?.Portfolio?.storeWebsite}
+                    target="_blank"
+                  >
                     Visit Our Websites
                   </Link>
                 </button>
@@ -368,7 +392,7 @@ const OnlyAdvertProductPreview = () => {
             <div className="social_head">Share This Deal</div>
             <div className="social_group">
               <div>
-                <a href="https://gmail.ocm">
+                <Link to="https://gmail.ocm" target="_blank">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -381,8 +405,8 @@ const OnlyAdvertProductPreview = () => {
                       fill="black"
                     />
                   </svg>
-                </a>
-                <a href="https://facebook.com">
+                </Link>
+                <Link to="https://facebook.com" target="_blank">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -395,8 +419,8 @@ const OnlyAdvertProductPreview = () => {
                       fill="black"
                     />
                   </svg>
-                </a>
-                <a href="https://twitter.com">
+                </Link>
+                <Link to="https://twitter.com" target="_blank">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -409,8 +433,8 @@ const OnlyAdvertProductPreview = () => {
                       fill="black"
                     />
                   </svg>
-                </a>
-                <a href="https://pintres.com">
+                </Link>
+                <Link to="https://pintres.com" target="_blank">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -423,7 +447,7 @@ const OnlyAdvertProductPreview = () => {
                       fill="black"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -476,6 +500,12 @@ const OnlyAdvertProductPreview = () => {
           Show all Ads from this provider
         </button>
       </div>
+
+      <ProviderDetailsModal
+        showProviderDetialsModal={showProviderDetialsModal}
+        setShowProviderDetialsModal={setShowProviderDetialsModal}
+        portfolio={previewData?.data?.Portfolio}
+      />
     </>
   );
 };

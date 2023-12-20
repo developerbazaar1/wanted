@@ -7,7 +7,6 @@ import { ImgSizeCheck } from "../helper/imageSizeCheck";
 import { ProctedApi } from "../config/axiosUtils";
 import { useAuth } from "../service/auth";
 import Spiner from "./Spiner";
-
 const ProductUploadImageModal = ({
   showProductImgModal,
   setshowProductImgModal,
@@ -39,9 +38,6 @@ const ProductUploadImageModal = ({
         toast.error("File size exceeds the limit of 5 MB");
         return;
       }
-      if (imagesPrveiw.length > 2) {
-        return alert("No More images allowed !");
-      }
       if (files[i] && files[i].type.startsWith("image/")) {
         setImg((img) => [...img, files[i]]);
         const reader = new FileReader();
@@ -59,7 +55,7 @@ const ProductUploadImageModal = ({
   const handleImageDrop = (e) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
-    console.log(files);
+    // console.log(files);
 
     for (let i = 0; i < files.length; i++) {
       if (!files[i].type.startsWith("image/")) {
@@ -90,9 +86,9 @@ const ProductUploadImageModal = ({
     // return;
     data.append("_id", editProductImgData?._id);
     data.append("provider_id", user.id);
-    data.append("productImages", editProductImgData?.productImages[0]);
-    data.append("productImages", editProductImgData?.productImages[1]);
-    data.append("productImages", editProductImgData?.productImages[2]);
+    editProductImgData?.productImages?.forEach((url) => {
+      data.append("productImages", url);
+    });
     img.forEach((file) => {
       data.append("img", file);
     });
@@ -101,7 +97,7 @@ const ProductUploadImageModal = ({
     // return;
     ProctedApi.updateProductImg(data, token)
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         toast.success(res?.data?.message);
         let updateProduct = res?.data?.Updateproduct;
         handleClose();
@@ -144,12 +140,11 @@ const ProductUploadImageModal = ({
                     <RxCross2 />
                   </div>
                 </div>
-
                 {/* //drag and drop image container start */}
                 <div className="add_prduct_img_container">
-                  <label className="form-head mb-2" htmlFor="file_upload">
+                  {/* <label className="form-head mb-2" htmlFor="file_upload">
                     Your Can add 3 images
-                  </label>
+                  </label> */}
                   <div
                     onDragOver={preventDefault}
                     onDragEnter={preventDefault}
@@ -173,27 +168,6 @@ const ProductUploadImageModal = ({
 
                     {/* message to show when no image have has been selected end */}
                     {/* image preview container  start */}
-
-                    {/* <div className="protfilo_image_preview_container">
-                          <div className="preview_image_div">
-                            <img
-                              
-                              alt="loading"
-                              className="protfilo_prew_image"
-                            />
-                          </div>
-                          <button
-                            className="protfilo_prew_image_remove_button"
-                            
-                          >
-                            Remove
-                          </button>
-
-                          <span className="protfilo_preview_image_name">
-                          
-                          </span>
-                        </div> */}
-
                     {/* image preview container start end */}
                   </div>
 
@@ -202,49 +176,30 @@ const ProductUploadImageModal = ({
                   </small>
                 </div>
                 {/* //drag and drop image container end */}
-
                 {/* products image review products start */}
 
-                <div className="add_productImgrewive_container mt-3">
-                  {Array.from({ length: 3 }, (_, index) => (
-                    <div key={index}>
-                      <img
-                        src={
-                          imagesPrveiw[index]
-                            ? imagesPrveiw[index]
-                            : editProductImgData?.productImages[index] // Replace with your placeholder image path
-                        }
-                        alt={`preview-${index}`}
-                      />
-                    </div>
-                  ))}
-                  {/* {editProductImgData?.productImages?.map(
-                    (productimg, index) => (
+                <div className="add_productImgrewive_container">
+                  {Array.from(
+                    {
+                      length:
+                        editProductImgData?.productImages.length + img?.length,
+                    },
+                    (_, index) => (
                       <div key={index}>
                         <img
                           src={
                             imagesPrveiw[index]
                               ? imagesPrveiw[index]
-                              : productimg
+                              : editProductImgData?.productImages[index] // Replace with your placeholder image path
                           }
-                          alt="img"
+                          alt={`preview-${index}`}
                         />
                       </div>
                     )
-                  )} */}
-                  {/* {imagesPrveiw?.map((img, index) => (
-                    <div key={index}>
-                      <img src={img} alt={`preview-${index}`} className="" />
-                    </div>
-                  ))}
-
-                  {Array.from({ length: numEmptyDivs }, (_, index) => (
-                    <div key={index}></div>
-                  ))} */}
+                  )}
                 </div>
 
                 {/* products image review products end */}
-
                 <div className="text-center mt-4">
                   <button
                     className="edit_product_modal_btn"

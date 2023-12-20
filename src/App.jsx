@@ -120,7 +120,7 @@ function App() {
               }
             />
             {/*profile advert Product Preview */}
-            <Route
+            {/* <Route
               path=":advertid"
               element={
                 <ProtectedRoutes
@@ -128,7 +128,7 @@ function App() {
                   component={<AdvertProductPreview />}
                 />
               }
-            />
+            /> */}
 
             {/* this route show particular preview  Page */}
             <Route

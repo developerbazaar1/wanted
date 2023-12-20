@@ -12,7 +12,10 @@ export function castAddAdvert(formData, user, portfolio_id) {
   data.append("advertPostalCode", formData?.adPostalCode);
   data.append("provider_portfolio_id", portfolio_id);
   data.append("provider_id", user.id);
-  data.append("img", formData.img);
+  data.append("portfolioImageCheckbox", formData.portfolioImageCheckbox);
+  if (!formData.portfolioImageCheckbox) {
+    data.append("img", formData.img);
+  }
   data.append("subscription_plan_id", formData.subscription_plan_id);
   return data;
 }
