@@ -16,6 +16,9 @@ const {
   updateProfileValidator,
 } = require("../../validations/userValidation");
 const { profileImageHelper } = require("../../helpers/userHelper");
+const {
+  liveAndLatestOfferController,
+} = require("../../controllers/userController/liveAdsLatesController");
 
 /**
  * user auth route for signup
@@ -32,6 +35,6 @@ UserRoutes.put(
   profileImageHelper("profilePic")
 );
 
-UserRoutes.get("/service");
+UserRoutes.get("/getads/:type", liveAndLatestOfferController);
 
 module.exports = UserRoutes;

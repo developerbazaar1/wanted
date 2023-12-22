@@ -22,7 +22,12 @@ const productsModal = new mongoose.Schema(
     },
     productImages: [
       {
-        type: String,
+        imgUrl: {
+          type: String,
+        },
+        imgPublicId: {
+          type: String,
+        },
       },
     ],
   },

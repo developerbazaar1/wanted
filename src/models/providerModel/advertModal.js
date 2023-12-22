@@ -58,7 +58,12 @@ const advertModal = new mongoose.Schema({
   },
   advertImages: [
     {
-      type: String,
+      imgUrl: {
+        type: String,
+      },
+      imgPublicId: {
+        type: String,
+      },
     },
   ],
   advertExpiryDate: {

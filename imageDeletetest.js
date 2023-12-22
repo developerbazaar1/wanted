@@ -11,7 +11,7 @@ if (publicIdMatch && publicIdMatch[1]) {
 
   // Now you can use the public_id to delete the image
   cloudinary.uploader.destroy(
-    "wantedvendor/wantedvendor/1702835192297-698certificate.webp.png",
+    "wantedvendor/pj37lr7v5q10f5g9ampr",
     (error, result) => {
       if (error) {
         console.error("Error deleting image from Cloudinary:", error);

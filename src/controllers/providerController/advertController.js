@@ -55,7 +55,7 @@ const addAdvert = async (req, res, next) => {
 
     //check to use portfolio image as the advert main images
     if (req.body.portfolioImageCheckbox === "true") {
-      console.log(provider_portfolio_id);
+      // console.log(provider_portfolio_id);
       let portfolio = await providerPortfolio.findById(provider_portfolio_id);
 
       if (!portfolio) {
@@ -64,12 +64,16 @@ const addAdvert = async (req, res, next) => {
           .json({ message: "Something Went Wrong!" });
       }
 
-      console.log(portfolio);
+      // console.log(portfolio);
 
-      req["advertImageUrls"] = portfolio.storeThumbNail;
+      // req["advertImageUrls"] = portfolio.storeThumbNail;
+      req["advertImageUrls"] = { imgUrl: portfolio.storeThumbNail };
     }
 
     // Create the advertisement
+    // console.log(req.advertImageUrls);
+    // console.log(typeof req.advertImageUrls);
+    // return;
     const advertCreated = await AdvertModal.create({
       advertTitle,
       whereToShow,
@@ -89,6 +93,8 @@ const addAdvert = async (req, res, next) => {
     // Decrement the remaining ads by 1
     subscription.remainingAds -= 1;
     await subscription.save();
+
+    // console.log("created advert", advertCreated);
 
     return res.status(CREATED).json({
       status: "success",
@@ -142,10 +148,21 @@ const getAdvert = async (req, res, next) => {
  */
 
 const updateAdvert = async (req, res, next) => {
-  console.log("request in advert updage");
+  // console.log(typeof req.body.oldImgUrl);
+  if (typeof req.body.oldImgUrl === "string") {
+    req.body.oldImgUrl = [req.body.oldImgUrl];
+    console.log("inside th object check", req.body.oldImgUrl);
+  }
+
+  if (req.body.oldImgUrl && Array.isArray(req.body.oldImgUrl)) {
+    req.body.oldImgUrl = req.body.oldImgUrl.map((jsonString) =>
+      JSON.parse(jsonString)
+    );
+  }
+
+  // console.log(req.body.oldImgUrl);
+
   let { _id, provider_id } = req.body;
-  // console.log(req.advertImageUrls);
-  // console.log(_id, provider_id);
   let {
     advertTitle,
     whereToShow,
@@ -156,10 +173,8 @@ const updateAdvert = async (req, res, next) => {
     advertDescription,
     advertPostalCode,
     advertImages,
+    advertVisibility,
   } = req.body;
-
-  // ...
-  // console.log(advertImages);
 
   let updateValue = {
     advertTitle,
@@ -170,18 +185,23 @@ const updateAdvert = async (req, res, next) => {
     advertPrice,
     advertDescription,
     advertPostalCode,
-    advertImages,
+    advertImages: req.body.oldImgUrl,
+    advertVisibility,
   };
 
+  // console.log(typeof updateValue.advertImages);
+  // console.log(updateValue.advertImages);
+
   if (req.advertImageUrls !== undefined && req.advertImageUrls.length > 0) {
-    updateValue.advertImages = req.advertImageUrls;
+    req.advertImageUrls.forEach((element) => {
+      updateValue.advertImages.push(element);
+    });
+    // updateValue.advertImages = req.advertImageUrls;
   }
 
   // console.log(updateValue, "update value");
 
   // ...
-
-  // console.log(updateValue);
 
   let filter = {
     _id: _id,
@@ -210,6 +230,7 @@ const updateAdvert = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal Server Error",

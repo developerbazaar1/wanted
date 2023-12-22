@@ -1,30 +1,43 @@
 const cloudinary = require("../config/cloudinary");
 
 const productUpdateImg = (fieldName) => async (req, res, next) => {
-  console.log(req.files, "files provided by user");
+  // console.log("old urls", req.body.productImages);
+  // console.log(req.files, "files provided by user");
+
   if (req.files === undefined) {
     next();
     return;
   }
   try {
+    // throw new Error("error");
     const fileUrls = [];
     for (const file of req.files) {
-      const uniqueFilename =
-        Date.now() + "-" + Math.round(Math.random() * 1000) + file.originalname;
       const b64 = Buffer.from(file.buffer).toString("base64");
       let dataURI = "data:" + file.mimetype + ";base64," + b64;
       const uploadedImage = await cloudinary.uploader.upload(dataURI, {
         upload_preset: "wantedvendor",
-        allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
-        public_id: "wantedvendor/" + uniqueFilename,
+        allowed_formats: [
+          "png",
+          "jpg",
+          "jpeg",
+          "svg",
+          "ico",
+          "jfif",
+          "webp",
+          "avif",
+        ],
+        unique_filename: true,
+        use_filename: false,
       });
-      // console.log("products image", uploadedImage);
-      // console.log("unique file name", uniqueFilename);
-      // console.log("This is original file Name", file.originalname);
-      fileUrls.push(uploadedImage.url);
+
+      let imgUrls = {
+        imgUrl: uploadedImage.url,
+        imgPublicId: uploadedImage.public_id,
+      };
+      fileUrls.push(imgUrls);
     }
 
-    console.log();
+    // console.log();
     req[fieldName] = fileUrls;
     next();
   } catch (error) {

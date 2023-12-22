@@ -17,26 +17,37 @@ const handleFileUpload = (fieldName) => async (req, res, next) => {
     }
 
     // Array to store file URLs
-    const fileUrls = [];
+    let fileUrls = {};
 
     // Process each file
     for (const file of req.files) {
-      // Generate a unique filename for each file
-      let fileNameParts = file.originalname.split(".");
-      let fileNameOnly = fileNameParts.slice(0, -1).join(".");
-      const uniqueFilename =
-        Date.now() + "-" + Math.round(Math.random() * 1000) + fileNameOnly;
       const b64 = Buffer.from(file.buffer).toString("base64");
       let dataURI = "data:" + file.mimetype + ";base64," + b64;
       const uploadedImage = await cloudinary.uploader.upload(dataURI, {
         upload_preset: "wantedvendor",
-        allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
-        public_id: uniqueFilename,
+        allowed_formats: [
+          "png",
+          "jpg",
+          "jpeg",
+          "svg",
+          "ico",
+          "jfif",
+          "webp",
+          "avif",
+        ],
+        unique_filename: true,
+        use_filename: false,
       });
 
+      // console.log(uploadedImage.public_id);
+      fileUrls["imgUrl"] = uploadedImage.url;
+      fileUrls["imgPublicId"] = uploadedImage.public_id;
       // Push the file URL to the array
-      fileUrls.push(uploadedImage.url);
+      // fileUrls.push(uploadedImage.url);
     }
+
+    // console.log(fileUrls);
+    // return;
 
     // Attach the array of file URLs to req
     req[fieldName] = fileUrls;

@@ -195,7 +195,7 @@ const updateProductController = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",
@@ -206,8 +206,34 @@ const updateProductController = async (req, res) => {
 const updateProductImageController = async (req, res) => {
   try {
     let { _id, provider_id, productImages } = req.body;
+    // console.log(req.productImages.length <= 0);
+    if (req.productImages.length <= 0) {
+      return res.status(BAD_REQUEST).json({
+        message: "Plase Provide New Images to Update",
+      });
+    }
+    let updateImgUrl = req.productImages || [];
 
-    let updateImgUrl = req.productImages;
+    // console.log(productImages);
+
+    if (typeof productImages === "string") {
+      productImages = [productImages];
+    }
+
+    if (productImages && Array.isArray(productImages)) {
+      productImages = productImages.map((jsonString) => JSON.parse(jsonString));
+    }
+
+    if (productImages?.length > 0) {
+      productImages.forEach((ulr) => {
+        updateImgUrl.push(ulr);
+      });
+    }
+
+    // throw new Error("hello");
+
+    // console.log("Uploaded url", updateImgUrl);
+
     if (!_id || !provider_id) {
       return res.status(BAD_REQUEST).json({
         status: "error",
@@ -215,23 +241,20 @@ const updateProductImageController = async (req, res) => {
       });
     }
 
-    if (!productImages) {
-      return res.status(BAD_REQUEST).json({
-        status: "error",
-        message: "Please Provider the Previous Product Image Array",
-      });
-    }
     let filter = {
       _id: _id,
       productProvider_id: provider_id,
     };
 
-    for (let i = 0; i < updateImgUrl.length; i++) {
-      productImages[i] = updateImgUrl[i];
-    }
+    // if()
+
+    // for (let i = 0; i < updateImgUrl.length; i++) {
+    //   // productImages[i] = updateImgUrl[i];
+    //   productImages.push(updateImgUrl[i]);
+    // }
 
     let updateValue = {
-      productImages,
+      productImages: updateImgUrl,
     };
 
     // console.log(filter);
@@ -244,7 +267,7 @@ const updateProductImageController = async (req, res) => {
       }
     );
 
-    // console.log(updateImgUrl);
+    // console.log(Updateproduct);
 
     if (updateImgUrl) {
       return res.status(OK).json({
@@ -253,6 +276,7 @@ const updateProductImageController = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",
