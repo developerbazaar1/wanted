@@ -9,6 +9,7 @@ import ProductCrasuel from "./Components/ProductCrasuel";
 // import { useCategory } from "../service/categoryhelper";
 import { FaInfoCircle } from "react-icons/fa";
 import ProviderDetailsModal from "./Components/ProviderDetailsModal";
+import MainAdvertImagesCarousel from "./Components/MainAdvertImagesCarousel";
 
 const OnlyAdvertProductPreview = () => {
   const [showProviderDetialsModal, setShowProviderDetialsModal] =
@@ -34,7 +35,7 @@ const OnlyAdvertProductPreview = () => {
     setLoading(true);
     getOnlyAdvertPreviewData(token, advertid, user?.id)
       .then((res) => {
-        // console.log(res?.data?.advertPreview);
+        console.log(res?.data?.advertPreview);
         setpreviewData({
           data: res?.data?.advertPreview,
           status: "successfull",
@@ -104,6 +105,7 @@ const OnlyAdvertProductPreview = () => {
                   {previewData?.data?.advert?.advertSubCategory}
                 </div>
               </div>
+              {/* icon for provider Details */}
               <div className="details_provider_favoruite">
                 <svg
                   viewBox="0 0 24 24"
@@ -195,12 +197,9 @@ const OnlyAdvertProductPreview = () => {
             </div>
           </div>
           <div className="detial_img_main_div">
-            <div className="details_image_div ">
-              <img
-                src={previewData?.data?.advert?.advertImages[0]}
-                alt="FaceAndSkin"
-              />
-            </div>
+            <MainAdvertImagesCarousel
+              advertImages={previewData?.data?.advert?.advertImages}
+            />
 
             {/* description for large screen */}
             <div className="details_description  d-none d-md-flex ">
@@ -472,7 +471,7 @@ const OnlyAdvertProductPreview = () => {
             >
               <div>
                 <div className="detials_provider_img">
-                  <img src={ads?.advertImages[0]} alt="adsImage" />
+                  <img src={ads?.advertImages[0].imgUrl} alt="adsImage" />
                   <div className="details_favoruite">
                     <svg
                       viewBox="0 0 24 24"

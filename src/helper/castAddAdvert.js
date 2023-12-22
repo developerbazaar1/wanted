@@ -20,7 +20,13 @@ export function castAddAdvert(formData, user, portfolio_id) {
   return data;
 }
 
-export function castEditadvertData(formData, _id, provider_id) {
+export function castEditadvertData(
+  formData,
+  _id,
+  provider_id,
+  img,
+  editAdvertData
+) {
   let data = new FormData();
   data.append("_id", _id);
   data.append("provider_id", provider_id);
@@ -29,10 +35,21 @@ export function castEditadvertData(formData, _id, provider_id) {
   data.append("advertCategory", formData?.advertcategory);
   data.append("advertSubCategory", formData?.advertsubCategory);
   data.append("advertDescription", formData?.advertdescription);
-  if (formData?.img) {
-    console.log("yes ther is imga");
-    data.append("img", formData?.img);
+  if (img.length) {
+    img.forEach((file) => {
+      data.append("img", file);
+    });
   }
+  // console.log("old image url", editAdvertData.advertImages.length);
+  if (editAdvertData.advertImages.length > 0) {
+    editAdvertData.advertImages.forEach((url) => {
+      // console.log("old image url", url);
+      let ToJson = JSON.stringify(url);
+      data.append("oldImgUrl", ToJson);
+    });
+  }
+  // console.log(editAdvertData.advertImages);
+  // data.append("oldImgUrl", editAdvertData.advertImages);
   return data;
 }
 //this function is used to cast

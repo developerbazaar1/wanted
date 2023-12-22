@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { castEditadvertData } from "../helper/castAddAdvert";
 import { ImgSizeCheck } from "../helper/imageSizeCheck";
 import { useCategory, useSubCategory } from "../service/categoryhelper";
+import { AiTwotoneDelete } from "react-icons/ai";
 const AdvertEditModal = ({
   showAdvertModal,
   setshowAdvertModal,
@@ -16,9 +17,10 @@ const AdvertEditModal = ({
   setRefresh,
 }) => {
   // console.log("edit advert data", editAdvertData);
-  const [imagesPrveiw, setimagesPrveiw] = useState();
+  const [imagesPrveiw, setimagesPrveiw] = useState([]);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const [img, setImg] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   // const numEmptyDivs = 5 - (imagesPrveiw ? imagesPrveiw.length : 0);
   const { subcategory } = useSubCategory();
@@ -32,7 +34,7 @@ const AdvertEditModal = ({
    * @returns
    */
   const handleCategoryChange = (event) => {
-    console.log("inside the subCategory");
+    // console.log("inside the subCategory");
     const selectedValue = event.target.value;
     const selectedCat = category.find(
       (cat) => cat.categoryName === selectedValue
@@ -41,42 +43,68 @@ const AdvertEditModal = ({
   };
 
   const handleImageSelect = (e) => {
-    const file = e.target.files[0];
-
-    if (!file.type.startsWith("image/")) {
-      toast.error("Selected file is not an image");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+    const files = e.target.files;
+    const selected = [];
+    for (let i = 0; i < files.length; i++) {
+      if (!files[i].type.startsWith("image/")) {
+        toast.error(files[i].name + "is Not image");
+        continue;
       }
-      return;
-    }
-
-    if (!ImgSizeCheck(file.size)) {
-      toast.error("File size exceeds the limit of 5 MB");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+      if (!ImgSizeCheck(files[i].size)) {
+        toast.error("File size exceeds the limit of 5 MB");
+        continue;
       }
-      return;
+      if (files[i] && files[i].type.startsWith("image/")) {
+        setImg((img) => [...img, files[i]]);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          selected.push(e.target.result);
+          setimagesPrveiw((prevImages) => [...prevImages, e.target.result]);
+        };
+        reader.readAsDataURL(files[i]);
+      }
     }
 
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setimagesPrveiw(e.target.result);
-      };
-      reader.readAsDataURL(file);
-      setValue("img", file);
-    }
+    // const file = e.target.files[0];
+
+    // if (!file.type.startsWith("image/")) {
+    //   toast.error("Selected file is not an image");
+    //   if (fileInputRef.current) {
+    //     fileInputRef.current.value = "";
+    //   }
+    //   return;
+    // }
+
+    // if (!ImgSizeCheck(file.size)) {
+    //   toast.error("File size exceeds the limit of 5 MB");
+    //   if (fileInputRef.current) {
+    //     fileInputRef.current.value = "";
+    //   }
+    //   return;
+    // }
+
+    // if (file && file.type.startsWith("image/")) {
+    //   const reader = new FileReader();
+    //   reader.onload = (e) => {
+    //     setimagesPrveiw(e.target.result);
+    //   };
+    //   reader.readAsDataURL(file);
+    //   setValue("img", file);
+    // }
   };
 
+  // console.log("image Preview", imagesPrveiw);
+
   const handleAdvertEdit = (formData) => {
-    console.log(formData);
-    // return;
-    // formData.append("_id", editAdvertData?._id);
-    // formData.append("provider_id", user?.id);
     setLoading(true);
 
-    const data = castEditadvertData(formData, editAdvertData?._id, user?.id);
+    const data = castEditadvertData(
+      formData,
+      editAdvertData?._id,
+      user?.id,
+      img,
+      editAdvertData
+    );
     // console.log(data);
     // return;
     ProctedApi.updateAdvert(data, token)
@@ -98,6 +126,7 @@ const AdvertEditModal = ({
   const handleCloseadvetModal = () => {
     setshowAdvertModal(false);
     // setSelectedCategory(null);
+    setimagesPrveiw([]);
   };
 
   useEffect(() => {
@@ -355,6 +384,7 @@ const AdvertEditModal = ({
                         id="advertmanageimg"
                         className="advert_edit_imag_picker"
                         onChange={handleImageSelect}
+                        multiple
                         ref={fileInputRef}
                       />
                       <svg
@@ -373,31 +403,32 @@ const AdvertEditModal = ({
                     </span>
                   </label>
                   <div>
-                    {/* {imagesPrveiw?.map((img, index) => (
-                      <div key={index}>
-                        <img src={img} alt={`preview-${index}`} className="" />
+                    {editAdvertData?.advertImages?.map((img) => (
+                      <div key={img?._id}>
+                        {/* <AiTwotoneDelete
+                          size={20}
+                          color="red"
+                          className="img_delete_icon"
+                          // onClick={}
+                        /> */}
+
+                        <img src={img?.imgUrl} alt={`already`} className="" />
                       </div>
-                    ))} */}
+                    ))}
 
-                    <div>
-                      {imagesPrveiw ? (
-                        <img src={imagesPrveiw} alt={`preview`} className="" />
-                      ) : (
-                        <img
-                          src={editAdvertData?.advertImages[0]}
-                          alt={`already`}
-                          className=""
-                        />
-                      )}
-                    </div>
-
-                    {/* {Array.from({ length: numEmptyDivs }, (_, index) => (
-                      <div key={index}></div>
-                    ))} */}
+                    {imagesPrveiw.map((prev, index) => (
+                      // console.log(prev);
+                      <div key={index}>
+                        <img src={prev} alt={`already`} className="" />
+                      </div>
+                    ))}
                   </div>
                 </div>
                 <div className="text-center">
-                  <button className="mt-3 edit_product_modal_btn">
+                  <button
+                    className="mt-3 edit_product_modal_btn"
+                    disabled={loading}
+                  >
                     Save Details
                   </button>
                 </div>

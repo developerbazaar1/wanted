@@ -295,7 +295,7 @@ th {
 .manage-advert-image-grup > div {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   gap: 10px;
 }
 
@@ -323,6 +323,7 @@ th {
   background: var(--hover-parrot-button);
 }
 .manage-advert-image-grup > div > div {
+  position: relative;
   border: 1px dashed black;
   border-radius: 2.5px;
   width: 100px;
@@ -331,6 +332,19 @@ th {
   -moz-border-radius: 2.5px;
   -ms-border-radius: 2.5px;
   -o-border-radius: 2.5px;
+}
+
+.img_delete_icon {
+  position: absolute;
+  cursor: pointer;
+  top: 5px;
+  right: 3px;
+
+  color: red;
+}
+
+.img_delete_icon:hover {
+  scale: 1.2;
 }
 
 .advert-top-image {
@@ -346,7 +360,7 @@ th {
 .manage-advert-image-grup > div > div > img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .protfilo_image_input_field {
@@ -785,22 +799,16 @@ span.plan-month {
 }
 
 .advert__tabel_container::-webkit-scrollbar {
-  width: 8px; /* Adjust the width as needed */
+  width: 12px;
   height: 10px;
 }
 
-/* Style the thumb (the draggable part of the scrollbar) */
 .advert__tabel_container::-webkit-scrollbar-thumb {
-  background: #888; /* Scroll thumb color */
-  border-radius: 3px; /* Rounded corners for the thumb */
+  background: #888;
+  border-radius: 3px;
 }
 
-/* Style the track (the background of the scrollbar) */
-.advert__tabel_container::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Scroll track color */
-}
 .advert__tabel_container .advert-table {
-  width: 1600px;
   padding: 0 63px;
 }
 

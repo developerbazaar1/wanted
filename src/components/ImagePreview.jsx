@@ -37,7 +37,11 @@ const ImagePreview = ({
       ) : (
         <div className="protfilo_image_preview_container">
           <div className="preview_image_div">
-            <img src={advertUrl} alt="" className="protfilo_prew_image" />
+            <img
+              src={advertUrl?.imgUrl}
+              alt=""
+              className="protfilo_prew_image"
+            />
           </div>
         </div>
       )}

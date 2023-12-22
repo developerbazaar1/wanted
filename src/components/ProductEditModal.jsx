@@ -150,10 +150,6 @@ const ProductEditModal = ({
                         value: /^\d+$/,
                         message: "Enter Valid Price",
                       },
-                      // required: {
-                      //   value: true,
-                      //   message: "Price is Required",
-                      // },
                     })}
                   />
                   <label htmlFor="productPrice">
@@ -192,7 +188,6 @@ const ProductEditModal = ({
                         {advert?.advertTitle}
                       </option>
                     ))}
-                    {/* <option value="">Advert 1</option> */}
                   </select>
                   <label htmlFor="advert_id">
                     <svg
@@ -211,7 +206,11 @@ const ProductEditModal = ({
                 </div>
               </div>
               <div className="text-center mt-4">
-                <button className="edit_product_modal_btn" type="submit">
+                <button
+                  disabled={loading}
+                  className="edit_product_modal_btn"
+                  type="submit"
+                >
                   Save Details
                 </button>
               </div>

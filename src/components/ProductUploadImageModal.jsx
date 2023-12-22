@@ -14,6 +14,7 @@ const ProductUploadImageModal = ({
   setRefresh,
   setProduct,
 }) => {
+  console.log("Product", editProductImgData);
   const [loading, setLoading] = useState(false);
   const [imagesPrveiw, setimagesPrveiw] = useState([]);
   const [img, setImg] = useState([]);
@@ -60,14 +61,14 @@ const ProductUploadImageModal = ({
     for (let i = 0; i < files.length; i++) {
       if (!files[i].type.startsWith("image/")) {
         toast.error("Selected file is not an image");
-        return;
+        continue;
       }
 
       if (!ImgSizeCheck(files[i].size)) {
         toast.error("File size exceeds the limit of 5 MB");
-        return;
+        continue;
       }
-      // setImg([...img, files[i]]);
+
       setImg((img) => [...img, files[i]]);
       if (files[i] && files[i].type.startsWith("image/")) {
         const reader = new FileReader();
@@ -82,19 +83,19 @@ const ProductUploadImageModal = ({
   const handeImageUpdate = () => {
     setLoading(true);
     let data = new FormData();
-    // console.log("This is the images", img);
-    // return;
     data.append("_id", editProductImgData?._id);
     data.append("provider_id", user.id);
-    editProductImgData?.productImages?.forEach((url) => {
-      data.append("productImages", url);
-    });
+
+    if (editProductImgData?.productImages.length > 0) {
+      editProductImgData?.productImages?.forEach((url) => {
+        let ToJson = JSON.stringify(url);
+        data.append("productImages", ToJson);
+      });
+    }
     img.forEach((file) => {
       data.append("img", file);
     });
-    // console.log(data);
-    // console.log(img, "images");
-    // return;
+
     ProctedApi.updateProductImg(data, token)
       .then((res) => {
         console.log(res);
@@ -142,9 +143,6 @@ const ProductUploadImageModal = ({
                 </div>
                 {/* //drag and drop image container start */}
                 <div className="add_prduct_img_container">
-                  {/* <label className="form-head mb-2" htmlFor="file_upload">
-                    Your Can add 3 images
-                  </label> */}
                   <div
                     onDragOver={preventDefault}
                     onDragEnter={preventDefault}
@@ -179,10 +177,23 @@ const ProductUploadImageModal = ({
                 {/* products image review products start */}
 
                 <div className="add_productImgrewive_container">
-                  {Array.from(
+                  {editProductImgData?.productImages?.map((img) => (
+                    <div key={img?._id}>
+                      <img src={img?.imgUrl} alt={`already`} className="" />
+                    </div>
+                  ))}
+
+                  {imagesPrveiw.map((prev, index) => (
+                    <div key={index}>
+                      <img src={prev} alt={`already`} className="" />
+                    </div>
+                  ))}
+                  {/* {Array.from(
                     {
-                      length:
-                        editProductImgData?.productImages.length + img?.length,
+                      length: Math.max(
+                        editProductImgData?.productImages.length,
+                        img?.length
+                      ),
                     },
                     (_, index) => (
                       <div key={index}>
@@ -190,13 +201,13 @@ const ProductUploadImageModal = ({
                           src={
                             imagesPrveiw[index]
                               ? imagesPrveiw[index]
-                              : editProductImgData?.productImages[index] // Replace with your placeholder image path
+                              : editProductImgData?.productImages[index].imgUrl
                           }
                           alt={`preview-${index}`}
                         />
                       </div>
                     )
-                  )}
+                  )} */}
                 </div>
 
                 {/* products image review products end */}

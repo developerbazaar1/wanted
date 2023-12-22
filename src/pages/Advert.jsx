@@ -90,12 +90,12 @@ const Advert = () => {
       advertVisibility: !advert.advertVisibility,
       provider_id: user.id,
     };
-
+    // return;
     ProctedApi.updateAdvert(data, token)
       .then((res) => {
         toast.success(res?.data?.message);
       })
-      .catch((e) => {
+      .catch(() => {
         // console.log(e);
         toast.error("Failed to update advert visibility. Please try again.");
 

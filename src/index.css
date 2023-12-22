@@ -386,6 +386,7 @@ p {
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
+  white-space: nowrap;
 }
 
 .table th,

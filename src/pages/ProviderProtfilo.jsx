@@ -582,6 +582,7 @@ const ProviderProtfilo = () => {
                   <button
                     type="submit"
                     className=" provider_protfilo_save_button"
+                    disabled={loading}
                   >
                     Save Updates
                   </button>

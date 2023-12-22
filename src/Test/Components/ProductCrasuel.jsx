@@ -6,7 +6,7 @@ const ProductCrasuel = ({ product, unique }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageClick = (index) => {
-    setSelectedImage(product?.productImages[index]);
+    setSelectedImage(product?.productImages[index].imgUrl);
     setShowModal(true);
   };
 
@@ -31,7 +31,7 @@ const ProductCrasuel = ({ product, unique }) => {
                 key={index}
                 onClick={() => handleImageClick(index)}
               >
-                <img src={img} className="d-block w-100 " alt={index} />
+                <img src={img?.imgUrl} className="d-block w-100 " alt={index} />
                 {product?.productPrice && (
                   <div>
                     {" "}
@@ -82,7 +82,7 @@ const ProductCrasuel = ({ product, unique }) => {
               key={index}
               onClick={() => handleImageClick(index)}
             >
-              <img src={img} className="img-fluid" alt={index} />
+              <img src={img?.imgUrl} className="img-fluid" alt={index} />
               {product?.productPrice && (
                 <div>
                   {" "}

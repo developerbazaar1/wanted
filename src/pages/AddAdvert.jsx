@@ -30,7 +30,7 @@ const AddAdvert = () => {
   const {
     register,
     handleSubmit,
-    // watch,
+    reset,
     formState: { errors },
     setValue,
   } = useForm();
@@ -53,6 +53,7 @@ const AddAdvert = () => {
       .then((response) => {
         // console.log(response);
         if (response.status === 201) {
+          reset();
           return toast.success("created");
         }
       })
@@ -153,7 +154,7 @@ const AddAdvert = () => {
         }
         // setValue("ad_location", res.address);
       })
-      .catch((e) => {
+      .catch(() => {
         alert("Failed to Load current Location Try Adding manually");
       });
   }, []);
@@ -466,8 +467,13 @@ const AddAdvert = () => {
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                     {/* <!-- field col  start :: dropify--> */}
                     <div className="form-group protfilo_image_upload">
-                      <label className="form-head mb-2 row">
-                        <span className="col-12 col-lg-4">
+                      <label className="form-head mb-0 row">
+                        <span
+                          className="col-12 col-lg-4"
+                          style={{
+                            whiteSpace: "nowrap",
+                          }}
+                        >
                           Upload main image
                         </span>
                         <label
@@ -551,8 +557,6 @@ const AddAdvert = () => {
           </div>
         </div>
         {/* <!-- form section end here --> */}
-        {/* <!-- card section --> */}
-
         <Subscriptions
           handleSelectsub={handleSelectsub}
           selectedSubscription={selectedSubscription}

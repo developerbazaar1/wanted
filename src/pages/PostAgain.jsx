@@ -24,7 +24,7 @@ const PostAgain = () => {
   const { subcategory } = useSubCategory();
   const { category } = useCategory();
   // handle drag and drop
-  // console.log(state);
+  console.log(state);
 
   const {
     register,
