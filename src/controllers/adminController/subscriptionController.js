@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const userSubscriptionPlan = require("../../models/providerModel/ProviderSubscriptionModal");
 const {
   NOT_FOUND,
@@ -25,6 +24,18 @@ async function addsubscriptionController(req, res, next) {
   try {
     const plan = await Plan.findById(plan_id);
 
+    const existsubscription = await userSubscriptionPlan.find({
+      plan_id: plan_id,
+      subscriptionStatus: "active",
+      remainingAds: { $gt: 0 },
+    });
+
+    if (existsubscription.length > 0) {
+      return res.status(CONFLICT).json({
+        message: "subscription already exit!",
+        status: "error",
+      });
+    }
     PaymentModal.create({
       provider_id,
       portfolio_id: provider_portfolio_id,

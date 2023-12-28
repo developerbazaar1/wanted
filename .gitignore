@@ -25,6 +25,7 @@ dist-ssr
 *.sw?
 
 #test fitles
+Test
 /imageDeletetest.js
 /test.js
 /test2.js

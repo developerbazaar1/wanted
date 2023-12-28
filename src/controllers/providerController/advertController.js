@@ -18,24 +18,26 @@ const providerPortfolio = require("../../models/providerModel/providerPortfolio"
  * @param {*} next
  * @returns return the created ads
  */
-const addAdvert = async (req, res, next) => {
-  const {
-    advertTitle,
-    whereToShow,
-    advertCategory,
-    advertSubCategory,
-    advertLocation,
-    advertPrice,
-    advertDescription,
-    advertPostalCode,
-    advertImages,
-    subscription_plan_id,
-    provider_portfolio_id,
-    provider_id,
-  } = req.body;
 
+const AddAdvert = async (req, res, next) => {
   try {
-    // Find the subscription
+    let {
+      advertPrice,
+      offerPrice,
+      advertProviderPortfolio_id,
+      advertProvider_id,
+      advertTitle,
+      advertCategory,
+      advertLocation,
+      advertPostalCode,
+      advertDescription,
+      whereToShow,
+      advertSubCategory,
+      advertOfferPrice,
+      subscription_plan_id,
+      product,
+    } = req.body;
+
     const subscription = await SubscriptionModal.findById(subscription_plan_id);
 
     if (!subscription) {
@@ -52,57 +54,69 @@ const addAdvert = async (req, res, next) => {
         message: "No remaining ads in the subscription",
       });
     }
-
-    //check to use portfolio image as the advert main images
     if (req.body.portfolioImageCheckbox === "true") {
-      // console.log(provider_portfolio_id);
-      let portfolio = await providerPortfolio.findById(provider_portfolio_id);
+      let portfolio = await providerPortfolio.findById(
+        advertProviderPortfolio_id
+      );
 
       if (!portfolio) {
         return res
           .status(BAD_REQUEST)
           .json({ message: "Something Went Wrong!" });
       }
-
-      // console.log(portfolio);
-
-      // req["advertImageUrls"] = portfolio.storeThumbNail;
-      req["advertImageUrls"] = { imgUrl: portfolio.storeThumbNail };
+      req["fileUrls"].mainImg = { imgUrl: portfolio.storeThumbNail };
     }
 
-    // Create the advertisement
-    // console.log(req.advertImageUrls);
-    // console.log(typeof req.advertImageUrls);
-    // return;
-    const advertCreated = await AdvertModal.create({
-      advertTitle,
-      whereToShow,
-      advertCategory,
-      advertSubCategory,
-      advertLocation,
+    if (product) {
+      for (let i = 0; i < product.length; i++) {
+        let productImgKey = `productImg${i + 1}`;
+        let productImgArray = req.fileUrls[productImgKey];
+        product[i].productImg = productImgArray;
+      }
+    }
+
+    // console.log(product);
+
+    const UpdateValue = {
       advertPrice,
-      advertDescription,
+      advertProviderPortfolio_id,
+      advertProvider_id,
+      advertTitle,
+      advertCategory,
+      advertLocation,
       advertPostalCode,
-      advertImages: req.advertImageUrls,
-      advertProviderPortfolio_id: provider_portfolio_id,
-      advertProvider_id: provider_id,
+      advertDescription,
+      whereToShow,
+      advertSubCategory,
+      advertOfferPrice,
       subscription_plan_id,
+      advertImage: req.fileUrls.mainImg,
+      products: product,
       advertExpiryDate: subscription.expiryDate,
-    });
+    };
 
-    // Decrement the remaining ads by 1
-    subscription.remainingAds -= 1;
-    await subscription.save();
+    // console.log("update Value", UpdateValue);
 
-    // console.log("created advert", advertCreated);
+    // return res.json("sucess");
 
-    return res.status(CREATED).json({
-      status: "success",
-      message: "Successfully Created Advert",
-      data: advertCreated,
-    });
+    AdvertModal.create(UpdateValue)
+      .then(async (result) => {
+        subscription.remainingAds -= 1;
+        await subscription.save();
+        return res.status(CREATED).json({
+          status: "success",
+          message: "Successfully Created Advert",
+          data: result,
+        });
+      })
+      .catch((e) => {
+        console.error("Advert Creation Error:", e);
+        return res.status(500).json({
+          status: "error",
+          message: "Internal Server Error during Advert Creation",
+        });
+      });
   } catch (error) {
-    console.error(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",
@@ -384,8 +398,10 @@ const postAgainAdvert = async (req, res, next) => {
   }
 };
 
+// const DeleteAdvertImg = async (req, res, next) => {};
+
 module.exports = {
-  addAdvert,
+  AddAdvert,
   getAdvert,
   updateAdvert,
   deleteAdvert,

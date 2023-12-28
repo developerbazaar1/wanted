@@ -137,21 +137,30 @@ const portfolioValidator = async (req, res, next) => {
 
 const advertValidator = async (req, res, next) => {
   const {
-    advertTitle,
-    whereToShow,
-    advertCategory,
-    advertSubCategory,
-    advertLocation,
     advertPrice,
-    advertDescription,
+    offerPrice,
+    advertProviderPortfolio_id,
+    advertProvider_id,
+    advertTitle,
+    advertCategory,
+    advertLocation,
     advertPostalCode,
-    provider_portfolio_id,
-    provider_id,
+    advertDescription,
+    whereToShow,
+    advertSubCategory,
+    advertOfferPrice,
     subscription_plan_id,
+    product,
   } = req.body;
 
   // console.log(req.body, "advert validator");
   try {
+    if (!subscription_plan_id) {
+      return res.status(BAD_REQUEST).json({
+        status: "Error",
+        message: "Please Select a subscription!",
+      });
+    }
     if (
       !advertTitle ||
       !whereToShow ||
@@ -166,12 +175,11 @@ const advertValidator = async (req, res, next) => {
         status: "Error",
         message: "Please Filled the All required Field!",
       });
-      a;
     }
     // console.log(provider_portfolio_id, "portfoloio _id");
     // console.log(provider_id, "provider Id");
 
-    if (!provider_portfolio_id || !provider_id) {
+    if (!advertProviderPortfolio_id || !advertProvider_id) {
       return res.status(UNAUTHORIZED).json({
         status: "error",
         message: "You Are not authorized!",

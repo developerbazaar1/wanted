@@ -4,8 +4,7 @@ const ProviderRouter = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const {
-  advertImgHelper,
-  handleFileUpload,
+  advertImgAndProductHelper,
 } = require("../../helpers/advertImagehelper");
 const {
   providersignupValidator,
@@ -28,6 +27,7 @@ const {
   updateAdvert,
   deleteAdvert,
   postAgainAdvert,
+  AddAdvert,
 } = require("../../controllers/providerController/advertController");
 const {
   updateProfile,
@@ -87,10 +87,15 @@ ProviderRouter.put(
 ProviderRouter.post(
   "/addAdvert",
   auth,
-  upload.array("img"),
+  upload.fields([
+    { name: "mainImg", maxCount: 1 },
+    { name: "productImg1", maxCount: 3 },
+    { name: "productImg2", maxCount: 3 },
+    { name: "productImg3", maxCount: 3 },
+  ]),
   advertValidator,
-  handleFileUpload("advertImageUrls"),
-  addAdvert
+  advertImgAndProductHelper,
+  AddAdvert
 )
   .get("/getAdvert", auth, getAdvert)
   .put(
@@ -110,6 +115,7 @@ ProviderRouter.post(
     advertUpdateImg("advertImageUrls"),
     postAgainAdvert
   );
+// .delete("/deleteAdvertImg/:id/images/:imgId", auth, deleteAdvertImage);
 
 /**
  * @products routes

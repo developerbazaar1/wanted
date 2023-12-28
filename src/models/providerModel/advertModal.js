@@ -56,14 +56,38 @@ const advertModal = new mongoose.Schema({
   advertOfferPrice: {
     type: Number,
   },
-  advertImages: [
+  advertImage: {
+    imgUrl: {
+      type: String,
+    },
+    imgPublicId: {
+      type: String,
+    },
+  },
+  products: [
     {
-      imgUrl: {
+      productName: {
         type: String,
+        required: true,
       },
-      imgPublicId: {
+      product_id: {
         type: String,
+        required: true,
       },
+      productPrice: {
+        type: Number,
+        required: true,
+      },
+      productImg: [
+        {
+          imgUrl: {
+            type: String,
+          },
+          imgPublicId: {
+            type: String,
+          },
+        },
+      ],
     },
   ],
   advertExpiryDate: {
