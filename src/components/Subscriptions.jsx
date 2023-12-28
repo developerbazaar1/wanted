@@ -7,10 +7,15 @@ import { DatedFormated } from "../helper/ToDate";
 import addCardImage from "../assets/plan-card01.png";
 import { setSubscription } from "../features/subscriptionSlice";
 
-const Subscriptions = ({ handleSelectsub, selectedSubscription, loading }) => {
+const Subscriptions = ({
+  subscription,
+  setsubscription,
+  handleSelectsub,
+  selectedSubscription,
+  loading,
+}) => {
   const dispatch = useDispatch();
   const { token, user, portfolio_id } = useAuth();
-  const [subscription, setsubscription] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -19,6 +24,7 @@ const Subscriptions = ({ handleSelectsub, selectedSubscription, loading }) => {
         const res = await getUserSubscription(token, user.id, portfolio_id);
         setsubscription(res.data.result);
         // setsubscription([]);
+        // console.log(res.data.result);
         dispatch(
           setSubscription({
             subscriptions: res.data.result,
@@ -118,11 +124,15 @@ const Subscriptions = ({ handleSelectsub, selectedSubscription, loading }) => {
                   : "Select a Plan"}
               </button>
             ) : (
-              <Link to="/buy-now">
-                <button className="mt-2 advert_pay_btn">Buy Now</button>
-              </Link>
+              ""
             )}
           </div>
+
+          {!subscription && (
+            <Link to="/plansy">
+              <button className="mt-2 advert_pay_btn">Buy Now</button>
+            </Link>
+          )}
         </div>
       </section>
 

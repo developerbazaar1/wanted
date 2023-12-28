@@ -2,9 +2,9 @@ const ImagePreview = ({
   selectedImage,
   fileName,
   removeImagePreview,
-  advertUrl,
+  portfolioImgUrl,
 }) => {
-  if (!selectedImage && !advertUrl) {
+  if (!selectedImage && !portfolioImgUrl) {
     return (
       <div className="protfilo_image_preview_container">
         <div className="preview_image_div">
@@ -37,11 +37,7 @@ const ImagePreview = ({
       ) : (
         <div className="protfilo_image_preview_container">
           <div className="preview_image_div">
-            <img
-              src={advertUrl?.imgUrl}
-              alt=""
-              className="protfilo_prew_image"
-            />
+            <img src={portfolioImgUrl} alt="" className="protfilo_prew_image" />
           </div>
         </div>
       )}

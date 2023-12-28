@@ -109,3 +109,74 @@ function DragAndDropImageInput() {
 }
 
 export default DragAndDropImageInput;
+
+//  <div className="product-details-container">
+//    <div className="single-product">
+//      <div className="advert-product-input">
+//        <div>
+//          <label htmlFor="productName">Product Name</label>
+//          <input type="text" placeholder="Enter Product Name" id="productName" />
+//        </div>
+//        <div>
+//          <label htmlFor="product_id">Product Id</label>
+//          <input type="text" placeholder="Enter Product Id" id="product_id" />
+//        </div>
+
+//        <div>
+//          <label htmlFor="productPrice">Product Price</label>
+//          <input
+//            type="text"
+//            placeholder="Enter Product Price"
+//            id="productPrice"
+//          />
+//        </div>
+//      </div>
+
+//      <div className="ms-3 product-icons">
+//        <label htmlFor="productName">
+//          <MdModeEditOutline
+//            size="20"
+//            style={{
+//              cursor: "pointer",
+//            }}
+//          />
+//        </label>
+
+//        <span>
+//          <label htmlFor="addMoreProductimg">
+//            <IoMdImages className="addMoreProductImgIcon" size="20" />
+//          </label>
+
+//          <input
+//            type="file"
+//            id="addMoreProductimg"
+//            className="particularImgInput"
+//          />
+//        </span>
+//      </div>
+
+//      <div className="product-img-prev-cont">
+//        <div className="single-img-cont">
+//          <img
+//            src="https://cdn.helioswatchstore.com/production/media/ar60042_1.jpg"
+//            alt=""
+//          />
+//          <MdDelete className="product-prevImg-del-icon" color="red" size="20" />
+//        </div>
+//        <div className="single-img-cont">
+//          <img
+//            src="https://cdn.helioswatchstore.com/production/media/ar60042_1.jpg"
+//            alt=""
+//          />
+//          <MdDelete size="20" className="product-prevImg-del-icon" />
+//        </div>
+//        <div className="single-img-cont">
+//          <img
+//            src="https://cdn.helioswatchstore.com/production/media/ar60042_1.jpg"
+//            alt=""
+//          />
+//          <MdDelete size="20" className="product-prevImg-del-icon" />
+//        </div>
+//      </div>
+//    </div>
+//  </div>;

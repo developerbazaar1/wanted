@@ -6,3 +6,6 @@ export const api = axios.create({
 export const openapi = axios.create({
   baseURL: import.meta.env.VITE_Common_Local_url,
 });
+export const testApi = axios.create({
+  baseURL: "http://localhost:3000/test",
+});

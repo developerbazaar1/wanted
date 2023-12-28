@@ -16,7 +16,7 @@ const AdvertEditModal = ({
   editAdvertData,
   setRefresh,
 }) => {
-  // console.log("edit advert data", editAdvertData);
+  console.log("edit advert data", editAdvertData);
   const [imagesPrveiw, setimagesPrveiw] = useState([]);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);

@@ -27,17 +27,6 @@ html {
   box-sizing: border-box;
 }
 /* scrollbar webkit */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #e8e8e8;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #363636;
-}
 
 ::-webkit-scrollbar-thumb {
   background-image: -webkit-linear-gradient(45deg, #363636, #363636);

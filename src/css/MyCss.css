@@ -218,11 +218,12 @@ th {
   font-weight: 500;
   line-height: 24px; /* 133.333% */
   border-style: none;
+  cursor: default !important;
 }
 
-.advert_pay_btn:hover {
+/* .advert_pay_btn:hover {
   background-color: var(--hover-parrot-button);
-}
+} */
 
 .payment-sucess-img {
   width: 100px;
@@ -780,6 +781,72 @@ span.plan-month {
 .input_filed_error {
   border: 1px solid red !important;
 }
+
+.more-advert-img-container {
+  height: 165px !important;
+}
+
+.single-product {
+  display: flex;
+}
+.single-product > .product-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.product-img-prev-cont {
+  display: flex;
+  /* overflow-y: auto; */
+  gap: 12px;
+}
+
+.single-img-cont {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+.product-prevImg-del-icon {
+  position: absolute;
+  color: red;
+  right: 0;
+  top: 4px;
+  cursor: pointer;
+}
+
+.single-img-cont > img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.advert-product-input > div {
+  display: flex;
+  flex-direction: column;
+}
+.advert-product-input > div > input {
+  border: 1.5px solid #333;
+  padding: 3px 7px;
+  outline: none;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+.product-prevImg-del-icon:hover {
+  scale: 1.2;
+}
+.addMoreProductImgIcon:hover {
+  scale: 1.2;
+  cursor: pointer;
+}
+
+.particularImgInput {
+  width: 0;
+}
 .advert__tabel_container {
   overflow-x: auto;
   width: 100%;
@@ -799,6 +866,7 @@ span.plan-month {
 }
 
 .advert__tabel_container::-webkit-scrollbar {
+  display: none;
   width: 12px;
   height: 10px;
 }
@@ -1139,11 +1207,21 @@ input:checked + .slider:before {
 
 .advert-preview {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   gap: 5px;
   text-decoration: underline !important;
   padding: 2px 0px;
+}
+
+.manage-advertDropDown {
+  padding: 3px 5px 4px 7px !important;
+}
+
+.manage-advert-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* style for category dropdown toogle start */

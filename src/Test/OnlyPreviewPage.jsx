@@ -28,7 +28,7 @@ const OnlyAdvertProductPreview = () => {
   // console.log(category);
   //   console.log(token);
 
-  //   console.log("preview data", previewData?.data?.adverts);
+  // console.log("preview data", previewData?.data?.adverts);
   //   console.log("preview product", previewData?.data?.product);
 
   useEffect(() => {
@@ -198,17 +198,14 @@ const OnlyAdvertProductPreview = () => {
           </div>
           <div className="detial_img_main_div">
             <MainAdvertImagesCarousel
-              advertImages={previewData?.data?.advert?.advertImages}
+              advertImages={previewData?.data?.advert?.advertImage}
             />
 
             {/* description for large screen */}
             <div className="details_description  d-none d-md-flex ">
               <h3>About This Service</h3>
-              <p>
-                {previewData?.data?.advert?.advertDescription}
-                <span className="details_read_more">Read More</span>
-              </p>
-              <div className="social_head">Share This Deal</div>
+              <p>{previewData?.data?.advert?.advertDescription}</p>
+              <div className="social_head">Share This Advert</div>
               <div className="social_group">
                 <div>
                   <a href="https://gmail.ocm">
@@ -384,10 +381,7 @@ const OnlyAdvertProductPreview = () => {
           </div>
           <div className="details_description  d-md-none">
             <h3>About This Service</h3>
-            <p>
-              {previewData?.data?.advert?.advertDescription}
-              <span className="details_read_more">Read More</span>
-            </p>
+            <p>{previewData?.data?.advert?.advertDescription}</p>
             <div className="social_head">Share This Deal</div>
             <div className="social_group">
               <div>
@@ -451,9 +445,12 @@ const OnlyAdvertProductPreview = () => {
             </div>
           </div>
         </div>
-        <h2>Provider Products</h2>
 
-        {previewData?.data?.product?.map((product, index) => (
+        {previewData?.data?.advert?.products?.length > 0 && (
+          <h2 className="mt-2">Provider Products</h2>
+        )}
+
+        {previewData?.data?.advert?.products?.map((product, index) => (
           <ProductCrasuel
             key={product?._id}
             product={product}
@@ -461,7 +458,7 @@ const OnlyAdvertProductPreview = () => {
           />
         ))}
         {/* {crasule("No-Chip Manicure")} */}
-        <h5>More Ads from this provider</h5>
+        <h5 className="mt-2">More Ads From This Provider</h5>
         <div className="details_ads">
           {previewData?.data?.adverts?.map((ads) => (
             <Link
@@ -471,7 +468,7 @@ const OnlyAdvertProductPreview = () => {
             >
               <div>
                 <div className="detials_provider_img">
-                  <img src={ads?.advertImages[0].imgUrl} alt="adsImage" />
+                  <img src={ads?.advertImage?.imgUrl} alt="adsImage" />
                   <div className="details_favoruite">
                     <svg
                       viewBox="0 0 24 24"
@@ -496,7 +493,7 @@ const OnlyAdvertProductPreview = () => {
           ))}
         </div>
         <button className="show_more_ads_btn">
-          Show all Ads from this provider
+          Show All Ads From This Provider
         </button>
       </div>
 

@@ -428,6 +428,13 @@
   min-width: min-content !important;
 }
 
+.preview_product_price {
+  color: #17c737;
+  font-weight: 700;
+  font-size: 1.2rem;
+  font-family: quicksand;
+}
+
 .zoom-image {
   width: 100%;
   height: 100%;

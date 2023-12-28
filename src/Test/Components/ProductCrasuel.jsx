@@ -6,7 +6,8 @@ const ProductCrasuel = ({ product, unique }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageClick = (index) => {
-    setSelectedImage(product?.productImages[index].imgUrl);
+    console.log("image click");
+    setSelectedImage(product?.productImg[index].imgUrl);
     setShowModal(true);
   };
 
@@ -18,34 +19,25 @@ const ProductCrasuel = ({ product, unique }) => {
   return (
     <>
       <div className="details_provider_products mb-2">
-        <h5>{product?.productname}</h5>
-        {/* //crasule for small screen */}
+        <div className="d-flex gap-2">
+          <h5>{product?.productName}</h5>
+          <span>{product?.product_id}</span> ||
+          <span className="preview_product_price">
+            $ {product?.productPrice}
+          </span>
+        </div>
         <div
           id={`carouselExampleIndicators${unique}`}
           className="carousel slide d-md-none"
         >
           <div className="carousel-inner detial_product_image">
-            {product?.productImages?.map((img, index) => (
+            {product?.productImg?.map((img, index) => (
               <div
                 className="carousel-item active singleProduct_image"
-                key={index}
+                key={img?._id}
                 onClick={() => handleImageClick(index)}
               >
                 <img src={img?.imgUrl} className="d-block w-100 " alt={index} />
-                {product?.productPrice && (
-                  <div>
-                    {" "}
-                    <span
-                      style={{
-                        color: "green",
-                        marginRight: "3px",
-                      }}
-                    >
-                      $
-                    </span>{" "}
-                    {product?.productPrice}
-                  </div>
-                )}
               </div>
             ))}
           </div>
@@ -76,27 +68,13 @@ const ProductCrasuel = ({ product, unique }) => {
         </div>
         {/* <!-- Image grid for medium and larger screens --> */}
         <div className=" d-none d-md-flex detial_product_image">
-          {product?.productImages?.map((img, index) => (
+          {product?.productImg?.map((img, index) => (
             <div
               className="singleProduct_image"
-              key={index}
+              key={img?._id}
               onClick={() => handleImageClick(index)}
             >
               <img src={img?.imgUrl} className="img-fluid" alt={index} />
-              {product?.productPrice && (
-                <div>
-                  {" "}
-                  <span
-                    style={{
-                      color: "green",
-                      marginRight: "3px",
-                    }}
-                  >
-                    $
-                  </span>{" "}
-                  {product?.productPrice}
-                </div>
-              )}
             </div>
           ))}
           {/* <!-- Add more columns for additional images --> */}

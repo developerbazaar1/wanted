@@ -21,7 +21,7 @@ const ProviderProtfilo = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { user, token, portfolio } = useAuth();
-  // console.log("portfolio", portfolio);
+  console.log("portfolio", portfolio);
   const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [fileName, setfileName] = useState("");
@@ -561,7 +561,7 @@ const ProviderProtfilo = () => {
                           selectedImage={selectedImage}
                           fileName={fileName}
                           removeImagePreview={removeImagePreview}
-                          advertUrl={portfolio?.storeThumbNail}
+                          portfolioImgUrl={portfolio?.storeThumbNail}
                         />
                         {/* image preview container start end */}
                       </div>

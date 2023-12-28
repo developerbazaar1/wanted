@@ -1,5 +1,5 @@
 import axios from "axios";
-import { api } from "./ApiConfig";
+import { api, testApi } from "./ApiConfig";
 import { openapi } from "./ApiConfig";
 export const categoriesApi = {
   getCategory: async () => {
@@ -306,5 +306,19 @@ export async function getOnlyAdvertPreviewData(
       "Content-Type": "application/json",
     },
   });
+  return response;
+}
+
+export async function newAdvertAPI(data, token) {
+  const response = await testApi.request({
+    url: `/newAdvertUrl`,
+    method: "POST",
+    headers: {
+      Authorization: `${token}`,
+      // "Content-Type": "application/json",
+    },
+    data: data,
+  });
+
   return response;
 }

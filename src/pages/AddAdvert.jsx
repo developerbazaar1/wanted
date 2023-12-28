@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-// import addCardIma1 from "../assets/plan-card01.png";
-// import addCardIma2 from "../assets/plan-card02.png";
-// import addCardIma3 from "../assets/plan-card03.png";
+const allowedTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/jpg",
+  "image/psd",
+  "image/ai",
+  "image/avif",
+];
 import { IoIosArrowDown } from "react-icons/io";
 
 import { useForm } from "react-hook-form";
@@ -16,13 +21,16 @@ import { useCategory, useSubCategory } from "../service/categoryhelper";
 import { getCurrentLocation } from "../helper/getCurrentLocation";
 import AddAdvertTopHead from "../components/AddAdvertTopHead";
 import Subscriptions from "../components/Subscriptions";
+import ProductForm from "../components/ProductForm";
 const AddAdvert = () => {
+  const [subscription, setsubscription] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedSubscription, setselectedSubscription] = useState(null);
   const { token, user, portfolio_id } = useAuth();
   const [selectedImage, setSelectedImage] = useState(null);
   const [fileName, setfileName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
+
   const fileInputRef = useRef(null);
   const { subcategory } = useSubCategory();
   const { category } = useCategory();
@@ -30,6 +38,7 @@ const AddAdvert = () => {
   const {
     register,
     handleSubmit,
+    watch,
     reset,
     formState: { errors },
     setValue,
@@ -44,16 +53,19 @@ const AddAdvert = () => {
   };
 
   const HandleAddadvertSubmit = (formData) => {
-    // console.log(formData);
-    // return;
+    console.log(formData);
+
     formData["subscription_plan_id"] = selectedSubscription._id;
     setLoading(true);
     const data = castAddAdvert(formData, user, portfolio_id);
+    // console.log("submit is firing");
+    // return;
     ProctedApi.AddAdvert(data, token)
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         if (response.status === 201) {
           reset();
+          setSelectedImage();
           return toast.success("created");
         }
       })
@@ -70,16 +82,18 @@ const AddAdvert = () => {
   /**
    * @handle drag and drop
    */
+
   const handleImageDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
+    console.log(file);
     if (!ImgSizeCheck(file.size)) {
       toast.error("File size exceeds the limit of 5 MB");
       return;
     }
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Selected file is not an image");
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Selected file is not a valid image format");
       return;
     }
 
@@ -97,7 +111,7 @@ const AddAdvert = () => {
   //functin to select image
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
-    if (!file.type.startsWith("image/")) {
+    if (!allowedTypes.includes(file.type)) {
       toast.error("Selected file is not an image");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -142,6 +156,8 @@ const AddAdvert = () => {
     setselectedSubscription(sub);
   };
 
+  let product = watch("addProduct");
+
   useEffect(() => {
     getCurrentLocation()
       .then((res) => {
@@ -163,6 +179,13 @@ const AddAdvert = () => {
     <>
       <Spiner loading={loading} />
       <main className="app-content">
+        {subscription?.length == 0 && (
+          <h5 className="text-center">
+            Oops! It looks like your subscription is inactive Or You don&#39;t
+            have ads left in It. To continue Publishing Your ads, please
+            consider purchasing a Subscription. Thank you
+          </h5>
+        )}
         <AddAdvertTopHead />
         {/* <!-- ::  row start here --> */}
         <div className="row mt-4">
@@ -302,15 +325,10 @@ const AddAdvert = () => {
                             {cat?.categoryName}
                           </option>
                         ))}
-
-                        {/* <option value="category2">Category 2</option> */}
-                        {/* Add more options as needed */}
                       </select>
-
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
-
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 04 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
@@ -351,7 +369,6 @@ const AddAdvert = () => {
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
-
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
@@ -410,10 +427,8 @@ const AddAdvert = () => {
                       />
                     </div>
                   </div>
-
                   {/* post code feild section */}
-
-                  <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
                         errors?.ad_location ? "error_pesudo" : ""
@@ -433,7 +448,31 @@ const AddAdvert = () => {
                       />
                     </div>
                   </div>
-
+                  {/* offer price div start */}
+                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.advertOfferPrice ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="advertOfferPrice">
+                        Advert Offer Price
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="advertOfferPrice"
+                        placeholder="Enter your advert price"
+                        {...register("advertOfferPrice", {
+                          pattern: {
+                            value: /^\d+$/,
+                            message: "Enter Valid Price",
+                          },
+                        })}
+                      />
+                    </div>
+                  </div>
+                  {/* offer price div end */}
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 07 start --> */}
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
@@ -474,7 +513,7 @@ const AddAdvert = () => {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          Upload main image
+                          Upload Main Image
                         </span>
                         <label
                           htmlFor="portfolioImageCheckbox"
@@ -485,7 +524,7 @@ const AddAdvert = () => {
                             id="portfolioImageCheckbox"
                             {...register("portfolioImageCheckbox", {})}
                           />{" "}
-                          Select Portfolio Image As Mian Image
+                          Select Image From Portfolio
                         </label>
                       </label>
 
@@ -546,18 +585,93 @@ const AddAdvert = () => {
                         PNG or JPG no bigger than 5MB and 800px wide and tall.
                       </small>
                     </div>
-
-                    {/* <!-- field col  enc :: dropify--> */}
                   </div>
-                  {/* <!-- field col end --> */}
+                  <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.ad_location ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="AddMoreProduct">
+                        Do You Want To Add Products
+                      </label>
+                      <div className="where_to_show_group d-flex">
+                        <div className="d-flex align-items-center gap-3 justify-content-between">
+                          <label
+                            className="form-head mb-0 custom_advert_label"
+                            htmlFor="YesAddProduct"
+                          >
+                            Yes
+                          </label>
+                          <input
+                            className="radioColor"
+                            type="radio"
+                            name="addProduct"
+                            value="YesAddProduct"
+                            id="YesAddProduct"
+                            {...register("addProduct")}
+                          />
+                        </div>
+                        <div className="d-flex align-items-center gap-3 justify-content-between">
+                          <label
+                            className="form-head mb-0 custom_advert_label"
+                            htmlFor="NoAddProduct"
+                          >
+                            No
+                          </label>
+                          <input
+                            className="radioColor"
+                            type="radio"
+                            name="addProduct"
+                            value="NoAddProduct"
+                            id="NoAddProduct"
+                            {...register("addProduct")}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {product === "YesAddProduct" && (
+                    <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
+                      <div className={`form-group`}>
+                        <label className="form-head" htmlFor="location">
+                          How Many Product do you have?
+                        </label>
+                        <select
+                          type="text"
+                          className="form-control"
+                          id="numberofProduct"
+                          placeholder="Enter location"
+                          {...register("numberofProduct")}
+                          // onChange={}
+                        >
+                          <option>Select The Number Of Product</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Conditionally render product upload forms using ProductForms component */}
+                  {product === "YesAddProduct" && (
+                    <ProductForm
+                      numProducts={parseInt(watch("numberofProduct")) || 0}
+                      register={register}
+                      setValue={setValue}
+                      errors={errors}
+                    />
+                  )}
                 </div>
               </form>
-              {/* <!-- add book form up end --> */}
             </div>
           </div>
         </div>
         {/* <!-- form section end here --> */}
         <Subscriptions
+          subscription={subscription}
+          setsubscription={setsubscription}
           handleSelectsub={handleSelectsub}
           selectedSubscription={selectedSubscription}
           loading={loading}

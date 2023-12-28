@@ -10,11 +10,26 @@ export function castAddAdvert(formData, user, portfolio_id) {
   data.append("advertPrice", formData?.adPrice);
   data.append("advertDescription", formData?.exampleTextarea);
   data.append("advertPostalCode", formData?.adPostalCode);
-  data.append("provider_portfolio_id", portfolio_id);
-  data.append("provider_id", user.id);
+  data.append("advertProviderPortfolio_id", portfolio_id);
+  data.append("advertProvider_id", user.id);
   data.append("portfolioImageCheckbox", formData.portfolioImageCheckbox);
-  if (!formData.portfolioImageCheckbox) {
-    data.append("img", formData.img);
+  data.append("advertOfferPrice", formData.advertOfferPrice);
+  if (formData?.product?.length > 0) {
+    if (formData?.addProduct === "YesAddProduct") {
+      console.log("yes product");
+      data.append("product", JSON.stringify(formData.product));
+    }
+  }
+  if (formData?.productImg?.length > 0) {
+    formData.productImg.forEach((product, ParentIndex) => {
+      product.forEach((productimg) => {
+        data.append(`productImg${ParentIndex + 1}`, productimg);
+      });
+    });
+  }
+  if (formData?.portfolioImageCheckbox === false) {
+    data.append("mainImg", formData.img);
+    console.log("advert mainImg");
   }
   data.append("subscription_plan_id", formData.subscription_plan_id);
   return data;

@@ -20,7 +20,7 @@ const Plans = () => {
   const { token, user, portfolio_id } = useAuth();
   const [loading, setLoading] = useState(false);
   let storeSubscription = useSubscription().subscriptions;
-  console.log(storeSubscription, "This is store subscriptin");
+  // console.log(storeSubscription, "This is store subscriptin");
   // console.log(subscriptions, "this is subscription");
   // this function is used to add subscription
   const handlePayment = () => {
@@ -46,6 +46,10 @@ const Plans = () => {
       })
       .catch((e) => {
         console.log(e);
+        if (e?.response?.status === 409) {
+          toast.error(e?.response?.data?.message);
+          return;
+        }
         setStatus({ type: "error", error: "Payment Failed try Again Later" });
         toast.error("Payment Failed try Again Later");
       })
@@ -73,8 +77,6 @@ const Plans = () => {
 
     fetchPlans();
   }, []);
-
-  console.log(plans, "Plans");
 
   const resetStatus = () => {
     setStatus(undefined);
@@ -156,7 +158,7 @@ const Plans = () => {
               <div className="text-center">
                 <button
                   className="mt-4 advert_pay_btn"
-                  disabled={!selectedPlan}
+                  disabled={!selectedPlan || loading}
                   onClick={() => handlePayment()}
                 >
                   {selectedPlan
