@@ -796,12 +796,17 @@ span.plan-month {
 }
 
 .product-img-prev-cont {
-  display: flex;
-  /* overflow-y: auto; */
+  display: -webkit-box;
   gap: 12px;
+  max-width: 100%;
+  overflow-x: scroll;
+  padding-bottom: 10px;
 }
 
 .single-img-cont {
+  border: 2px solid #d2d2d2;
+  padding: 5px;
+  border-radius: 4px;
   width: 200px;
   height: 200px;
   position: relative;
@@ -810,9 +815,13 @@ span.plan-month {
 .product-prevImg-del-icon {
   position: absolute;
   color: red;
-  right: 0;
-  top: 4px;
+  right: 10px;
+  top: 10px;
   cursor: pointer;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: inherit;
 }
 
 .single-img-cont > img {
@@ -1012,6 +1021,24 @@ input:checked + .slider:before {
 }
 
 /* Rounded sliders */
+
+.advertUpdate-btn {
+  padding: 5px 28px;
+  border: 1px solid #2bc924;
+  background-color: #2bc924;
+  display: flex;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: Quicksand;
+  margin: 0 auto;
+}
+
+.advertUpdate-btn:hover {
+  border: 1px solid #30b229;
+  background-color: #30b229;
+}
+
 .slider.round {
   border-radius: 34px;
 }
@@ -1223,7 +1250,17 @@ input:checked + .slider:before {
   align-items: center;
   gap: 4px;
 }
+.delete-product-icon {
+  border: none;
+  margin: 0;
+  padding: 0;
+  background-color: inherit;
+  cursor: pointer;
+}
 
+.delete-product-icon:hover {
+  scale: 1.2;
+}
 /* style for category dropdown toogle start */
 
 .category-dropw-down-toogle {

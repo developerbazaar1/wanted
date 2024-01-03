@@ -27,6 +27,7 @@ import { setSubscription } from "./features/subscriptionSlice";
 import Plans from "./components/Plans";
 import AdvertProductPreview from "./Test/AdvertProductPreview";
 import OnlyAdvertProductPreview from "./Test/OnlyPreviewPage";
+import EditAdvertData from "./pages/EditAdvert";
 function App() {
   const { isLoggedIn, token, portfolio_id, user } = useAuth();
   const dispatch = useDispatch();
@@ -147,6 +148,15 @@ function App() {
                 <ProtectedRoutes
                   isLoggedIn={isLoggedIn}
                   component={<Advert />}
+                />
+              }
+            />
+            <Route
+              path="advert/edit"
+              element={
+                <ProtectedRoutes
+                  isLoggedIn={isLoggedIn}
+                  component={<EditAdvertData />}
                 />
               }
             />

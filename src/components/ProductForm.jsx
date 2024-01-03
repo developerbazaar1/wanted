@@ -2,8 +2,19 @@ import { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoMdImages } from "react-icons/io";
+import { toast } from "react-toastify";
+const allowedTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/jpg",
+  "image/psd",
+  "image/ai",
+  "image/avif",
+];
 
-const ProductForm = ({ numProducts, register, setValue }) => {
+const ProductForm = ({ numProducts, register, setValue, errors }) => {
+  // console.log("This is number of products", numProducts);
+  console.log(errors);
   const [imagePreviews, setImagePreviews] = useState(
     Array.from({ length: numProducts }, () => [])
   );
@@ -27,27 +38,33 @@ const ProductForm = ({ numProducts, register, setValue }) => {
     }
 
     for (let i = 0; i < Math.min(files.length, 3); i++) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        // Ensure that the array element at the inner index exists
-        if (!newPreviews[productIndex][i]) {
-          newPreviews[productIndex][i] = event.target.result;
-        } else {
-          newPreviews[productIndex].push(event.target.result);
-        }
-        setImagePreviews([...newPreviews]);
+      // Check if the file type is allowed
+      if (allowedTypes.includes(files[i].type)) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          // Ensure that the array element at the inner index exists
+          if (!newPreviews[productIndex][i]) {
+            newPreviews[productIndex][i] = event.target.result;
+          } else {
+            newPreviews[productIndex].push(event.target.result);
+          }
+          setImagePreviews([...newPreviews]);
 
-        // Store the selected images in the separate state
-        newSelectedImages[productIndex].push(files[i]);
-        setSelectedImages([...newSelectedImages]);
+          // Store the selected images in the separate state
+          newSelectedImages[productIndex].push(files[i]);
+          setSelectedImages([...newSelectedImages]);
 
-        // Set the value only for the current product
-        setValue(
-          `productImg[${productIndex}]`,
-          newSelectedImages[productIndex]
-        );
-      };
-      reader.readAsDataURL(files[i]);
+          // Set the value only for the current product
+          setValue(
+            `productImg[${productIndex}]`,
+            newSelectedImages[productIndex]
+          );
+        };
+        reader.readAsDataURL(files[i]);
+      } else {
+        // File type not allowed, handle accordingly (e.g., show an error message)
+        toast.error(`File type not allowed: ${files[i].type}`);
+      }
     }
   };
 
@@ -83,7 +100,16 @@ const ProductForm = ({ numProducts, register, setValue }) => {
                 type="text"
                 placeholder="Enter Product Name"
                 id={`productName${i}`}
-                {...register(`product[${i}].productName`)}
+                {...register(`product[${i}].productName`, {
+                  pattern: {
+                    value: /^[A-Za-z!'!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]+$/,
+                    message: "Invalid Product Name",
+                  },
+                  required: {
+                    value: true,
+                    message: "Title is Required",
+                  },
+                })}
               />
             </div>
             <div className="mb-1">
@@ -94,7 +120,16 @@ const ProductForm = ({ numProducts, register, setValue }) => {
                 type="text"
                 placeholder="Enter Product Id"
                 id={`product_id${i}`}
-                {...register(`product[${i}].product_id`)}
+                {...register(`product[${i}].product_id`, {
+                  pattern: {
+                    value: /^[ A-Za-z0-9._%+-]*$/,
+                    message: "Invalid Product iD",
+                  },
+                  required: {
+                    value: true,
+                    message: "Product Id is Required",
+                  },
+                })}
               />
             </div>
 
@@ -106,7 +141,16 @@ const ProductForm = ({ numProducts, register, setValue }) => {
                 type="text"
                 placeholder="Enter Product Price"
                 id={`productPrice${i}`}
-                {...register(`product[${i}].productPrice`)}
+                {...register(`product[${i}].productPrice`, {
+                  pattern: {
+                    value: /^\d+$/,
+                    message: "Invalid Product Price",
+                  },
+                  required: {
+                    value: true,
+                    message: "Product Price is Required",
+                  },
+                })}
               />
             </div>
           </div>

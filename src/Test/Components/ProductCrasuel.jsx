@@ -28,7 +28,7 @@ const ProductCrasuel = ({ product, unique }) => {
         </div>
         <div
           id={`carouselExampleIndicators${unique}`}
-          className="carousel slide d-md-none"
+          className="carousel slide w-30"
         >
           <div className="carousel-inner detial_product_image">
             {product?.productImg?.map((img, index) => (
@@ -67,7 +67,7 @@ const ProductCrasuel = ({ product, unique }) => {
           </button>
         </div>
         {/* <!-- Image grid for medium and larger screens --> */}
-        <div className=" d-none d-md-flex detial_product_image">
+        <div className=" d-none d-md-none detial_product_image">
           {product?.productImg?.map((img, index) => (
             <div
               className="singleProduct_image"

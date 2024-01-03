@@ -129,10 +129,10 @@ const Advert = () => {
     });
   };
 
-  const handleAdvertEditModal = (advert) => {
-    editAdvertModalData(advert);
-    setshowAdvertModal(true);
-  };
+  // const handleAdvertEditModal = (advert) => {
+  //   editAdvertModalData(advert);
+  //   setshowAdvertModal(true);
+  // };
 
   useEffect(() => {
     getUserAdvert();
@@ -296,7 +296,7 @@ const Advert = () => {
                           <li className="pointer  my-1 manage-advert-btn">
                             <Link
                               to="/postagain"
-                              state={{ advertData: advert }}
+                              state={{ _id: advert._id }}
                               className="postAgain-ling manage-advert-btn"
                             >
                               <IoRepeat size="20" />
@@ -305,10 +305,12 @@ const Advert = () => {
                           </li>
                           <li
                             className="pointer manage-advert-btn"
-                            onClick={() => handleAdvertEditModal(advert)}
+                            // onClick={() => handleAdvertEditModal(advert)}
                           >
-                            <FiEdit2 />
-                            <span>Edit Advert Details</span>
+                            <Link to="edit" state={{ _id: advert._id }}>
+                              <FiEdit2 />
+                              <span>Edit Advert Details</span>
+                            </Link>
                           </li>
                           <li
                             className="pointer mt-2 delete_advert manage-advert-btn"

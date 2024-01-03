@@ -1,50 +1,50 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-const allowedTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/jpg",
-  "image/psd",
-  "image/ai",
-  "image/avif",
-];
-import { IoIosArrowDown } from "react-icons/io";
-
+import { Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { ProctedApi } from "../config/axiosUtils";
-import { useAuth } from "../service/auth";
-import { castAddAdvert } from "../helper/castAddAdvert";
-import { toast } from "react-toastify";
 import Spiner from "../components/Spiner";
+import { ProctedApi } from "../config/axiosUtils";
+import { castEditadvertData } from "../helper/castAddAdvert";
+import { useAuth } from "../service/auth";
+import { toast } from "react-toastify";
+import ImagePreview from "../components/ImagePreview";
 import { ImgSizeCheck } from "../helper/imageSizeCheck";
 import { useCategory, useSubCategory } from "../service/categoryhelper";
-import { getCurrentLocation } from "../helper/getCurrentLocation";
-import AddAdvertTopHead from "../components/AddAdvertTopHead";
-import Subscriptions from "../components/Subscriptions";
+import EditAdvertProducts from "../components/EditAdvertProducts";
 import ProductForm from "../components/ProductForm";
-const AddAdvert = () => {
-  const [subscription, setsubscription] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [selectedSubscription, setselectedSubscription] = useState(null);
-  const { token, user, portfolio_id } = useAuth();
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [fileName, setfileName] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
+const EditAdvertData = () => {
+  let { _id } = useLocation().state;
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [fileName, setfileName] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const { user, token } = useAuth();
   const fileInputRef = useRef(null);
+  // const [selectedSubscription, setselectedSubscription] = useState(null);
+  const [advert, setAdvert] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState();
   const { subcategory } = useSubCategory();
   const { category } = useCategory();
+
+  // handle drag and drop
+  // console.log(state);
 
   const {
     register,
     handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
     setValue,
+    // reset,
+    watch,
+    getValues,
+    formState: { errors },
   } = useForm();
 
+  // console.log(advert);
+
+  //function to handle category change
   const handleCategoryChange = (event) => {
+    console.log("inside the subCategory");
     const selectedValue = event.target.value;
     const selectedCat = category.find(
       (cat) => cat.categoryName === selectedValue
@@ -52,53 +52,20 @@ const AddAdvert = () => {
     setSelectedCategory(selectedCat);
   };
 
-  const HandleAddadvertSubmit = (formData) => {
-    // console.log(formData);
-
-    formData["subscription_plan_id"] = selectedSubscription._id;
-    setLoading(true);
-    const data = castAddAdvert(formData, user, portfolio_id);
-    // console.log("submit is firing");
-    // return;
-    ProctedApi.AddAdvert(data, token)
-      .then((response) => {
-        console.log(response);
-        if (response.status === 201) {
-          reset();
-          setSelectedImage();
-          return toast.success("created");
-        }
-      })
-      .catch((e) => {
-        // console.log(e, "error");
-        // console.log(e?.response?.data?.message);
-        return toast.error(e?.response?.data?.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  /**
-   * @handle drag and drop
-   */
-
   const handleImageDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    console.log(file);
     if (!ImgSizeCheck(file.size)) {
       toast.error("File size exceeds the limit of 5 MB");
       return;
     }
 
-    if (!allowedTypes.includes(file.type)) {
-      toast.error("Selected file is not a valid image format");
+    if (!file.type.startsWith("image/")) {
+      toast.error("Selected file is not an image");
       return;
     }
-
-    setfileName(file.name);
     setValue("img", e.dataTransfer.files[0]);
+    setfileName(file.name);
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -110,15 +77,16 @@ const AddAdvert = () => {
 
   //functin to select image
   const handleImageSelect = (e) => {
+    const filename = e?.target?.files[0].name;
+
     const file = e.target.files[0];
-    if (!allowedTypes.includes(file.type)) {
+    if (!file.type.startsWith("image/")) {
       toast.error("Selected file is not an image");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
       return;
     }
-
     if (!ImgSizeCheck(file.size)) {
       toast.error("File size exceeds the limit of 5 MB");
       if (fileInputRef.current) {
@@ -126,10 +94,7 @@ const AddAdvert = () => {
       }
       return;
     }
-
-    setValue("img", e?.target?.files[0]);
-    console.log("image is receving");
-    const filename = e?.target?.files[0].name;
+    setValue("mainImg", e.target.files[0]);
     setfileName(filename);
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
@@ -139,63 +104,148 @@ const AddAdvert = () => {
       reader.readAsDataURL(file);
     }
   };
-
   const removeImagePreview = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
     setSelectedImage(null);
     setfileName("");
+    // reset("img", "");
+    // reset();
   };
 
   const preventDefault = (e) => {
     e.preventDefault();
   };
 
-  const handleSelectsub = (sub) => {
-    setselectedSubscription(sub);
+  const handleAdvertUpdate = (formData) => {
+    // console.log("inside the advert update", formData);
+    // return;
+
+    setLoading(true);
+    const data = castEditadvertData(formData, advert?._id, user?.id);
+
+    let numOfOldProduct = formData.products.length;
+    ProctedApi.updateAdvert(data, token, numOfOldProduct)
+      .then((res) => {
+        toast.success(res?.data?.message);
+        console.log(res);
+        // setAdvert(res.data.data);
+        // setValue()
+        // addProduct;
+        setTimeout(() => {
+          window.location.reload();
+        }, [1000]);
+
+        // setRefresh((val) => !val);
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error(e?.response?.data?.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  let product = watch("addProduct");
+  // console.log(subcategory);
 
   useEffect(() => {
-    getCurrentLocation()
+    setLoading(true);
+    ProctedApi.getSingleAdvert(token, _id)
       .then((res) => {
-        // console.log(res);
-        if (res?.formattedAddress?.postalCode) {
-          setValue("ad_location", res?.formattedAddress?.formattedAddress);
-        } else {
-          let addres = `${res?.formattedAddress?.placeLabel} , ${res?.formattedAddress?.formattedAddress}`;
-          setValue("ad_location", addres);
-        }
-        // setValue("ad_location", res.address);
+        console.log(res);
+        setAdvert(res.data.advert);
+        let advert = res.data.advert;
+        setValue("advertTitle", advert?.advertTitle);
+        setValue("advertCategory", advert?.advertCategory);
+        setValue("advertSubCategory", advert?.advertSubCategory);
+        setValue("advertPostalCode", advert.advertPostalCode);
+        setValue("advertPrice", advert?.advertPrice);
+        setValue("advertOfferPrice", advert?.advertOfferPrice);
+        setValue("advertLocation", advert?.advertLocation);
+        setValue("advertDescription", advert?.advertDescription);
+        setValue("products", advert?.products);
       })
-      .catch(() => {
-        alert("Failed to Load current Location Try Adding manually");
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, []);
+  }, [_id, refresh]);
 
+  useEffect(() => {
+    let subCat = category?.find(
+      (element) => element?.categoryName === advert?.advertCategory
+    );
+    console.log("this is subcategory", subCat);
+    setSelectedCategory(subCat);
+  }, [advert, refresh]);
+
+  // console.log(getValues("porducts"));
+  let product = watch("addProduct");
+
+  // console.log("default selected sub category", selectedCategory);
   return (
     <>
       <Spiner loading={loading} />
       <main className="app-content">
-        {subscription?.length == 0 && (
-          <h5 className="text-center">
-            Oops! It looks like your subscription is inactive Or You don&#39;t
-            have ads left in It. To continue Publishing Your ads, please
-            consider purchasing a Subscription. Thank you
-          </h5>
-        )}
-        <AddAdvertTopHead />
+        <div className="row">
+          <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div className="row">
+              {/* <!-- top head --> */}
+              <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-left self-center">
+                <div className="back-btn">
+                  <Link to="/advert" className="b-btn">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="21"
+                      viewBox="0 0 20 21"
+                      fill="none"
+                    >
+                      <g clipPath="url(#clip0_1710_5743)">
+                        <path
+                          d="M8.67222 5.13338L3.33333 10.5L8.67222 15.8667C8.72044 15.93 8.7817 15.9823 8.85185 16.0198C8.922 16.0574 8.99941 16.0795 9.07884 16.0846C9.15827 16.0896 9.23785 16.0776 9.31221 16.0492C9.38658 16.0208 9.45397 15.9768 9.50985 15.9202C9.56572 15.8635 9.60876 15.7955 9.63606 15.7207C9.66336 15.6459 9.67428 15.5662 9.66808 15.4868C9.66188 15.4075 9.6387 15.3304 9.60012 15.2608C9.56153 15.1912 9.50845 15.1307 9.44444 15.0834L5.45 11.0556H16.0778C16.2251 11.0556 16.3664 10.9971 16.4706 10.8929C16.5748 10.7887 16.6333 10.6474 16.6333 10.5C16.6333 10.3527 16.5748 10.2114 16.4706 10.1072C16.3664 10.003 16.2251 9.94449 16.0778 9.94449H5.45L9.44444 5.91672C9.54832 5.8121 9.60639 5.67051 9.60586 5.52308C9.60534 5.37566 9.54628 5.23448 9.44167 5.1306C9.33705 5.02673 9.19546 4.96866 9.04804 4.96918C8.90061 4.9697 8.75943 5.02877 8.65556 5.13338H8.67222Z"
+                          fill="black"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_1710_5743">
+                          <rect
+                            width="20"
+                            height="20"
+                            fill="white"
+                            transform="matrix(0 -1 1 0 0 20.5)"
+                          />
+                        </clipPath>
+                      </defs>
+                    </svg>{" "}
+                    Back
+                  </Link>
+                </div>
+              </div>
+              <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
+                <div className="top-heading mt-3">
+                  <h1>Edit Advert Details</h1>
+                </div>
+              </div>
+              {/* <!-- top image --> */}
+              <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-end"></div>
+            </div>
+          </div>
+        </div>
+
         {/* <!-- ::  row start here --> */}
         <div className="row mt-4">
           <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div id="form" className="form-container">
               {/* <!-- add book form start--> */}
               <form
-                onSubmit={handleSubmit(HandleAddadvertSubmit)}
+                onSubmit={handleSubmit(handleAdvertUpdate)}
                 className="w-100"
-                id="add-advert-form"
+                id="advertedit-form"
               >
                 {/* <!-- form row start at lower div --> */}
                 <div className=" cst-add-new-form row">
@@ -203,7 +253,7 @@ const AddAdvert = () => {
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.advert_title ? "error_pesudo" : ""
+                        errors?.advertTitle ? "error_pesudo" : ""
                       }`}
                     >
                       <label className="form-head" htmlFor="title">
@@ -212,9 +262,9 @@ const AddAdvert = () => {
                       <input
                         type="text"
                         className="form-control"
-                        id="advert_title"
+                        id="advertTitle"
                         placeholder="Enter your advert title"
-                        {...register("advert_title", {
+                        {...register("advertTitle", {
                           pattern: {
                             value: /^[ A-Za-z0-9._%+-]*$/,
                             message: "Invalid String",
@@ -228,105 +278,32 @@ const AddAdvert = () => {
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
-                  {/* <!-- field col 02 start --> */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div className="form-group">
-                      <label className="form-head" htmlFor="show-ad">
-                        Where To Show:
-                      </label>
-                      <div
-                        className={`d-flex flex-column flex-md-row justify-content-between where_to_show_group ${
-                          errors?.userSearch ? "whrer_To_show_error" : ""
-                        }`}
-                      >
-                        <div className="d-flex align-items-center gap-3 justify-content-between">
-                          <label
-                            className="form-head mb-0 custom_advert_label"
-                            htmlFor="liveads"
-                          >
-                            Live Ads
-                          </label>
-                          <input
-                            className="radioColor"
-                            type="radio"
-                            name="userSearch"
-                            value="liveAds"
-                            id="liveads"
-                            {...register("userSearch", {
-                              required: true,
-                            })}
-                          />
-                        </div>
-                        <div className="d-flex align-items-center gap-3 justify-content-between">
-                          <label
-                            className="form-head mb-0 custom_advert_label"
-                            htmlFor="latestoffer"
-                          >
-                            Latest Offer
-                          </label>
-
-                          <input
-                            {...register("userSearch", {
-                              required: true,
-                            })}
-                            className="radioColor"
-                            type="radio"
-                            name="userSearch"
-                            id="latestoffer"
-                            value="latesOffer"
-                          />
-                        </div>
-
-                        <div className="d-flex align-items-center gap-3 justify-content-between">
-                          <label
-                            className="form-head mb-0 custom_advert_label"
-                            htmlFor="service"
-                          >
-                            Services
-                          </label>
-                          <input
-                            {...register("userSearch", {
-                              required: true,
-                            })}
-                            className="radioColor"
-                            type="radio"
-                            name="userSearch"
-                            id="service"
-                            value="service"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* <!-- field col end --> */}
                   {/* <!-- field col 03 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.adcategory ? "error_pesudo" : ""
+                        errors?.advertCategory ? "error_pesudo" : ""
                       }`}
                     >
                       <label className="form-head" htmlFor="category">
                         Advert Category
                       </label>
                       <select
+                        type="text"
                         className="form-control"
-                        id="adcategory"
-                        {...register("adcategory", {
+                        id="advertCategory"
+                        placeholder="Enter your advert Category"
+                        {...register("advertCategory", {
                           required: true,
                         })}
                         onChange={handleCategoryChange}
                       >
-                        <option value="" key="defaultcat">
-                          Select Advert Category
-                        </option>
                         {category?.map((cat) => (
                           <option key={cat._id} value={`${cat?.categoryName}`}>
                             {cat?.categoryName}
                           </option>
                         ))}
                       </select>
-                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
@@ -334,23 +311,20 @@ const AddAdvert = () => {
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.subCategory ? "error_pesudo" : ""
+                        errors?.advertSubCategory ? "error_pesudo" : ""
                       }`}
                     >
                       <label className="form-head" htmlFor="sub-ad">
                         Advert Sub Category
                       </label>
                       <select
+                        type="text"
                         className="form-control"
-                        id="subCategory"
-                        placeholder="Enter your advert Sub Category"
-                        {...register("subCategory", {
+                        id="advertSubCategory"
+                        {...register("advertSubCategory", {
                           required: true,
                         })}
                       >
-                        <option value="" key="defaultsubcat">
-                          Select Advert Sub Category
-                        </option>
                         {selectedCategory &&
                           subcategory
                             ?.filter(
@@ -365,8 +339,8 @@ const AddAdvert = () => {
                                 {subcate?.subCategoryName}
                               </option>
                             ))}
+                        {/* <option value={`Cafe & Treats`}>Cafe & Treats</option> */}
                       </select>
-                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
@@ -374,18 +348,18 @@ const AddAdvert = () => {
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.adPostalCode ? "error_pesudo" : ""
+                        errors?.advertPostalCode ? "error_pesudo" : ""
                       }`}
                     >
-                      <label className="form-head" htmlFor="adPostalCode">
+                      <label className="form-head" htmlFor="advertPostalCode">
                         Postal Code
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="adPostalCode"
+                        id="advertPostalCode"
                         placeholder="Enter your advert Postal Code"
-                        {...register("adPostalCode", {
+                        {...register("advertPostalCode", {
                           pattern: {
                             value: /^\d+$/,
                             message: "Enter a Valid Postal Code",
@@ -403,18 +377,18 @@ const AddAdvert = () => {
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.adPrice ? "error_pesudo" : ""
+                        errors?.advertPrice ? "error_pesudo" : ""
                       }`}
                     >
-                      <label className="form-head" htmlFor="price">
+                      <label className="form-head" htmlFor="advertPrice">
                         Advert Price
                       </label>
                       <input
                         type="text"
                         className="form-control"
-                        id="adPrice"
+                        id="advertPrice"
                         placeholder="Enter your advert price"
-                        {...register("adPrice", {
+                        {...register("advertPrice", {
                           pattern: {
                             value: /^\d+$/,
                             message: "Enter Valid Price",
@@ -427,28 +401,7 @@ const AddAdvert = () => {
                       />
                     </div>
                   </div>
-                  {/* post code feild section */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div
-                      className={`form-group ${
-                        errors?.ad_location ? "error_pesudo" : ""
-                      }`}
-                    >
-                      <label className="form-head" htmlFor="location">
-                        Location
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="ad_location"
-                        placeholder="Enter location"
-                        {...register("ad_location", {
-                          required: true,
-                        })}
-                      />
-                    </div>
-                  </div>
-                  {/* offer price div start */}
+
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
@@ -466,31 +419,54 @@ const AddAdvert = () => {
                         {...register("advertOfferPrice", {
                           pattern: {
                             value: /^\d+$/,
-                            message: "Enter Valid Advert Offer Price",
+                            message: "Enter Valid Offer Price",
                           },
                         })}
                       />
                     </div>
                   </div>
-                  {/* offer price div end */}
+
+                  {/* post code feild section */}
+
+                  <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.advertLocation ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="advertLocation">
+                        Location
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="advertLocation"
+                        placeholder="Enter location"
+                        {...register("advertLocation", {
+                          required: true,
+                        })}
+                      />
+                    </div>
+                  </div>
+
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 07 start --> */}
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.exampleTextarea ? "error_pesudo" : ""
+                        errors?.advertDescription ? "error_pesudo" : ""
                       }`}
                     >
-                      <label className="form-head" htmlFor="description">
+                      <label className="form-head" htmlFor="advertDescription">
                         Advert Description
                       </label>
                       <textarea
                         className="form-control"
                         placeholder="Enter your store description"
-                        id="exampleTextarea"
+                        id="advertDescription"
                         rows="6"
                         name="answer"
-                        {...register("exampleTextarea", {
+                        {...register("advertDescription", {
                           required: true,
                         })}
                       ></textarea>
@@ -506,86 +482,60 @@ const AddAdvert = () => {
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                     {/* <!-- field col  start :: dropify--> */}
                     <div className="form-group protfilo_image_upload">
-                      <label className="form-head mb-0 row">
-                        <span
-                          className="col-12 col-lg-4"
-                          style={{
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          Upload Main Image
-                        </span>
-                        <label
-                          htmlFor="portfolioImageCheckbox"
-                          className="col-12 col-lg-8 text-lg-end"
-                        >
-                          <input
-                            type="checkbox"
-                            id="portfolioImageCheckbox"
-                            {...register("portfolioImageCheckbox", {})}
-                          />{" "}
-                          Select Image From Portfolio
-                        </label>
+                      <label className="form-head mb-2" htmlFor="file_upload">
+                        Upload Advert Images
                       </label>
-
                       <div
                         onDragOver={preventDefault}
                         onDragEnter={preventDefault}
                         onDrop={handleImageDrop}
-                        // className={`
-                        //  ${errors?.img ? "input_filed_error" : ""}
-                        // `}
                       >
                         <input
                           name="file1"
                           type="file"
                           className=" protfilo_image_input_field"
-                          id="file_upload"
+                          data-height="100"
+                          data-allowed-file-extensions="jpg jpeg png"
                           ref={fileInputRef}
+                          id="file_upload"
                           onChange={handleImageSelect}
-                          // {...register("img", {
-                          //   required: true,
-                          // })}
                         />
                         {/* message to show when no image have has been selected start */}
                         {!selectedImage && (
-                          <div className="protfilo_image_icons">
+                          <div className="protfilo_image_icons ">
                             <AiOutlineCloudUpload />
-                            <span>Drag Or Upload Advert Main Images</span>
+
+                            <span
+                              style={{
+                                zIndex: "999",
+                              }}
+                            >
+                              Drag Or Upload Your Thumbnail Image Here
+                            </span>
                           </div>
                         )}
                         {/* message to show when no image have has been selected end */}
                         {/* image preview container  start */}
 
-                        {selectedImage && (
-                          <div className="protfilo_image_preview_container">
-                            <div className="preview_image_div">
-                              <img
-                                src={selectedImage}
-                                alt="loading"
-                                className="protfilo_prew_image"
-                              />
-                            </div>
-                            <button
-                              className="protfilo_prew_image_remove_button"
-                              onClick={removeImagePreview}
-                            >
-                              Remove
-                            </button>
-
-                            <span className="protfilo_preview_image_name">
-                              {fileName}
-                            </span>
-                          </div>
-                        )}
+                        <ImagePreview
+                          selectedImage={selectedImage}
+                          fileName={fileName}
+                          removeImagePreview={removeImagePreview}
+                          portfolioImgUrl={advert?.advertImage?.imgUrl}
+                        />
                         {/* image preview container start end */}
                       </div>
-
                       <small className="form-text text-muted upload-info mt-1">
                         PNG or JPG no bigger than 5MB and 800px wide and tall.
                       </small>
                     </div>
+                    {/* <!-- field col  enc :: dropify--> */}
                   </div>
+
+                  {/* <!-- field col end --> */}
+
+                  {/* Add more Product */}
+
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
@@ -593,7 +543,7 @@ const AddAdvert = () => {
                       }`}
                     >
                       <label className="form-head" htmlFor="AddMoreProduct">
-                        Do You Want To Add Products ?
+                        Do You Want To Add More Products ?
                       </label>
                       <div className="where_to_show_group d-flex">
                         <div className="d-flex align-items-center gap-3 justify-content-between">
@@ -635,7 +585,7 @@ const AddAdvert = () => {
                     <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                       <div className={`form-group`}>
                         <label className="form-head" htmlFor="location">
-                          How Many Product do you have?
+                          How Many Products do you have?
                         </label>
                         <select
                           type="text"
@@ -663,22 +613,42 @@ const AddAdvert = () => {
                       errors={errors}
                     />
                   )}
+
+                  {/* //components for advert product */}
+                  {advert?.products?.length > 0 &&
+                    advert?.products?.map((product, i) => (
+                      <EditAdvertProducts
+                        key={product._id}
+                        product={product}
+                        i={i}
+                        register={register}
+                        setValue={setValue}
+                        advertId={advert._id}
+                        loading={loading}
+                        setLoading={setLoading}
+                        token={token}
+                        setRefresh={setRefresh}
+                      />
+                    ))}
                 </div>
+
+                <button
+                  type="submit"
+                  className="advertUpdate-btn"
+                  id="advertedit-form"
+                  disabled={loading}
+                >
+                  Save
+                </button>
               </form>
+              {/* <!-- add book form up end --> */}
             </div>
           </div>
         </div>
         {/* <!-- form section end here --> */}
-        <Subscriptions
-          subscription={subscription}
-          setsubscription={setsubscription}
-          handleSelectsub={handleSelectsub}
-          selectedSubscription={selectedSubscription}
-          loading={loading}
-        />
       </main>
     </>
   );
 };
 
-export default AddAdvert;
+export default EditAdvertData;

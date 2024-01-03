@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const AddAdvertTopHead = () => {
+const AddAdvertTopHead = ({ Title }) => {
   return (
     <>
       <div className="row">
@@ -40,7 +40,10 @@ const AddAdvertTopHead = () => {
             </div>
             <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
               <div className="top-heading mt-3">
-                <h1>Add New Advert</h1>
+                <h1>
+                  {" "}
+                  {Title === "Edit Advert" ? "Edit Advert" : "Add New Advert"}
+                </h1>
               </div>
             </div>
             {/* <!-- button to pay subscription --> */}

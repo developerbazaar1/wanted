@@ -22,8 +22,9 @@ const Subscriptions = ({
     const fetchSubscription = async () => {
       try {
         const res = await getUserSubscription(token, user.id, portfolio_id);
+        console.log("subscription", res.data);
+        // setsubscription(res.data.result);
         setsubscription(res.data.result);
-        // setsubscription([]);
         // console.log(res.data.result);
         dispatch(
           setSubscription({

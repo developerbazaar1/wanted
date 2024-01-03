@@ -102,9 +102,9 @@ export const ProctedApi = {
     });
     return response;
   },
-  updateAdvert: async (data, token) => {
+  updateAdvert: async (data, token, numOfOldProduct) => {
     const response = await api.request({
-      url: `/updateAdvert`,
+      url: `/updateAdvert?numOfOldProduct=${numOfOldProduct}`,
       method: "PUT",
       headers: {
         Authorization: `${token}`,
@@ -115,10 +115,33 @@ export const ProctedApi = {
     return response;
   },
 
-  //Route to handle PostAgain Advert
-  postAgainAdvert: async (data, token) => {
+  //Route ot handle Delete advert particular products
+
+  deleteadvertProduct: async (token, advert_id, product_id) => {
     const response = await api.request({
-      url: `/postagainadvert`,
+      url: `/delete/products?advertId=${advert_id}&productId=${product_id}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    return response;
+  },
+  deleteadvertProductImage: async (token, advert_id, product_id, imgId) => {
+    const response = await api.request({
+      url: `/delete/products/images?advertId=${advert_id}&productId=${product_id}&imageId=${imgId}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    return response;
+  },
+
+  //Route to handle PostAgain Advert
+  postAgainAdvert: async (data, token, numOfOldProduct) => {
+    const response = await api.request({
+      url: `/postagainadvert?numOfOldProduct=${numOfOldProduct}`,
       method: "PUT",
       headers: {
         Authorization: `${token}`,
@@ -144,6 +167,22 @@ export const ProctedApi = {
         "Content-Type": "application/json",
       },
       data: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  /**
+   * route to get single advert by advert_id
+   */
+
+  getSingleAdvert: async (token, _id) => {
+    const response = await api.request({
+      url: `/getsingleadvert/${_id}`,
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
     });
     return response;
   },

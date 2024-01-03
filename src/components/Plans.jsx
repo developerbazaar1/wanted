@@ -20,9 +20,9 @@ const Plans = () => {
   const { token, user, portfolio_id } = useAuth();
   const [loading, setLoading] = useState(false);
   let storeSubscription = useSubscription().subscriptions;
-  // console.log(storeSubscription, "This is store subscriptin");
-  // console.log(subscriptions, "this is subscription");
-  // this function is used to add subscription
+  // console.log("this is user _Id", user);
+  // console.log("this is prvoider_Id _ID", portfolio_id);
+
   const handlePayment = () => {
     setLoading(true);
     let data = {
@@ -33,9 +33,12 @@ const Plans = () => {
       numberof_ads: selectedPlan.no_of_ads,
       remainingAds: selectedPlan.no_of_ads,
     };
+
+    // console.log("subscription create data", data);
+    // return;
     ProctedApi.addSubscription(data, token)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(
           setSubscription({
             subscriptions: [...storeSubscription, res.data.result],

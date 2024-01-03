@@ -450,13 +450,15 @@ const OnlyAdvertProductPreview = () => {
           <h2 className="mt-2">Provider Products</h2>
         )}
 
-        {previewData?.data?.advert?.products?.map((product, index) => (
-          <ProductCrasuel
-            key={product?._id}
-            product={product}
-            unique={index + 1}
-          />
-        ))}
+        <div className="prd-preview-grd">
+          {previewData?.data?.advert?.products?.map((product, index) => (
+            <ProductCrasuel
+              key={product?._id}
+              product={product}
+              unique={index + 1}
+            />
+          ))}
+        </div>
         {/* {crasule("No-Chip Manicure")} */}
         <h5 className="mt-2">More Ads From This Provider</h5>
         <div className="details_ads">

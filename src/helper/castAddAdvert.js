@@ -35,57 +35,99 @@ export function castAddAdvert(formData, user, portfolio_id) {
   return data;
 }
 
-export function castEditadvertData(
-  formData,
-  _id,
-  provider_id,
-  img,
-  editAdvertData
-) {
+export function castEditadvertData(formData, _id, provider_id) {
   let data = new FormData();
-  data.append("_id", _id);
+  data.append("advertId", _id);
   data.append("provider_id", provider_id);
-  data.append("advertTitle", formData?.adverttitle);
-  data.append("whereToShow", formData?.wheretshow);
-  data.append("advertCategory", formData?.advertcategory);
-  data.append("advertSubCategory", formData?.advertsubCategory);
-  data.append("advertDescription", formData?.advertdescription);
-  if (img.length) {
-    img.forEach((file) => {
-      data.append("img", file);
+  data.append("advertCategory", formData.advertCategory);
+  data.append("advertTitle", formData?.advertTitle);
+  data.append("advertSubCategory", formData?.advertSubCategory);
+  data.append("advertDescription", formData?.advertDescription);
+  data.append("advertLocation", formData?.advertLocation);
+  data.append("advertPrice", formData?.advertPrice);
+  data.append("advertOfferPrice", formData?.advertOfferPrice);
+  data.append("advertPostalCode", formData?.advertPostalCode);
+  if (formData?.mainImg) {
+    data.append("mainImg", formData.mainImg);
+    // console.log("advert mainImg");
+  }
+
+  // console.log("number of products in cast", formData.porducts.length);
+  if (formData?.products?.length > 0) {
+    // console.log("old product in cast", formData?.products);
+    data.append("products", JSON.stringify(formData.products));
+  }
+  if (formData?.product?.length > 0) {
+    console.log("new product in cast", formData?.product);
+    data.append("product", JSON.stringify(formData.product));
+  }
+
+  if (formData?.productImg?.length > 0) {
+    formData.productImg.forEach((product, ParentIndex) => {
+      product.forEach((productimg) => {
+        data.append(`productImg${ParentIndex + 1}`, productimg);
+      });
     });
   }
-  // console.log("old image url", editAdvertData.advertImages.length);
-  if (editAdvertData.advertImages.length > 0) {
-    editAdvertData.advertImages.forEach((url) => {
-      // console.log("old image url", url);
-      let ToJson = JSON.stringify(url);
-      data.append("oldImgUrl", ToJson);
+
+  if (formData.oldProductImg) {
+    formData.oldProductImg.forEach((oldProductimg, mainIndex) => {
+      oldProductimg.forEach((img) => {
+        data.append(`oldProductImg${mainIndex + 1}`, img);
+      });
+      // console.log("old Product Img", oldProductimg);
     });
   }
-  // console.log(editAdvertData.advertImages);
-  // data.append("oldImgUrl", editAdvertData.advertImages);
+
   return data;
 }
 //this function is used to cast
-export function castPostAgainAdvert(formData, id, provider_id, portfolio_id) {
+export function castPostAgainAdvert(formData, _id, provider_id) {
   let data = new FormData();
-  data.append("id", id);
-  data.append("provider_portfolio_id", portfolio_id);
+  data.append("advertId", _id);
   data.append("provider_id", provider_id);
-  data.append("advertTitle", formData?.advert_title);
-  data.append("whereToShow", formData?.userSearch);
-  data.append("advertCategory", formData?.adcategory);
-  data.append("advertSubCategory", formData?.subCategory);
+  data.append("advertCategory", formData.advertCategory);
+  data.append("advertTitle", formData?.advertTitle);
+  data.append("advertSubCategory", formData?.advertSubCategory);
   data.append("advertDescription", formData?.advertDescription);
   data.append("advertLocation", formData?.advertLocation);
-  data.append("advertPostalCode", formData?.adPostalCode);
-  data.append("advertPrice", formData?.adPrice);
+  data.append("advertPrice", formData?.advertPrice);
+  data.append("advertOfferPrice", formData?.advertOfferPrice);
+  data.append("advertPostalCode", formData?.advertPostalCode);
   data.append("subscription_plan_id", formData.subscription_plan_id);
-  if (formData?.img) {
-    console.log("yes ther is imga");
-    data.append("img", formData?.img);
+  data.append("whereToShow", formData.whereToShow);
+  if (formData?.mainImg) {
+    data.append("mainImg", formData.mainImg);
+    // console.log("advert mainImg");
   }
+
+  // console.log("number of products in cast", formData.porducts.length);
+  if (formData?.products?.length > 0) {
+    // console.log("old product in cast", formData?.products);
+    data.append("products", JSON.stringify(formData.products));
+  }
+  if (formData?.product?.length > 0) {
+    console.log("new product in cast", formData?.product);
+    data.append("product", JSON.stringify(formData.product));
+  }
+
+  if (formData?.productImg?.length > 0) {
+    formData.productImg.forEach((product, ParentIndex) => {
+      product.forEach((productimg) => {
+        data.append(`productImg${ParentIndex + 1}`, productimg);
+      });
+    });
+  }
+
+  if (formData.oldProductImg) {
+    formData.oldProductImg.forEach((oldProductimg, mainIndex) => {
+      oldProductimg.forEach((img) => {
+        data.append(`oldProductImg${mainIndex + 1}`, img);
+      });
+      // console.log("old Product Img", oldProductimg);
+    });
+  }
+
   return data;
 }
 
