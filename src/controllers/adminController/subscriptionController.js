@@ -25,10 +25,13 @@ async function addsubscriptionController(req, res, next) {
     const plan = await Plan.findById(plan_id);
 
     const existsubscription = await userSubscriptionPlan.find({
+      provider_id: provider_id,
       plan_id: plan_id,
       subscriptionStatus: "active",
       remainingAds: { $gt: 0 },
     });
+
+    // console.log("existed subscription", existsubscription);
 
     if (existsubscription.length > 0) {
       return res.status(CONFLICT).json({
@@ -45,7 +48,7 @@ async function addsubscriptionController(req, res, next) {
       amount: plan.plan_price,
       description: plan.plan_name,
     });
-    let subscription = userSubscriptionPlan
+    userSubscriptionPlan
       .create({
         plan_id,
         provider_id,
@@ -57,7 +60,7 @@ async function addsubscriptionController(req, res, next) {
         subscriptionPlanPrice: plan?.plan_price,
       })
       .then((result) => {
-        // console.log(result);
+        // console.log("created subscription", result);
         return res.status(OK).json({
           message: "subscription added successfully",
           status: "success",
@@ -83,20 +86,16 @@ async function getProviderSubscription(req, res, next) {
   let { provider_id, provider_portfolio_id } = req.query;
   // console.log(provider_id, provider_portfolio_id);
   try {
-    // Get the current date and time
-    const currentDate = new Date();
-
-    // Find subscriptions for the given user where expiryDate is greater than or equal to the current date
     // and remainingAds is greater than zero
     const activeSubscriptions = await userSubscriptionPlan
       .find({
         provider_id: provider_id,
         provider_portfolio_id: provider_portfolio_id,
-        expiryDate: { $gte: currentDate },
-        remainingAds: { $gt: 0 },
+        subscriptionStatus: "active",
+        remainingAds: { $gt: "0" },
       })
       .then((result) => {
-        // console.log(result);
+        // console.log("active subscription", result);
         return res.status(OK).json({
           status: "success",
           message: "successfylly fetched subscription",

@@ -199,10 +199,13 @@ const advertValidator = async (req, res, next) => {
  * @updateadvertvaladition
  */
 const updateAdvertValidator = async (req, res, next) => {
-  let { _id, provider_id } = req.body;
-  // console.log(req.body);
+  let { advertId, provider_id } = req.body;
+
+  // console.log("This is old products", products);
+  // console.log("This is new product", product);
+  // return res.status(400).json("This is message");
   try {
-    if (!_id || !provider_id) {
+    if (!advertId || !provider_id) {
       return res.status(BAD_REQUEST).json({
         status: "error",
         message: "Addvert Id is Missing",
@@ -219,7 +222,7 @@ const updateAdvertValidator = async (req, res, next) => {
 
 const postAdvertAgainValidator = async (req, res, next) => {
   const {
-    id,
+    advertId,
     advertTitle,
     whereToShow,
     advertCategory,
@@ -228,14 +231,13 @@ const postAdvertAgainValidator = async (req, res, next) => {
     advertPrice,
     advertDescription,
     advertPostalCode,
-    provider_portfolio_id,
     provider_id,
     subscription_plan_id,
   } = req.body;
 
   try {
     if (
-      !id ||
+      !advertId ||
       !advertTitle ||
       !whereToShow ||
       !advertCategory ||
@@ -243,7 +245,8 @@ const postAdvertAgainValidator = async (req, res, next) => {
       !advertLocation ||
       !advertPrice ||
       !advertDescription ||
-      !advertPostalCode
+      !advertPostalCode ||
+      !provider_id
     ) {
       return res.status(BAD_REQUEST).json({
         status: "Error",
@@ -258,7 +261,7 @@ const postAdvertAgainValidator = async (req, res, next) => {
         message: "Please Select a Subscription!",
       });
     }
-    if (!provider_portfolio_id || !provider_id) {
+    if (!provider_id) {
       return res.status(UNAUTHORIZED).json({
         status: "error",
         message: "You Are not authorized!",
@@ -266,7 +269,7 @@ const postAdvertAgainValidator = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    // console.log("error inside the validator");
+    console.log("error inside the validator", error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       error: "Internal server error",

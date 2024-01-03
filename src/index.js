@@ -19,6 +19,11 @@ app.use("/admin", AdminRoutes);
 app.use("/common", CommonRoute);
 app.use("/test", newrouter);
 
+// Catch-all route for any other endpoint
+app.all("*", (req, res) => {
+  res.status(404).send("Page not found");
+});
+
 const PORT = process.env.PORT || 3001;
 const server = app.listen(
   PORT,

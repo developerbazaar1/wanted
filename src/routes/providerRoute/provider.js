@@ -22,12 +22,12 @@ const {
 } = require("../../controllers/providerController/portfolio");
 const auth = require("../../config/auth");
 const {
-  addAdvert,
   getAdvert,
-  updateAdvert,
   deleteAdvert,
   postAgainAdvert,
   AddAdvert,
+  updateAdvertController,
+  getSingleAdvert,
 } = require("../../controllers/providerController/advertController");
 const {
   updateProfile,
@@ -39,7 +39,10 @@ const {
   updateProductController,
   updateProductImageController,
 } = require("../../controllers/providerController/productController");
-const { advertUpdateImg } = require("../../helpers/advertUpdateImg");
+const {
+  advertUpdateImg,
+  AdvertAndProductImgUpdateHelper,
+} = require("../../helpers/AdvertAndProductImgHelper");
 const { handlePortfolioImg } = require("../../helpers/handlePortfolioImg");
 const { productUpdateImg } = require("../../helpers/productUpdateImageHelper");
 const subscriptionValidator = require("../../validations/subscriptionValidator");
@@ -53,6 +56,13 @@ const {
   AdvertProductPreviewController,
   GetOnlyAdvertPreview,
 } = require("../../controllers/providerController/AdvertProductPreviewController");
+const {
+  deleteAdvertProductController,
+  deleteProductImgController,
+} = require("../../controllers/providerController/DeleteProductAndProductImg");
+const productDeleteValidator = require("../../validations/productDeleteValidator");
+const productImgDeleteValidator = require("../../validations/productImgDeleteValidator");
+const AdvertAndProductDataCast = require("../../helpers/AdvertAndProductDataCast");
 require("../../validations/subscriptionValidator");
 
 /**
@@ -101,21 +111,68 @@ ProviderRouter.post(
   .put(
     "/updateAdvert",
     auth,
-    upload.array("img"),
+    (req, res, next) => {
+      const numProducts = parseInt(req.query.numOfOldProduct);
+
+      const uploadFields = [
+        { name: "mainImg", maxCount: 1 },
+        { name: "productImg1", maxCount: 3 },
+        { name: "productImg2", maxCount: 3 },
+        { name: "productImg3", maxCount: 3 },
+      ];
+
+      // Handle dynamic oldProductImg fields based on the number of products
+      for (let i = 1; i <= numProducts; i++) {
+        uploadFields.push({ name: `oldProductImg${i}`, maxCount: 3 });
+      }
+
+      upload.fields(uploadFields)(req, res, next);
+    },
     updateAdvertValidator,
-    advertUpdateImg("advertImageUrls"),
-    updateAdvert
+    AdvertAndProductImgUpdateHelper,
+    AdvertAndProductDataCast,
+    updateAdvertController
   )
-  .delete("/deleteAdvert", auth, deleteAdvert)
   .put(
     "/postagainadvert",
     auth,
-    upload.array("img"),
+    (req, res, next) => {
+      const numProducts = parseInt(req.query.numOfOldProduct);
+
+      const uploadFields = [
+        { name: "mainImg", maxCount: 1 },
+        { name: "productImg1", maxCount: 3 },
+        { name: "productImg2", maxCount: 3 },
+        { name: "productImg3", maxCount: 3 },
+      ];
+
+      // Handle dynamic oldProductImg fields based on the number of products
+      for (let i = 1; i <= numProducts; i++) {
+        uploadFields.push({ name: `oldProductImg${i}`, maxCount: 3 });
+      }
+
+      upload.fields(uploadFields)(req, res, next);
+    },
     postAdvertAgainValidator,
-    advertUpdateImg("advertImageUrls"),
+    AdvertAndProductImgUpdateHelper,
+    AdvertAndProductDataCast,
     postAgainAdvert
-  );
-// .delete("/deleteAdvertImg/:id/images/:imgId", auth, deleteAdvertImage);
+  )
+  // .put("/handleshowhide",auth, handleAdvertVisibilaty)
+  .delete("/deleteAdvert", auth, deleteAdvert)
+  .delete(
+    "/delete/products",
+    auth,
+    productDeleteValidator,
+    deleteAdvertProductController
+  )
+  .delete(
+    "/delete/products/images",
+    auth,
+    productImgDeleteValidator,
+    deleteProductImgController
+  )
+  .get("/getsingleadvert/:_id", auth, getSingleAdvert);
 
 /**
  * @products routes

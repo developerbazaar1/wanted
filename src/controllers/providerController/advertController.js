@@ -158,96 +158,80 @@ const getAdvert = async (req, res, next) => {
 };
 
 /**
- * @param {advert_id , provider_id }
+ * route to get single advert
+ * @param {*_id} req
+ * @param {*single advert} res
+ * @returns
  */
 
-const updateAdvert = async (req, res, next) => {
-  // console.log(typeof req.body.oldImgUrl);
-  if (typeof req.body.oldImgUrl === "string") {
-    req.body.oldImgUrl = [req.body.oldImgUrl];
-    console.log("inside th object check", req.body.oldImgUrl);
-  }
+const getSingleAdvert = async (req, res, next) => {
+  const { ObjectId } = require("mongoose").Types;
+  const { _id } = req.params;
 
-  if (req.body.oldImgUrl && Array.isArray(req.body.oldImgUrl)) {
-    req.body.oldImgUrl = req.body.oldImgUrl.map((jsonString) =>
-      JSON.parse(jsonString)
-    );
-  }
-
-  // console.log(req.body.oldImgUrl);
-
-  let { _id, provider_id } = req.body;
-  let {
-    advertTitle,
-    whereToShow,
-    advertCategory,
-    advertSubCategory,
-    advertLocation,
-    advertPrice,
-    advertDescription,
-    advertPostalCode,
-    advertImages,
-    advertVisibility,
-  } = req.body;
-
-  let updateValue = {
-    advertTitle,
-    whereToShow,
-    advertCategory,
-    advertSubCategory,
-    advertLocation,
-    advertPrice,
-    advertDescription,
-    advertPostalCode,
-    advertImages: req.body.oldImgUrl,
-    advertVisibility,
-  };
-
-  // console.log(typeof updateValue.advertImages);
-  // console.log(updateValue.advertImages);
-
-  if (req.advertImageUrls !== undefined && req.advertImageUrls.length > 0) {
-    req.advertImageUrls.forEach((element) => {
-      updateValue.advertImages.push(element);
+  // Validate if _id is a valid ObjectId
+  if (!ObjectId.isValid(_id)) {
+    return res.status(BAD_REQUEST).json({
+      status: "error",
+      message: "Invalid advertisement ID",
     });
-    // updateValue.advertImages = req.advertImageUrls;
   }
 
-  // console.log(updateValue, "update value");
-
-  // ...
-
-  let filter = {
-    _id: _id,
-    advertProvider_id: provider_id,
-  };
   try {
-    let Updateadvert = await AdvertModal.findOneAndUpdate(
-      filter,
-      { $set: updateValue },
-      {
-        returnDocument: "after",
-      }
-    );
+    const advert = await AdvertModal.findOne({ _id });
 
-    // console.log(Updateadvert);
-    if (!Updateadvert) {
-      return res.status(400).json({
+    if (!advert) {
+      return res.status(NOT_FOUND).json({
         status: "error",
-        message: "Something went wrong; please try again later.",
-      });
-    } else {
-      return res.status(OK).json({
-        status: "success",
-        Updateadvert,
-        message: "Updated Successfully",
+        message: "Advertisement not found",
       });
     }
+
+    return res.status(OK).json({
+      advert,
+      status: "success",
+    });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
-      message: "Internal Server Error",
+      message: "Internal server error",
+    });
+  }
+};
+
+/**
+ * @param {advert_id , update Values }
+ */
+const updateAdvertController = async (req, res) => {
+  try {
+    let { advertId } = req.body;
+    const { updateFields } = req.body;
+
+    const advert = await AdvertModal.findByIdAndUpdate(
+      advertId,
+      { $set: updateFields },
+      { new: true }
+    );
+
+    // console.log("updated advert", advert);
+
+    if (!advert) {
+      return res.status(404).json({
+        status: "error",
+        message: "Advert not found",
+      });
+    }
+
+    res.json({
+      status: "success",
+      message: "Advert updated successfully",
+      data: advert,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
     });
   }
 };
@@ -302,22 +286,7 @@ const deleteAdvert = async (req, res, next) => {
  */
 
 const postAgainAdvert = async (req, res, next) => {
-  // console.log("request in postAgainAdvert");
-  const {
-    advertTitle,
-    whereToShow,
-    advertCategory,
-    advertSubCategory,
-    advertLocation,
-    advertPrice,
-    advertDescription,
-    advertPostalCode,
-    provider_portfolio_id,
-    provider_id,
-    subscription_plan_id,
-    advertImages,
-    id,
-  } = req.body;
+  const { provider_id, subscription_plan_id, advertId, whereToShow } = req.body;
 
   try {
     const subscription = await SubscriptionModal.findById(subscription_plan_id);
@@ -335,6 +304,26 @@ const postAgainAdvert = async (req, res, next) => {
         message: "No remaining ads in the subscription",
       });
     }
+    let {
+      advertTitle,
+      advertCategory,
+      advertSubCategory,
+      advertLocation,
+      advertPrice,
+      advertDescription,
+      advertPostalCode,
+      advertOfferPrice,
+      products,
+      advertImage,
+    } = req.body["updateFields"];
+
+    // thing that is not in req.body["updateFields"]\
+    // whereToShow;
+    // advertProvider_id;
+    // subscription_plan_id;
+    // advertExpiryDate: subscription.expiryDate,
+    //  advertStatus: "active",
+    //  createdAt: new Date(),
 
     const postAgainValue = {
       advertTitle,
@@ -345,23 +334,19 @@ const postAgainAdvert = async (req, res, next) => {
       advertPrice,
       advertDescription,
       advertPostalCode,
-      advertImages,
-      advertProviderPortfolio_id: provider_portfolio_id,
+      products,
+      advertOfferPrice,
+      advertImage,
       advertProvider_id: provider_id,
       subscription_plan_id,
       advertExpiryDate: subscription.expiryDate,
       advertStatus: "active",
       createdAt: new Date(),
     };
-
-    // console.log(postAgainValue);
-
-    if (req.advertImageUrls !== undefined && req.advertImageUrls.length > 0) {
-      postAgainValue.advertImages = req.advertImageUrls;
-    }
+    console.log("This is post Again Value", postAgainValue);
 
     let filter = {
-      _id: id,
+      _id: advertId,
       advertProvider_id: provider_id,
     };
 
@@ -391,6 +376,7 @@ const postAgainAdvert = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.log("Error in post Again -> ", error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",
@@ -403,7 +389,8 @@ const postAgainAdvert = async (req, res, next) => {
 module.exports = {
   AddAdvert,
   getAdvert,
-  updateAdvert,
+  updateAdvertController,
+  getSingleAdvert,
   deleteAdvert,
   postAgainAdvert,
 };
