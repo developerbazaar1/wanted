@@ -6,7 +6,7 @@ const providerRoute = require("../src/routes/providerRoute/provider");
 const UserRoutes = require("./routes/userRoute/userRoute");
 const AdminRoutes = require("./routes/adminRoute/adminRoute");
 const CommonRoute = require("./routes/common");
-const newrouter = require("./Test/advertProductContoller");
+// const newrouter = require("./Test/advertProductContoller");
 const app = express();
 dotenv.config();
 connectDB();
@@ -17,7 +17,7 @@ app.use("/provider", providerRoute);
 app.use("/user", UserRoutes);
 app.use("/admin", AdminRoutes);
 app.use("/common", CommonRoute);
-app.use("/test", newrouter);
+// app.use("/test", newrouter);
 
 // Catch-all route for any other endpoint
 app.all("*", (req, res) => {
