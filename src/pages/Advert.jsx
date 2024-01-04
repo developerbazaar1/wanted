@@ -286,7 +286,8 @@ const Advert = () => {
                         <ul className="dropdown-menu manage-advertDropDown">
                           <li className="pointer">
                             <Link
-                              to={`/advertpreview/${advert._id}`}
+                              to={`/advert-preview`}
+                              state={{ advertid: advert._id }}
                               className="advert-preview manage-advert-btn"
                             >
                               <FaEye />

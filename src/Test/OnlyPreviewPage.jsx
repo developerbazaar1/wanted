@@ -3,7 +3,7 @@ import BeautySpaIcon from "../assets/Development/BeautyAndSpa.png";
 import { useAuth } from "../service/auth";
 import { useEffect, useState } from "react";
 import { getOnlyAdvertPreviewData } from "../config/axiosUtils";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Spiner from "../components/Spiner";
 import ProductCrasuel from "./Components/ProductCrasuel";
 // import { useCategory } from "../service/categoryhelper";
@@ -22,7 +22,8 @@ const OnlyAdvertProductPreview = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  let { advertid } = useParams();
+  // let { advertid } = useParams();
+  let { advertid } = useLocation().state;
   const { user, token } = useAuth();
   // const { category } = useCategory();
   // console.log(category);

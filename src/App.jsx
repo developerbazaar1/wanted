@@ -133,7 +133,7 @@ function App() {
 
             {/* this route show particular preview  Page */}
             <Route
-              path="advertpreview/:advertid"
+              path="advert-preview"
               element={
                 <ProtectedRoutes
                   isLoggedIn={isLoggedIn}
