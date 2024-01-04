@@ -3,6 +3,9 @@ import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoMdImages } from "react-icons/io";
 import { toast } from "react-toastify";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 const allowedTypes = [
   "image/jpeg",
   "image/png",
@@ -13,6 +16,13 @@ const allowedTypes = [
 ];
 
 const ProductForm = ({ numProducts, register, setValue, errors }) => {
+  const [settings] = useState({
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  });
   // console.log("This is number of products", numProducts);
   console.log(errors);
   const [imagePreviews, setImagePreviews] = useState(
@@ -86,116 +96,157 @@ const ProductForm = ({ numProducts, register, setValue, errors }) => {
   const productForms = [];
   for (let i = 0; i < numProducts; i++) {
     productForms.push(
-      <div className="product-details-container" key={i}>
-        <label className="form-head" htmlFor="">
-          {`Product ${i + 1}`}
-        </label>
-        <div className="single-product">
-          <div className="advert-product-input">
-            <div className="mb-1 ">
-              <label htmlFor={`productName${i}`} className="mb-0">
-                Product Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter Product Name"
-                id={`productName${i}`}
-                {...register(`product[${i}].productName`, {
-                  pattern: {
-                    value: /^[A-Za-z!'!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]+$/,
-                    message: "Invalid Product Name",
-                  },
-                  required: {
-                    value: true,
-                    message: "Title is Required",
-                  },
-                })}
-              />
-            </div>
-            <div className="mb-1">
-              <label htmlFor={`product_id${i}`} className="mb-0">
-                Product Id
-              </label>
-              <input
-                type="text"
-                placeholder="Enter Product Id"
-                id={`product_id${i}`}
-                {...register(`product[${i}].product_id`, {
-                  pattern: {
-                    value: /^[ A-Za-z0-9._%+-]*$/,
-                    message: "Invalid Product iD",
-                  },
-                  required: {
-                    value: true,
-                    message: "Product Id is Required",
-                  },
-                })}
-              />
-            </div>
-
-            <div>
-              <label htmlFor={`productPrice${i}`} className="mb-0">
-                Product Price
-              </label>
-              <input
-                type="text"
-                placeholder="Enter Product Price"
-                id={`productPrice${i}`}
-                {...register(`product[${i}].productPrice`, {
-                  pattern: {
-                    value: /^\d+$/,
-                    message: "Invalid Product Price",
-                  },
-                  required: {
-                    value: true,
-                    message: "Product Price is Required",
-                  },
-                })}
-              />
-            </div>
-          </div>
-
-          <div className="mx-3 product-icons">
-            <label htmlFor={`productName${i}`}>
-              <MdModeEditOutline
-                size="20"
-                style={{
-                  cursor: "pointer",
-                }}
-              />
+      <div className="row justify-content-center mx-0" key={i}>
+        <div className="col-md-12 px-0">
+          <div className="row">
+            <label className="form-head mx-1" htmlFor="">
+              {/* {`Product ${i + 1}`} */}
             </label>
+            <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+              <div className="product-details-container mb-2 pb-3" key={i}>
+                <div className="single-product">
+                  <div className="advert-product-input ">
+                    <div className="mb-2 ">
+                      <label
+                        htmlFor={`productName${i}`}
+                        className="mb-2 form-head"
+                      >
+                        Product Name
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Product Name"
+                        id={`productName${i}`}
+                        {...register(`product[${i}].productName`, {
+                          pattern: {
+                            value: /^[ A-Za-z0-9._%+-]*$/,
+                            message: "Invalid Product Name",
+                          },
+                          required: {
+                            value: true,
+                            message: "Title is Required",
+                          },
+                        })}
+                      />
+                    </div>
+                    <div className="mb-2">
+                      <label
+                        htmlFor={`product_id${i}`}
+                        className="mb-2 form-head"
+                      >
+                        Product Id
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Product Id"
+                        id={`product_id${i}`}
+                        {...register(`product[${i}].product_id`, {
+                          pattern: {
+                            value: /^[ A-Za-z0-9._%+-]*$/,
+                            message: "Invalid Product iD",
+                          },
+                          required: {
+                            value: true,
+                            message: "Product Id is Required",
+                          },
+                        })}
+                      />
+                    </div>
 
-            <span>
-              <label htmlFor={`productImg${i + 1}`}>
-                <IoMdImages className="addMoreProductImgIcon" size="20" />
-              </label>
+                    <div>
+                      <label
+                        htmlFor={`productPrice${i}`}
+                        className="mb-2 form-head"
+                      >
+                        Product Price
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Product Price"
+                        id={`productPrice${i}`}
+                        {...register(`product[${i}].productPrice`, {
+                          pattern: {
+                            value: /^\d+$/,
+                            message: "Invalid Product Price",
+                          },
+                          required: {
+                            value: true,
+                            message: "Product Price is Required",
+                          },
+                        })}
+                      />
+                    </div>
+                  </div>
 
-              <input
-                type="file"
-                id={`productImg${i + 1}`}
-                className="particularImgInput"
-                multiple
-                onChange={(e) => handleImageChangeForProduct(e, i)}
-              />
-            </span>
-          </div>
+                  <div className="ms-3 product-icons">
+                    <label
+                      htmlFor={`productName${i}`}
+                      title="Edit Product Name"
+                    >
+                      <MdModeEditOutline
+                        size="20"
+                        style={{
+                          cursor: "pointer",
+                        }}
+                      />
+                    </label>
 
-          <div className="product-img-prev-cont">
-            {!imagePreviews[i] && <div> image is required </div>}
-            {imagePreviews[i]?.map((preview, imgIndex) => (
-              <div key={imgIndex} className="single-img-cont">
-                <img
-                  src={preview}
-                  alt={`Product ${i + 1} - Image ${imgIndex + 1}`}
-                />
-                <MdDelete
-                  className="product-prevImg-del-icon"
-                  color="red"
-                  size="20"
-                  onClick={() => handleImageRemove(i, imgIndex)}
-                />
+                    <span>
+                      <label
+                        htmlFor={`productImg${i + 1}`}
+                        title="Add Product Images"
+                      >
+                        <IoMdImages
+                          className="addMoreProductImgIcon"
+                          size="30"
+                        />
+                      </label>
+
+                      <input
+                        type="file"
+                        id={`productImg${i + 1}`}
+                        className="particularImgInput"
+                        multiple
+                        onChange={(e) => handleImageChangeForProduct(e, i)}
+                      />
+                    </span>
+                  </div>
+                </div>
+                {/* image area */}
               </div>
-            ))}
+            </div>
+            <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+              {!imagePreviews[i] && (
+                <div className="text-center"> image is required </div>
+              )}
+
+              {imagePreviews[i] && (
+                <Slider {...settings} className="selected-product-img-preview">
+                  {imagePreviews[i]?.map((preview, imgIndex) => (
+                    <div key={imgIndex} className="productForm-img-container">
+                      <img
+                        src={preview}
+                        style={{
+                          width: "100%",
+                          height: "238px",
+                          objectFit: "cover",
+                        }}
+                        alt={`Product ${i + 1} - Image ${imgIndex + 1}`}
+                      />
+                      <MdDelete
+                        className="product-prevImg-del-icon"
+                        color="red"
+                        size="20"
+                        onClick={() => handleImageRemove(i, imgIndex)}
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              )}
+            </div>
           </div>
         </div>
         <hr />

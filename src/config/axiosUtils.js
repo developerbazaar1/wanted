@@ -115,6 +115,19 @@ export const ProctedApi = {
     return response;
   },
 
+  handleAdvertVisability: async (data, token) => {
+    const response = await api.request({
+      url: `/handleshowhide`,
+      method: "PUT",
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+      data: data,
+    });
+    return response;
+  },
+  // handleshowhide
   //Route ot handle Delete advert particular products
 
   deleteadvertProduct: async (token, advert_id, product_id) => {

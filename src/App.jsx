@@ -25,9 +25,9 @@ import { setcategory } from "./features/categorySlice";
 import { setsubcategory } from "./features/subcategorySlice";
 import { setSubscription } from "./features/subscriptionSlice";
 import Plans from "./components/Plans";
-import AdvertProductPreview from "./Test/AdvertProductPreview";
 import OnlyAdvertProductPreview from "./Test/OnlyPreviewPage";
 import EditAdvertData from "./pages/EditAdvert";
+import ImageCrasuel from "./Test";
 function App() {
   const { isLoggedIn, token, portfolio_id, user } = useAuth();
   const dispatch = useDispatch();
@@ -107,7 +107,7 @@ function App() {
           />
           <Route path="/forgotassword" element={<ForgotPassword />} />
           <Route path="/resetsucess" element={<ResetPassworConform />} />
-          {/* <Route path="/test" element={<FileUpload />} /> */}
+          <Route path="/test" element={<ImageCrasuel />} />
           {/* <Route path="test" element={<ProviderProtfilo />} /> */}
 
           <Route element={<NavBar />}>

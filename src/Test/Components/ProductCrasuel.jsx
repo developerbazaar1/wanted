@@ -66,19 +66,6 @@ const ProductCrasuel = ({ product, unique }) => {
             <span className="visually-hidden">Next</span>
           </button>
         </div>
-        {/* <!-- Image grid for medium and larger screens --> */}
-        <div className=" d-none d-md-none detial_product_image">
-          {product?.productImg?.map((img, index) => (
-            <div
-              className="singleProduct_image"
-              key={img?._id}
-              onClick={() => handleImageClick(index)}
-            >
-              <img src={img?.imgUrl} className="img-fluid" alt={index} />
-            </div>
-          ))}
-          {/* <!-- Add more columns for additional images --> */}
-        </div>
       </div>
 
       <Modal show={showModal} onHide={handleCloseModal} id="zoomimage" centered>

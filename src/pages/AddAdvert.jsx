@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+
 const allowedTypes = [
   "image/jpeg",
   "image/png",
@@ -22,7 +23,9 @@ import { getCurrentLocation } from "../helper/getCurrentLocation";
 import AddAdvertTopHead from "../components/AddAdvertTopHead";
 import Subscriptions from "../components/Subscriptions";
 import ProductForm from "../components/ProductForm";
+import { useNavigate } from "react-router-dom";
 const AddAdvert = () => {
+  const navigate = useNavigate();
   const [subscription, setsubscription] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedSubscription, setselectedSubscription] = useState(null);
@@ -66,7 +69,9 @@ const AddAdvert = () => {
         if (response.status === 201) {
           reset();
           setSelectedImage();
-          return toast.success("created");
+          toast.success("created");
+          // console.log("navigating");
+          navigate("/advert");
         }
       })
       .catch((e) => {
