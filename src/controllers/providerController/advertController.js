@@ -7,6 +7,7 @@ const {
   INTERNAL_SERVER_ERROR,
   CONFLICT,
   CREATED,
+  SEE_OTHER,
 } = require("../../httpStatusCode");
 const SubscriptionModal = require("../../models/providerModel/ProviderSubscriptionModal");
 const providerPortfolio = require("../../models/providerModel/providerPortfolio");
@@ -317,14 +318,6 @@ const postAgainAdvert = async (req, res, next) => {
       advertImage,
     } = req.body["updateFields"];
 
-    // thing that is not in req.body["updateFields"]\
-    // whereToShow;
-    // advertProvider_id;
-    // subscription_plan_id;
-    // advertExpiryDate: subscription.expiryDate,
-    //  advertStatus: "active",
-    //  createdAt: new Date(),
-
     const postAgainValue = {
       advertTitle,
       whereToShow,
@@ -343,7 +336,7 @@ const postAgainAdvert = async (req, res, next) => {
       advertStatus: "active",
       createdAt: new Date(),
     };
-    console.log("This is post Again Value", postAgainValue);
+    // console.log("This is post Again Value", postAgainValue);
 
     let filter = {
       _id: advertId,
@@ -384,6 +377,60 @@ const postAgainAdvert = async (req, res, next) => {
   }
 };
 
+const AdvertVisibilatyController = async (req, res, next) => {
+  const { advertId, provider_id, advertVisibility } = req.body;
+  if (!advertId) {
+    return res.status(BAD_REQUEST).json({
+      status: "error",
+      message: "Please Provide advert Id",
+    });
+  } else if (!provider_id) {
+    return res.status(BAD_REQUEST).json({
+      status: "error",
+      message: "Please Provide User Id",
+    });
+  } else if (!advertVisibility) {
+    return res.status(BAD_REQUEST).json({
+      status: "error",
+      message: "Please Provide AdvertVisibility Status",
+    });
+  }
+  try {
+    let filter = {
+      _id: advertId,
+      advertProvider_id: provider_id,
+    };
+
+    AdvertModal.findOneAndUpdate(
+      filter,
+      { $set: { advertVisibility: advertVisibility } },
+      {
+        returnDocument: "after",
+      }
+    )
+      .then((result) => {
+        console.log(result);
+        return res.status(OK).json({
+          status: "success",
+          message: "Successfully Update advert Visibality",
+          result: result,
+        });
+      })
+      .catch((e) => {
+        console.log("error in advert visibality while changing", e);
+        return res.status(SEE_OTHER).json({
+          status: "error",
+          message: e.message,
+        });
+      });
+  } catch (error) {
+    console.log("Error in advert visibality -> ", error);
+    return res.status(INTERNAL_SERVER_ERROR).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
+};
 // const DeleteAdvertImg = async (req, res, next) => {};
 
 module.exports = {
@@ -393,4 +440,5 @@ module.exports = {
   getSingleAdvert,
   deleteAdvert,
   postAgainAdvert,
+  AdvertVisibilatyController,
 };

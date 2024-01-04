@@ -46,7 +46,15 @@ const AdvertAndProductDataCast = async (req, res, next) => {
         let productImgArray = req.fileUrls[productImgKey];
         req.body.newProducts[i].productImg = productImgArray;
       }
-      products = products.concat(req.body.newProducts);
+      // console.log("old products", products);
+      if (!products) {
+        products = req.body.newProducts;
+      } else {
+        products = products.concat(req.body.newProducts);
+      }
+      // console.log("after concat products", products);
+
+      // log
     }
 
     req.body["updateFields"] = {

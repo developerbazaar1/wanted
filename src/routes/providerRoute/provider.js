@@ -28,6 +28,7 @@ const {
   AddAdvert,
   updateAdvertController,
   getSingleAdvert,
+  AdvertVisibilatyController,
 } = require("../../controllers/providerController/advertController");
 const {
   updateProfile,
@@ -158,7 +159,7 @@ ProviderRouter.post(
     AdvertAndProductDataCast,
     postAgainAdvert
   )
-  // .put("/handleshowhide",auth, handleAdvertVisibilaty)
+  .put("/handleshowhide", auth, AdvertVisibilatyController)
   .delete("/deleteAdvert", auth, deleteAdvert)
   .delete(
     "/delete/products",
