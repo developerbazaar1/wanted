@@ -38,7 +38,7 @@ const CustomerTop = () => {
               </Link>
             </div>
             <div className="top-head mt-3">
-              <h1>Customer Inquirers</h1>
+              <h1>Customer Inquiries</h1>
               <p className="mb-0">Stay Connected with Your Customers</p>
               <p className="para-2 mt-2">
                 Manage and Respond to Customer Inquiries Here

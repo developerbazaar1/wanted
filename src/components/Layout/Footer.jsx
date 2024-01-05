@@ -57,7 +57,7 @@ function Footer() {
             <ul className="list-group gap-2 Foorer_margin-top footer-font">
               <li className="list__style-none">
                 <Link to="/signup" className="footer-font">
-                  Sing Up
+                  Sign Up
                 </Link>
               </li>
               <li className="list__style-none">
@@ -88,7 +88,7 @@ function Footer() {
         >
           &#xa9; 2023 - All Rights Reserved | Designed & Developed By{" "}
           <span className="parrot">
-            Developer <span className="red">Bazzar</span>
+            Developer <span className="red">Bazaar</span>
           </span>{" "}
           Technologies
         </div>

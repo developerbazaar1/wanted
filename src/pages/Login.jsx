@@ -172,7 +172,7 @@ const Login = () => {
               <div>
                 New To Wanted?{" "}
                 <Link to="/signup" className="vendor_signup_link">
-                  Sing up
+                  Sign up
                 </Link>{" "}
                 now!
               </div>

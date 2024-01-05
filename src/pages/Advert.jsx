@@ -232,7 +232,7 @@ const Advert = () => {
                     <th>Advert Name</th>
                     <th>Where To Show</th>
                     <th>Advert Price</th>
-                    <th>Creating Date</th>
+                    <th>Creation Date</th>
                     <th>Expire Date</th>
                     <th>Status</th>
                     <th>Manage Advert</th>
