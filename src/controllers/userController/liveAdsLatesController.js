@@ -10,11 +10,11 @@ const {
 const advertModal = require("../../models/providerModel/advertModal");
 
 const liveAndLatestOfferController = async (req, res, next) => {
-  const { type } = req.params;
-  const { page = 1, pageSize = 6 } = req.query;
+  // const { type } = req.params;
+  const { page = 1, pageSize = 6, adstypes } = req.query;
 
-  console.log("params", type);
-  console.log("query", req.query);
+  // console.log("params", type);
+  // console.log("query", req.query);
 
   try {
     const pipeline = [
@@ -22,7 +22,7 @@ const liveAndLatestOfferController = async (req, res, next) => {
         $match: {
           advertStatus: "active",
           advertVisibility: true,
-          whereToShow: type,
+          whereToShow: adstypes,
         },
       },
       {

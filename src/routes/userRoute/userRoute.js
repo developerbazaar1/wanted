@@ -35,6 +35,6 @@ UserRoutes.put(
   profileImageHelper("profilePic")
 );
 
-UserRoutes.get("/getads/:type", liveAndLatestOfferController);
+UserRoutes.get("/getads", liveAndLatestOfferController);
 
 module.exports = UserRoutes;

@@ -19,7 +19,20 @@ const advertImgAndProductHelper = async (req, res, next) => {
     let { product } = req.body;
     if (product) {
       req.body["product"] = JSON.parse(product);
+      for (let i = 0; i < req.body.product.length; i++) {
+        if (!req.files[`productImg${i + 1}`]) {
+          return res.status(BAD_REQUEST).json({
+            status: "error",
+            message: "Please Provide the Product Images for Each Product!",
+          });
+        }
+      }
     }
+
+    // let { product } = req.body;
+
+    //to check weather new product have image of not
+
     const uploadToCloudinary = async (file) => {
       const b64 = Buffer.from(file.buffer).toString("base64");
       let dataURI = "data:" + file.mimetype + ";base64," + b64;
