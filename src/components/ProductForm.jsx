@@ -120,7 +120,7 @@ const ProductForm = ({ numProducts, register, setValue, errors }) => {
                         id={`productName${i}`}
                         {...register(`product[${i}].productName`, {
                           pattern: {
-                            value: /^[ A-Za-z0-9._%+-]*$/,
+                            value: /^[ A-Za-z!@#$%^&*()_+{}\[\]:;<>,.?/~`'-]*$/,
                             message: "Invalid Product Name",
                           },
                           required: {
