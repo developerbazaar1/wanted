@@ -451,7 +451,7 @@ const OnlyAdvertProductPreview = () => {
           <h2 className="mt-2">Provider Products</h2>
         )}
 
-        <div className="prd-preview-grd">
+        <div className="row prduct-preview-main-container">
           {previewData?.data?.advert?.products?.map((product, index) => (
             <ProductCrasuel
               key={product?._id}

@@ -17,7 +17,7 @@ const allowedTypes = [
 
 const ProductForm = ({ numProducts, register, setValue, errors }) => {
   const [settings] = useState({
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,

@@ -1,7 +1,15 @@
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { RxCross2 } from "react-icons/rx";
+import Slider from "react-slick";
 const ProductCrasuel = ({ product, unique }) => {
+  const [settings] = useState({
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  });
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -18,7 +26,7 @@ const ProductCrasuel = ({ product, unique }) => {
   // console.log(unique);
   return (
     <>
-      <div className="details_provider_products mb-2">
+      <div className="col-sm-12 col-xs-12 col-md-6 col-lg-4 col-xl-4 col-lg-4">
         <div className="d-flex gap-2">
           <h5>{product?.productName}</h5>
           <span>{product?.product_id}</span> ||
@@ -26,21 +34,11 @@ const ProductCrasuel = ({ product, unique }) => {
             $ {product?.productPrice}
           </span>
         </div>
-        <div
+        {/* <div
           id={`carouselExampleIndicators${unique}`}
           className="carousel slide w-30"
         >
-          <div className="carousel-inner detial_product_image">
-            {product?.productImg?.map((img, index) => (
-              <div
-                className="carousel-item active singleProduct_image"
-                key={img?._id}
-                onClick={() => handleImageClick(index)}
-              >
-                <img src={img?.imgUrl} className="d-block w-100 " alt={index} />
-              </div>
-            ))}
-          </div>
+          <div className="carousel-inner detial_product_image"></div>
           <button
             className="carousel-control-prev"
             type="button"
@@ -65,7 +63,28 @@ const ProductCrasuel = ({ product, unique }) => {
             ></span>
             <span className="visually-hidden">Next</span>
           </button>
-        </div>
+        </div> */}
+
+        <Slider {...settings} className="single-advert-product-prevew">
+          {product?.productImg?.map((img, index) => (
+            <div
+              className="carousel-item active"
+              key={img?._id}
+              onClick={() => handleImageClick(index)}
+            >
+              <img
+                src={img?.imgUrl}
+                style={{
+                  // width: "300px",
+                  height: "300px",
+                  objectFit: "cover",
+                }}
+                className="d-block w-100 "
+                alt={index}
+              />
+            </div>
+          ))}
+        </Slider>
       </div>
 
       <Modal show={showModal} onHide={handleCloseModal} id="zoomimage" centered>

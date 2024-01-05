@@ -883,11 +883,33 @@ span.plan-month {
 .particularImgInput {
   width: 0;
 }
+.advert__tabel_container .advert-table {
+  padding-bottom: 60px;
+}
+
+.prduct-preview-main-container {
+  /* gap: 7%; */
+}
+
+.single-advert-product-prevew {
+  border: 3px solid #eee;
+  border-radius: 7px;
+  padding: 5px;
+}
+.single-advert-product-prevew .slick-prev {
+  z-index: 99;
+  left: 8px;
+}
+.single-advert-product-prevew .slick-next {
+  z-index: 99;
+  right: 8px;
+}
 .advert__tabel_container {
-  overflow-x: auto;
+  /* overflow-x: auto; */
   width: 100%;
   max-width: 100%;
   /* min-height: 400px; */
+
   white-space: nowrap;
 }
 
