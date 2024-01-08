@@ -26,7 +26,7 @@ const advertModal = new mongoose.Schema({
   },
   advertCategory: {
     type: String,
-    required: true,
+    // required: true,
   },
   advertLocation: {
     type: String,
@@ -42,12 +42,12 @@ const advertModal = new mongoose.Schema({
   },
   whereToShow: {
     type: String,
-    enum: ["liveAds", "latesOffer", "service"],
+    enum: ["Live Ads", "Latest Offers", "Service"],
     required: true,
   },
   advertSubCategory: {
     type: String,
-    required: true,
+    // required: true,
   },
   advertPrice: {
     type: Number,
@@ -76,6 +76,14 @@ const advertModal = new mongoose.Schema({
       },
       productPrice: {
         type: Number,
+        required: true,
+      },
+      category: {
+        type: String,
+        required: true,
+      },
+      subcategory: {
+        type: String,
         required: true,
       },
       productImg: [

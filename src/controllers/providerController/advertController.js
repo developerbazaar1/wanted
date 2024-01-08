@@ -96,7 +96,7 @@ const AddAdvert = async (req, res, next) => {
       advertExpiryDate: subscription.expiryDate,
     };
 
-    // console.log("update Value", UpdateValue);
+    console.log("update Value", UpdateValue);
 
     // return res.json("sucess");
 

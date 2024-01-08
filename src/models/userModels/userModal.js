@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
   userQRcode: {
     type: String,
   },
+  role: {
+    type: String,
+    enum: ["user,vendor,admin"],
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("UserModal", userSchema);
