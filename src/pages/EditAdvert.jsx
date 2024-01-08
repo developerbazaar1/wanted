@@ -611,6 +611,8 @@ const EditAdvertData = () => {
                       register={register}
                       setValue={setValue}
                       errors={errors}
+                      subcategory={subcategory}
+                      category={category}
                     />
                   )}
 
@@ -628,6 +630,8 @@ const EditAdvertData = () => {
                         setLoading={setLoading}
                         token={token}
                         setRefresh={setRefresh}
+                        subcategory={subcategory}
+                        category={category}
                       />
                     ))}
                 </div>

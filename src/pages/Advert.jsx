@@ -60,6 +60,7 @@ const Advert = () => {
     ProctedApi.deleteAdvert(data, token)
       .then((res) => {
         // console.log(res);
+        Swal.fire("Deleted!", "Your item has been deleted.", "success");
         setAdvert(adverts.filter((advert) => advert._id !== advertId));
         toast.success(res?.data?.message);
       })
@@ -122,7 +123,6 @@ const Advert = () => {
       if (result.isConfirmed) {
         // Perform the delete operation here
         removeAdvert(id);
-        Swal.fire("Deleted!", "Your item has been deleted.", "success");
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire("Cancelled", "Your item is safe :)", "info");
       }
@@ -233,7 +233,7 @@ const Advert = () => {
                     <th>Where To Show</th>
                     <th>Advert Price</th>
                     <th>Creation Date</th>
-                    <th>Expire Date</th>
+                    <th>Expiry Date</th>
                     <th>Status</th>
                     <th>Manage Advert</th>
                     <th>Show/Hide Ads</th>

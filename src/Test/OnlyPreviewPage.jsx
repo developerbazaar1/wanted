@@ -3,7 +3,7 @@ import BeautySpaIcon from "../assets/Development/BeautyAndSpa.png";
 import { useAuth } from "../service/auth";
 import { useEffect, useState } from "react";
 import { getOnlyAdvertPreviewData } from "../config/axiosUtils";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Spiner from "../components/Spiner";
 import ProductCrasuel from "./Components/ProductCrasuel";
 // import { useCategory } from "../service/categoryhelper";
@@ -465,7 +465,8 @@ const OnlyAdvertProductPreview = () => {
         <div className="details_ads">
           {previewData?.data?.adverts?.map((ads) => (
             <Link
-              to={`/advertpreview/${ads._id}`}
+              to={`/advert-preview`}
+              state={{ advertid: ads._id }}
               className="details_provider_ads"
               key={ads?._id}
             >

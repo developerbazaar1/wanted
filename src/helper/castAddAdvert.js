@@ -107,8 +107,10 @@ export function castPostAgainAdvert(formData, _id, provider_id) {
     data.append("products", JSON.stringify(formData.products));
   }
   if (formData?.product?.length > 0) {
-    console.log("new product in cast", formData?.product);
-    data.append("product", JSON.stringify(formData.product));
+    if (formData?.addProduct === "YesAddProduct") {
+      // console.log("new product in cast", formData?.product);
+      data.append("product", JSON.stringify(formData.product));
+    }
   }
 
   if (formData?.productImg?.length > 0) {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import { IoMdImages } from "react-icons/io";
+import { IoIosArrowDown, IoMdImages } from "react-icons/io";
 import { toast } from "react-toastify";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -15,7 +15,14 @@ const allowedTypes = [
   "image/avif",
 ];
 
-const ProductForm = ({ numProducts, register, setValue, errors }) => {
+const ProductForm = ({
+  numProducts,
+  register,
+  setValue,
+  errors,
+  category,
+  subcategory,
+}) => {
   const [settings] = useState({
     dots: false,
     infinite: true,
@@ -23,8 +30,10 @@ const ProductForm = ({ numProducts, register, setValue, errors }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
   });
-  // console.log("This is number of products", numProducts);
-  console.log(errors);
+  // console.log("This is number of sub cateogry", subcategory);
+  const [selectedCategories, setSelectedCategories] = useState(
+    Array.from({ length: numProducts }, () => [])
+  );
   const [imagePreviews, setImagePreviews] = useState(
     Array.from({ length: numProducts }, () => [])
   );
@@ -93,6 +102,22 @@ const ProductForm = ({ numProducts, register, setValue, errors }) => {
     setValue(`productImg[${productIndex}]`, newSelectedImages[productIndex]);
   };
 
+  const handleCategoryChange = (event, productIndex) => {
+    console.log(productIndex);
+    const selectedValue = event.target.value;
+    const selectedCat = category.find(
+      (cat) => cat.categoryName === selectedValue
+    );
+
+    const newSelectedCategories = [...selectedCategories];
+    newSelectedCategories[productIndex] = selectedCat;
+    console.log("new cateogry", newSelectedCategories);
+    setSelectedCategories(newSelectedCategories);
+
+    // ... (other code)
+  };
+
+  console.log("This is Sub category", selectedCategories);
   const productForms = [];
   for (let i = 0; i < numProducts; i++) {
     productForms.push(
@@ -155,7 +180,7 @@ const ProductForm = ({ numProducts, register, setValue, errors }) => {
                       />
                     </div>
 
-                    <div>
+                    <div className="mb-2">
                       <label
                         htmlFor={`productPrice${i}`}
                         className="mb-2 form-head"
@@ -178,6 +203,61 @@ const ProductForm = ({ numProducts, register, setValue, errors }) => {
                           },
                         })}
                       />
+                    </div>
+                    <div className={`form-group mb-2`}>
+                      <label className="form-head" htmlFor="category">
+                        Product Category
+                      </label>
+                      <select
+                        className="form-control"
+                        id="productCategory"
+                        {...register(`product[${i}].category`, {
+                          required: true,
+                        })}
+                        onChange={(e) => handleCategoryChange(e, i)}
+                      >
+                        <option value="" key="defaultcat">
+                          Select Product Category
+                        </option>
+                        {category?.map((cat) => (
+                          <option key={cat._id} value={`${cat?.categoryName}`}>
+                            {cat?.categoryName}
+                          </option>
+                        ))}
+                      </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
+                    </div>
+                    <div className={`form-group mb-2`}>
+                      <label className="form-head" htmlFor="category">
+                        Product Sub Category
+                      </label>
+                      <select
+                        className="form-control"
+                        id="productSubCategory"
+                        {...register(`product[${i}].subcategory`, {
+                          required: true,
+                        })}
+                        // onChange={handleCategoryChange}
+                      >
+                        <option value="" key="defaultcat">
+                          Select Product Sub Category
+                        </option>
+                        {selectedCategories[i] &&
+                          subcategory
+                            ?.filter(
+                              (item) =>
+                                item.category_id === selectedCategories[i]?._id
+                            )
+                            .map((subcate) => (
+                              <option
+                                key={subcate._id}
+                                value={`${subcate?.subCategoryName}`}
+                              >
+                                {subcate?.subCategoryName}
+                              </option>
+                            ))}
+                      </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
 

@@ -56,12 +56,13 @@ const AddAdvert = () => {
   };
 
   const HandleAddadvertSubmit = (formData) => {
-    // console.log(formData);
-
     formData["subscription_plan_id"] = selectedSubscription._id;
+    console.log(formData);
+    // console.log("submit is firing");
+    // return;
     setLoading(true);
     const data = castAddAdvert(formData, user, portfolio_id);
-    // console.log("submit is firing");
+    //
     // return;
     ProctedApi.AddAdvert(data, token)
       .then((response) => {
@@ -255,7 +256,7 @@ const AddAdvert = () => {
                             className="radioColor"
                             type="radio"
                             name="userSearch"
-                            value="liveAds"
+                            value="Live Ads"
                             id="liveads"
                             {...register("userSearch", {
                               required: true,
@@ -278,7 +279,7 @@ const AddAdvert = () => {
                             type="radio"
                             name="userSearch"
                             id="latestoffer"
-                            value="latesOffer"
+                            value="Latest Offer"
                           />
                         </div>
 
@@ -297,7 +298,7 @@ const AddAdvert = () => {
                             type="radio"
                             name="userSearch"
                             id="service"
-                            value="service"
+                            value="Service"
                           />
                         </div>
                       </div>
@@ -666,6 +667,8 @@ const AddAdvert = () => {
                       register={register}
                       setValue={setValue}
                       errors={errors}
+                      category={category}
+                      subcategory={subcategory}
                     />
                   )}
                 </div>

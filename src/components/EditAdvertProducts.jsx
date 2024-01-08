@@ -25,6 +25,8 @@ const EditAdvertProducts = ({
   setLoading,
   token,
   setRefresh,
+  subcategory,
+  category,
 }) => {
   const [settings] = useState({
     // dots: true,
@@ -35,7 +37,7 @@ const EditAdvertProducts = ({
   });
   const [addProductImg, setAddProductImg] = useState([]);
   const [newProductImgPreve, setNewProductImgPreve] = useState([]);
-
+  const [selectedCategory, setSelectedCategory] = useState();
   const handleProductImageUpdate = (e, productIndex) => {
     e.preventDefault();
     let files = e.target.files;
@@ -122,6 +124,15 @@ const EditAdvertProducts = ({
       });
   };
 
+  const handleCategoryChange = (event) => {
+    console.log("inside the subCategory");
+    const selectedValue = event.target.value;
+    const selectedCat = category.find(
+      (cat) => cat.categoryName === selectedValue
+    );
+    setSelectedCategory(selectedCat);
+  };
+
   const HandleProductImgRemove = (e, imgId) => {
     if (loading) {
       return;
@@ -148,6 +159,14 @@ const EditAdvertProducts = ({
       setValue(`oldProductImg[${i}]`, addProductImg);
     }
   }, [addProductImg]);
+
+  useEffect(() => {
+    let subCat = category?.find(
+      (element) => element?.categoryName === product?.category
+    );
+    console.log("this is subcategory", subCat);
+    setSelectedCategory(subCat);
+  }, []);
 
   return (
     <>
@@ -231,6 +250,62 @@ const EditAdvertProducts = ({
                           },
                         })}
                       />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`productPrice${i}`}
+                        className="mb-2 form-head"
+                      >
+                        Product Category
+                      </label>
+                      <select
+                        className="form-control"
+                        id={`productcategory${i}`}
+                        {...register(`products[${i}].category`, {
+                          required: {
+                            value: true,
+                            message: "Product Category is Required",
+                          },
+                        })}
+                        onChange={handleCategoryChange}
+                      >
+                        {category?.map((cat) => (
+                          <option key={cat._id}>{cat.categoryName}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`productPrice${i}`}
+                        className="mb-2 form-head"
+                      >
+                        Product Sub Category
+                      </label>
+                      <select
+                        className="form-control"
+                        id={`productcategory${i}`}
+                        {...register(`products[${i}].subcategory`, {
+                          required: {
+                            value: true,
+                            message: "Product Category is Required",
+                          },
+                        })}
+                      >
+                        {selectedCategory &&
+                          subcategory
+                            ?.filter(
+                              (item) =>
+                                item.category_id === selectedCategory?._id
+                            )
+                            .map((subcate) => (
+                              <option
+                                key={subcate._id}
+                                value={`${subcate?.subCategoryName}`}
+                              >
+                                {subcate?.subCategoryName}
+                              </option>
+                            ))}
+                      </select>
                     </div>
                   </div>
 

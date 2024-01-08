@@ -45,6 +45,7 @@ const PostAgain = () => {
   // console.log(advert);
 
   //function to handle category change
+  console.log(token);
   const handleCategoryChange = (event) => {
     // console.log("inside the subCategory");
     const selectedValue = event.target.value;
@@ -309,7 +310,7 @@ const PostAgain = () => {
                             className="radioColor"
                             type="radio"
                             name="whereToShow"
-                            value="liveAds"
+                            value="Live Ads"
                             id="liveads"
                             {...register("whereToShow", {
                               required: true,
@@ -332,7 +333,7 @@ const PostAgain = () => {
                             type="radio"
                             name="whereToShow"
                             id="latestoffer"
-                            value="latesOffer"
+                            value="Latest Offer"
                           />
                         </div>
 
@@ -351,7 +352,7 @@ const PostAgain = () => {
                             type="radio"
                             name="whereToShow"
                             id="service"
-                            value="service"
+                            value="Service"
                           />
                         </div>
                       </div>
@@ -691,6 +692,8 @@ const PostAgain = () => {
                       register={register}
                       setValue={setValue}
                       errors={errors}
+                      category={category}
+                      subcategory={subcategory}
                     />
                   )}
 
@@ -708,6 +711,8 @@ const PostAgain = () => {
                         setLoading={setLoading}
                         token={token}
                         setRefresh={setRefresh}
+                        category={category}
+                        subcategory={subcategory}
                       />
                     ))}
                 </div>
