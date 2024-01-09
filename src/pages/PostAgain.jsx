@@ -168,8 +168,8 @@ const PostAgain = () => {
         setAdvert(res.data.advert);
         let advert = res.data.advert;
         setValue("advertTitle", advert?.advertTitle);
-        setValue("advertCategory", advert?.advertCategory);
-        setValue("advertSubCategory", advert?.advertSubCategory);
+        // setValue("advertCategory", advert?.advertCategory);
+        // setValue("advertSubCategory", advert?.advertSubCategory);
         setValue("advertPostalCode", advert.advertPostalCode);
         setValue("advertPrice", advert?.advertPrice);
         setValue("advertOfferPrice", advert?.advertOfferPrice);
@@ -360,7 +360,7 @@ const PostAgain = () => {
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 03 start --> */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
                         errors?.advertCategory ? "error_pesudo" : ""
@@ -386,10 +386,10 @@ const PostAgain = () => {
                         ))}
                       </select>
                     </div>
-                  </div>
+                  </div> */}
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 04 start --> */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
                         errors?.advertSubCategory ? "error_pesudo" : ""
@@ -420,10 +420,10 @@ const PostAgain = () => {
                                 {subcate?.subCategoryName}
                               </option>
                             ))}
-                        {/* <option value={`Cafe & Treats`}>Cafe & Treats</option> */}
+                        {/* <option value={`Cafe & Treats`}>Cafe & Treats</option> 
                       </select>
                     </div>
-                  </div>
+                  </div> */}
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IoMdImages } from "react-icons/io";
+import { IoIosArrowDown, IoMdImages } from "react-icons/io";
 import { MdDelete, MdModeEditOutline } from "react-icons/md";
 import { toast } from "react-toastify";
 import { ImgSizeCheck } from "../helper/imageSizeCheck";
@@ -186,7 +186,7 @@ const EditAdvertProducts = ({
             <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
               <div className="product-details-container mb-2 pb-3">
                 <div className="single-product">
-                  <div className="advert-product-input">
+                  <div className="advert-product-input row">
                     <div className="mb-1 ">
                       <label
                         htmlFor={`productName${i}`}
@@ -202,7 +202,7 @@ const EditAdvertProducts = ({
                         {...register(`products[${i}].productName`)}
                       />
                     </div>
-                    <div className="mb-1">
+                    <div className="mb-1 col-6">
                       <label
                         htmlFor={`product_id${i}`}
                         className="mb-2 form-head"
@@ -227,7 +227,7 @@ const EditAdvertProducts = ({
                       />
                     </div>
 
-                    <div>
+                    <div className="mb-1 col-6">
                       <label
                         htmlFor={`productPrice${i}`}
                         className="mb-2 form-head"
@@ -251,7 +251,7 @@ const EditAdvertProducts = ({
                         })}
                       />
                     </div>
-                    <div>
+                    <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
                         htmlFor={`productPrice${i}`}
                         className="mb-2 form-head"
@@ -273,8 +273,9 @@ const EditAdvertProducts = ({
                           <option key={cat._id}>{cat.categoryName}</option>
                         ))}
                       </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
-                    <div>
+                    <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
                         htmlFor={`productPrice${i}`}
                         className="mb-2 form-head"
@@ -306,6 +307,7 @@ const EditAdvertProducts = ({
                               </option>
                             ))}
                       </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
                   </div>
 

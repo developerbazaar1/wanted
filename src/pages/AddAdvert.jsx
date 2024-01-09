@@ -57,7 +57,7 @@ const AddAdvert = () => {
 
   const HandleAddadvertSubmit = (formData) => {
     formData["subscription_plan_id"] = selectedSubscription._id;
-    console.log(formData);
+    // console.log(formData);
     // console.log("submit is firing");
     // return;
     setLoading(true);
@@ -186,7 +186,7 @@ const AddAdvert = () => {
       <Spiner loading={loading} />
       <main className="app-content">
         {subscription?.length == 0 && (
-          <h5 className="text-center">
+          <h5 className="text-center fw-bold">
             Oops! It looks like your subscription is inactive Or You don&#39;t
             have ads left in It. To continue Publishing Your ads, please
             consider purchasing a Subscription. Thank you
@@ -306,7 +306,7 @@ const AddAdvert = () => {
                   </div>
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 03 start --> */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
                         errors?.adcategory ? "error_pesudo" : ""
@@ -334,10 +334,10 @@ const AddAdvert = () => {
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
-                  </div>
+                  </div> */}
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 04 start --> */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
                         errors?.subCategory ? "error_pesudo" : ""
@@ -374,7 +374,7 @@ const AddAdvert = () => {
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
-                  </div>
+                  </div> */}
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">

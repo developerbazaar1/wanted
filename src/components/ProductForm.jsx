@@ -30,7 +30,7 @@ const ProductForm = ({
     slidesToShow: 1,
     slidesToScroll: 1,
   });
-  // console.log("This is number of sub cateogry", subcategory);
+
   const [selectedCategories, setSelectedCategories] = useState(
     Array.from({ length: numProducts }, () => [])
   );
@@ -102,8 +102,16 @@ const ProductForm = ({
     setValue(`productImg[${productIndex}]`, newSelectedImages[productIndex]);
   };
 
+  const cahndleSubcategory = (e, index) => {
+    if (index === 0) {
+      for (let localIndex = 1; localIndex < numProducts; localIndex++) {
+        // console.log("setting sub category ", e.target.value);
+        setValue(`product[${localIndex}].subcategory`, e.target.value);
+      }
+    }
+  };
+
   const handleCategoryChange = (event, productIndex) => {
-    console.log(productIndex);
     const selectedValue = event.target.value;
     const selectedCat = category.find(
       (cat) => cat.categoryName === selectedValue
@@ -111,11 +119,40 @@ const ProductForm = ({
 
     const newSelectedCategories = [...selectedCategories];
     newSelectedCategories[productIndex] = selectedCat;
-    console.log("new cateogry", newSelectedCategories);
     setSelectedCategories(newSelectedCategories);
 
-    // ... (other code)
+    // Set default category and subcategory for other products
+    for (let i = 0; i < numProducts; i++) {
+      if (i !== productIndex && !newSelectedCategories[i]) {
+        newSelectedCategories[i] = selectedCat;
+        if (productIndex === 0) {
+          setValue(`product[${i}].category`, event.target.value);
+        }
+      }
+    }
+
+    // Update state with default categories
+    setSelectedCategories(newSelectedCategories);
+    // let dupNewforcate = [...newSelectedCategories];
+
+    // return;
+    // for (let i = 0; i < numProducts; i++) {
+    //   console.log("dup category", dupNewforcate[i].categoryName);
+    //   console.log("user selected category category", event.target.value);
+    //   console.log(
+    //     "set category name for dup category",
+    //     selectedCat.categoryName
+    //   );
+    //   if (productIndex === 0) {
+    //     console.log(dupNewforcate[i]);
+    //     dupNewforcate[i] = selectedCat;
+    //   }
+    // }
+
+    // setSelectedCategories(dupNewforcate);
   };
+
+  // console.log("This is selected categories", selectedCategories);
 
   console.log("This is Sub category", selectedCategories);
   const productForms = [];
@@ -130,7 +167,7 @@ const ProductForm = ({
             <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
               <div className="product-details-container mb-2 pb-3" key={i}>
                 <div className="single-product">
-                  <div className="advert-product-input ">
+                  <div className="advert-product-input row">
                     <div className="mb-2 ">
                       <label
                         htmlFor={`productName${i}`}
@@ -155,7 +192,7 @@ const ProductForm = ({
                         })}
                       />
                     </div>
-                    <div className="mb-2">
+                    <div className="mb-2 col-6">
                       <label
                         htmlFor={`product_id${i}`}
                         className="mb-2 form-head"
@@ -180,7 +217,7 @@ const ProductForm = ({
                       />
                     </div>
 
-                    <div className="mb-2">
+                    <div className="mb-2 col-6">
                       <label
                         htmlFor={`productPrice${i}`}
                         className="mb-2 form-head"
@@ -204,7 +241,9 @@ const ProductForm = ({
                         })}
                       />
                     </div>
-                    <div className={`form-group mb-2`}>
+                    <div
+                      className={`form-group mb-2 position-relative  col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6`}
+                    >
                       <label className="form-head" htmlFor="category">
                         Product Category
                       </label>
@@ -215,6 +254,7 @@ const ProductForm = ({
                           required: true,
                         })}
                         onChange={(e) => handleCategoryChange(e, i)}
+                        // value={"rahul"}
                       >
                         <option value="" key="defaultcat">
                           Select Product Category
@@ -227,7 +267,9 @@ const ProductForm = ({
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
-                    <div className={`form-group mb-2`}>
+                    <div
+                      className={`form-group mb-2 position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6`}
+                    >
                       <label className="form-head" htmlFor="category">
                         Product Sub Category
                       </label>
@@ -237,7 +279,7 @@ const ProductForm = ({
                         {...register(`product[${i}].subcategory`, {
                           required: true,
                         })}
-                        // onChange={handleCategoryChange}
+                        onChange={(e) => cahndleSubcategory(e, i)}
                       >
                         <option value="" key="defaultcat">
                           Select Product Sub Category

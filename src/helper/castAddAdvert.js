@@ -4,8 +4,8 @@ export function castAddAdvert(formData, user, portfolio_id) {
   let data = new FormData();
   data.append("advertTitle", formData?.advert_title);
   data.append("whereToShow", formData?.userSearch);
-  data.append("advertCategory", formData?.adcategory);
-  data.append("advertSubCategory", formData?.subCategory);
+  // data.append("advertCategory", formData?.adcategory);
+  // data.append("advertSubCategory", formData?.subCategory);
   data.append("advertLocation", formData?.ad_location);
   data.append("advertPrice", formData?.adPrice);
   data.append("advertDescription", formData?.exampleTextarea);
@@ -39,9 +39,9 @@ export function castEditadvertData(formData, _id, provider_id) {
   let data = new FormData();
   data.append("advertId", _id);
   data.append("provider_id", provider_id);
-  data.append("advertCategory", formData.advertCategory);
+  // data.append("advertCategory", formData.advertCategory);
   data.append("advertTitle", formData?.advertTitle);
-  data.append("advertSubCategory", formData?.advertSubCategory);
+  // data.append("advertSubCategory", formData?.advertSubCategory);
   data.append("advertDescription", formData?.advertDescription);
   data.append("advertLocation", formData?.advertLocation);
   data.append("advertPrice", formData?.advertPrice);
@@ -86,9 +86,9 @@ export function castPostAgainAdvert(formData, _id, provider_id) {
   let data = new FormData();
   data.append("advertId", _id);
   data.append("provider_id", provider_id);
-  data.append("advertCategory", formData.advertCategory);
+  // data.append("advertCategory", formData.advertCategory);
   data.append("advertTitle", formData?.advertTitle);
-  data.append("advertSubCategory", formData?.advertSubCategory);
+  // data.append("advertSubCategory", formData?.advertSubCategory);
   data.append("advertDescription", formData?.advertDescription);
   data.append("advertLocation", formData?.advertLocation);
   data.append("advertPrice", formData?.advertPrice);

@@ -372,12 +372,12 @@ const Advert = () => {
         </div>
       </main>
 
-      <AdvertEditModal
+      {/* <AdvertEditModal
         showAdvertModal={showAdvertModal}
         setshowAdvertModal={setshowAdvertModal}
         editAdvertData={editAdvertData}
         setRefresh={setRefresh}
-      />
+      /> */}
     </div>
   );
 };
