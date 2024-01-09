@@ -28,12 +28,10 @@ const AddAdvert = async (req, res, next) => {
       advertProviderPortfolio_id,
       advertProvider_id,
       advertTitle,
-      advertCategory,
       advertLocation,
       advertPostalCode,
       advertDescription,
       whereToShow,
-      advertSubCategory,
       advertOfferPrice,
       subscription_plan_id,
       product,
@@ -83,12 +81,10 @@ const AddAdvert = async (req, res, next) => {
       advertProviderPortfolio_id,
       advertProvider_id,
       advertTitle,
-      advertCategory,
       advertLocation,
       advertPostalCode,
       advertDescription,
       whereToShow,
-      advertSubCategory,
       advertOfferPrice,
       subscription_plan_id,
       advertImage: req.fileUrls.mainImg,
@@ -96,7 +92,7 @@ const AddAdvert = async (req, res, next) => {
       advertExpiryDate: subscription.expiryDate,
     };
 
-    console.log("update Value", UpdateValue);
+    // console.log("update Value", UpdateValue);
 
     // return res.json("sucess");
 

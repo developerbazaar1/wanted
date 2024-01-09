@@ -80,11 +80,11 @@ const advertModal = new mongoose.Schema({
       },
       category: {
         type: String,
-        required: true,
+        // required: true,
       },
       subcategory: {
         type: String,
-        required: true,
+        // required: true,
       },
       productImg: [
         {

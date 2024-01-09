@@ -5,8 +5,6 @@ const AdvertAndProductDataCast = async (req, res, next) => {
   // return res.status(404).json("error");
   let {
     advertTitle,
-    advertCategory,
-    advertSubCategory,
     advertPostalCode,
     advertPrice,
     advertLocation,
@@ -59,8 +57,6 @@ const AdvertAndProductDataCast = async (req, res, next) => {
 
     req.body["updateFields"] = {
       advertTitle,
-      advertCategory,
-      advertSubCategory,
       advertPostalCode,
       advertPrice,
       advertLocation,

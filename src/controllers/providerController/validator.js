@@ -142,12 +142,12 @@ const advertValidator = async (req, res, next) => {
     advertProviderPortfolio_id,
     advertProvider_id,
     advertTitle,
-    advertCategory,
+    // advertCategory,
     advertLocation,
     advertPostalCode,
     advertDescription,
     whereToShow,
-    advertSubCategory,
+    // advertSubCategory,
     advertOfferPrice,
     subscription_plan_id,
     product,
@@ -164,8 +164,6 @@ const advertValidator = async (req, res, next) => {
     if (
       !advertTitle ||
       !whereToShow ||
-      !advertCategory ||
-      !advertSubCategory ||
       !advertLocation ||
       !advertPrice ||
       !advertDescription ||
@@ -225,8 +223,6 @@ const postAdvertAgainValidator = async (req, res, next) => {
     advertId,
     advertTitle,
     whereToShow,
-    advertCategory,
-    advertSubCategory,
     advertLocation,
     advertPrice,
     advertDescription,
@@ -240,8 +236,6 @@ const postAdvertAgainValidator = async (req, res, next) => {
       !advertId ||
       !advertTitle ||
       !whereToShow ||
-      !advertCategory ||
-      !advertSubCategory ||
       !advertLocation ||
       !advertPrice ||
       !advertDescription ||
