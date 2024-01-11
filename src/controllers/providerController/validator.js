@@ -142,12 +142,10 @@ const advertValidator = async (req, res, next) => {
     advertProviderPortfolio_id,
     advertProvider_id,
     advertTitle,
-    // advertCategory,
     advertLocation,
     advertPostalCode,
     advertDescription,
     whereToShow,
-    // advertSubCategory,
     advertOfferPrice,
     subscription_plan_id,
     product,
@@ -198,10 +196,6 @@ const advertValidator = async (req, res, next) => {
  */
 const updateAdvertValidator = async (req, res, next) => {
   let { advertId, provider_id } = req.body;
-
-  // console.log("This is old products", products);
-  // console.log("This is new product", product);
-  // return res.status(400).json("This is message");
   try {
     if (!advertId || !provider_id) {
       return res.status(BAD_REQUEST).json({

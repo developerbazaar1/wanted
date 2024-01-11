@@ -21,6 +21,9 @@ const {
 const auth = require("../../config/auth");
 const handeCatImgAndIconHelper = require("../../helpers/CatImgAndIconHelper");
 const subcategoryImageUploaderHelper = require("../../helpers/uploadsubcategoryImgHelper");
+const {
+  adsubSubcategoryController,
+} = require("../../controllers/adminController/subSubCategoryController");
 const AdminRoutes = express.Router();
 /**
  * routes to handle categroy
@@ -53,6 +56,9 @@ AdminRoutes.post(
   subcategoryImageUploaderHelper("subCatImg"),
   adSubcategoryController
 );
+
+//routes to hande subsubCategory
+AdminRoutes.post("/addsubsubcategory", adsubSubcategoryController);
 AdminRoutes.put(
   "/updatesubcateogry",
   upload.single("subcateImg"),

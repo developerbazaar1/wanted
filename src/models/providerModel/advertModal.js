@@ -66,6 +66,11 @@ const advertModal = new mongoose.Schema({
   },
   products: [
     {
+      productTitle: {
+        type: String,
+        required: true,
+      },
+
       productName: {
         type: String,
         required: true,
@@ -85,6 +90,9 @@ const advertModal = new mongoose.Schema({
       subcategory: {
         type: String,
         // required: true,
+      },
+      subsubcategory: {
+        type: String,
       },
       productImg: [
         {

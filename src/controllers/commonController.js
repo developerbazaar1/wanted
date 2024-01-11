@@ -1,6 +1,7 @@
 const { OK, BAD_REQUEST } = require("../httpStatusCode");
 const CategroyModal = require("../models/adminModel/category");
 const SubcategoryModal = require("../models/adminModel/subCategory");
+const SubSubCategoryModal = require("../models/adminModel/subSubCategoryModal");
 
 const getCategoryController = async (req, res, async) => {
   try {
@@ -47,5 +48,34 @@ const getsubCategoryController = async (req, res, async) => {
       .json({ message: "Internal Server Error" });
   }
 };
+const getsubSubCategoryController = async (req, res, async) => {
+  try {
+    let subCategory = await SubSubCategoryModal.find({})
+      .then((subSubCategory) => {
+        res.status(OK).json({
+          status: "success",
+          subSubCategory,
+        });
+      })
+      .catch((error) => {
+        res.status(BAD_REQUEST).json({
+          status: "error",
+          message: "failed to load Sub category",
+        });
+      });
 
-module.exports = { getCategoryController, getsubCategoryController };
+    console.log(subCategory);
+    console.log(SubSubCategoryModal);
+  } catch (error) {
+    // console.error(error);
+    res
+      .status(INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = {
+  getCategoryController,
+  getsubCategoryController,
+  getsubSubCategoryController,
+};

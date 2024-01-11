@@ -375,6 +375,7 @@ const postAgainAdvert = async (req, res, next) => {
 
 const AdvertVisibilatyController = async (req, res, next) => {
   const { advertId, provider_id, advertVisibility } = req.body;
+  console.log(advertVisibility);
   if (!advertId) {
     return res.status(BAD_REQUEST).json({
       status: "error",
@@ -385,7 +386,8 @@ const AdvertVisibilatyController = async (req, res, next) => {
       status: "error",
       message: "Please Provide User Id",
     });
-  } else if (!advertVisibility) {
+  } else if (advertVisibility === undefined) {
+    console.log("inside the advert visibality check", advertVisibility);
     return res.status(BAD_REQUEST).json({
       status: "error",
       message: "Please Provide AdvertVisibility Status",
