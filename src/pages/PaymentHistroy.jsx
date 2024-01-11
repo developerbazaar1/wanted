@@ -5,17 +5,19 @@ import { toast } from "react-toastify";
 import Spiner from "../components/Spiner";
 import PaymentHistroyTop from "../components/PaymentHistroyTop";
 import { DatedFormated } from "../helper/ToDate";
+import CustomPagination from "../components/CustomePagination";
 
 const PaymentHistroy = () => {
   const [payments, setPayment] = useState();
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   let { token, user, portfolio_id } = useAuth();
   useEffect(() => {
     function GetPaymentHistroy() {
       setLoading(true);
       ProctedApi.getPaymentHistory(token, user.id, portfolio_id)
         .then((res) => {
-          console.log(res.data.payment);
           setPayment(res.data.payment);
         })
         .catch((e) => {
@@ -28,6 +30,10 @@ const PaymentHistroy = () => {
     }
     GetPaymentHistroy();
   }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = payments?.slice(indexOfFirstItem, indexOfLastItem);
 
   if (payments?.length === 0) {
     return (
@@ -56,7 +62,7 @@ const PaymentHistroy = () => {
             <div className="table-responsive pay-table">
               <table className="table">
                 <thead className="r-thed">
-                  <tr>
+                  <tr className="text-center">
                     <th></th>
                     <th>S.No.</th>
                     <th>Date Of Payment</th>
@@ -68,10 +74,12 @@ const PaymentHistroy = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {payments?.map((payment, index) => (
-                    <tr key={payment?._id}>
+                  {currentItems?.map((payment, index) => (
+                    <tr key={payment?._id} className="text-center">
                       <td></td>
-                      <td className="serial">{index + 1} </td>
+                      <td className="serial">
+                        {index + 1 + indexOfFirstItem}{" "}
+                      </td>
                       <td className="">{DatedFormated(payment?.createdAt)}</td>
                       <td className="user">{payment?.description}</td>
                       <td className="amount">£ {payment?.amount}</td>
@@ -94,6 +102,12 @@ const PaymentHistroy = () => {
                 </tbody>
               </table>
             </div>
+
+            <CustomPagination
+              totalItems={payments?.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={(page) => setCurrentPage(page)}
+            />
           </div>
         </div>
         {/* <!-- section end here --> */}

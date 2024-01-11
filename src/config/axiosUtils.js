@@ -16,6 +16,13 @@ export const categoriesApi = {
     });
     return response;
   },
+  subSubgetCategory: async () => {
+    const response = await openapi.request({
+      url: `/getsubSubcategory`,
+      method: "GET",
+    });
+    return response;
+  },
 };
 
 export const AuthApi = {

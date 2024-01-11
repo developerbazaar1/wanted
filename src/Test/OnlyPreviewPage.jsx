@@ -23,14 +23,10 @@ const OnlyAdvertProductPreview = () => {
 
   const [loading, setLoading] = useState(false);
   // let { advertid } = useParams();
-  let { advertid } = useLocation().state;
+  const advertid = localStorage.getItem("advertId");
+  // let { advertid } = useLocation().state;
+  // console.log(state);
   const { user, token } = useAuth();
-  // const { category } = useCategory();
-  // console.log(category);
-  //   console.log(token);
-
-  // console.log("preview data", previewData?.data?.adverts);
-  //   console.log("preview product", previewData?.data?.product);
 
   useEffect(() => {
     setLoading(true);
@@ -53,6 +49,11 @@ const OnlyAdvertProductPreview = () => {
         setLoading(false);
       });
   }, [advertid]);
+
+  const handleClick = (Id) => {
+    // Store the state in localStorage
+    localStorage.setItem("advertId", Id);
+  };
 
   if (loading) {
     return (
@@ -83,7 +84,10 @@ const OnlyAdvertProductPreview = () => {
   return (
     <>
       <Spiner loading={loading} />
-      <div className="mx-2  advert-preview-container my-4  mx-md-auto">
+      <div
+        className="mx-2  advert-preview-container my-4  mx-md-auto"
+        key={advertid}
+      >
         <div className="details">
           {/* // mobile None div */}
           <div className="details_location  d-none d-md-flex">
@@ -98,23 +102,23 @@ const OnlyAdvertProductPreview = () => {
               </div>
               <div>{previewData?.data?.advert?.advertLocation}</div>
               <div className="icon_cat_container">
-                <div className="detail_icon">
+                {/* <div className="detail_icon">
                   <img src={BeautySpaIcon} alt="Ico" />
                 </div>
                 <div>
                   {previewData?.data?.advert?.advertCategory}/
                   {previewData?.data?.advert?.advertSubCategory}
-                </div>
+                </div> */}
               </div>
               {/* icon for provider Details */}
               <div className="details_provider_favoruite">
-                <svg
+                {/* <svg
                   viewBox="0 0 24 24"
                   className="favoruite_grey"
                   xmlns="https://www.w3.org/2000/svg"
                 >
                   <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
-                </svg>
+                </svg> */}
               </div>
             </div>
             <div className="details_contact">
@@ -209,7 +213,7 @@ const OnlyAdvertProductPreview = () => {
               <div className="social_head">Share This Advert</div>
               <div className="social_group">
                 <div>
-                  <a href="https://gmail.ocm">
+                  <Link target="_blank" to="https://gmail.com">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -222,8 +226,8 @@ const OnlyAdvertProductPreview = () => {
                         fill="black"
                       />
                     </svg>
-                  </a>
-                  <a href="https://facebook.com">
+                  </Link>
+                  <Link target="_blank" to="https://facebook.com">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -236,8 +240,8 @@ const OnlyAdvertProductPreview = () => {
                         fill="black"
                       />
                     </svg>
-                  </a>
-                  <a href="https://twitter.com">
+                  </Link>
+                  <Link target="_blank" to="https://twitter.com">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -250,8 +254,8 @@ const OnlyAdvertProductPreview = () => {
                         fill="black"
                       />
                     </svg>
-                  </a>
-                  <a href="https://pintres.com">
+                  </Link>
+                  <Link target="_blank" to="https://pintres.com">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -264,7 +268,7 @@ const OnlyAdvertProductPreview = () => {
                         fill="black"
                       />
                     </svg>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -446,59 +450,65 @@ const OnlyAdvertProductPreview = () => {
             </div>
           </div>
         </div>
+        {previewData?.data?.products?.map((element) => (
+          <div key={element.title}>
+            <h3 className="mt-2 text-capitalize">{element.title}</h3>
+            <div className="row prduct-preview-main-container">
+              {element?.items?.map((product, index) => (
+                <ProductCrasuel
+                  key={product?._id}
+                  product={product}
+                  unique={index + 1}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
 
-        {previewData?.data?.advert?.products?.length > 0 && (
-          <h2 className="mt-2">Provider Products</h2>
+        {previewData?.data?.adverts?.length > 0 && (
+          <>
+            <h5 className="mt-2">More Ads From This Provider</h5>
+            <div className="details_ads">
+              {previewData?.data?.adverts?.map((ads) => (
+                <Link
+                  to={`/advert-preview`}
+                  state={{ advertid: ads._id }}
+                  className="details_provider_ads"
+                  key={ads?._id}
+                  target="_blank"
+                  onClick={() => handleClick(ads._id)}
+                >
+                  <div>
+                    <div className="detials_provider_img">
+                      <img src={ads?.advertImage?.imgUrl} alt="adsImage" />
+                      <div className="details_favoruite">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="unfilled"
+                          xmlns="https://www.w3.org/2000/svg"
+                        >
+                          <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="details_ads_description">
+                      <button className="container_ads_button">
+                        {ads?.whereToShow}
+                      </button>
+                      <p>{ads?.advertDescription.slice(0, 60)}</p>
+                      <div className="details_ads_description_provider">
+                        {previewData?.data?.Portfolio?.storeName}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <button className="show_more_ads_btn">
+              Show All Ads From This Provider
+            </button>
+          </>
         )}
-
-        <div className="row prduct-preview-main-container">
-          {previewData?.data?.advert?.products?.map((product, index) => (
-            <ProductCrasuel
-              key={product?._id}
-              product={product}
-              unique={index + 1}
-            />
-          ))}
-        </div>
-        {/* {crasule("No-Chip Manicure")} */}
-        <h5 className="mt-2">More Ads From This Provider</h5>
-        <div className="details_ads">
-          {previewData?.data?.adverts?.map((ads) => (
-            <Link
-              to={`/advert-preview`}
-              state={{ advertid: ads._id }}
-              className="details_provider_ads"
-              key={ads?._id}
-            >
-              <div>
-                <div className="detials_provider_img">
-                  <img src={ads?.advertImage?.imgUrl} alt="adsImage" />
-                  <div className="details_favoruite">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="unfilled"
-                      xmlns="https://www.w3.org/2000/svg"
-                    >
-                      <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
-                    </svg>
-                  </div>
-                </div>
-                <div className="details_ads_description">
-                  <button className="container_ads_button">
-                    {ads?.whereToShow}
-                  </button>
-                  <p>{ads?.advertDescription.slice(0, 60)}</p>
-                  <div className="details_ads_description_provider">
-                    {previewData?.data?.Portfolio?.storeName}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-        <button className="show_more_ads_btn">
-          Show All Ads From This Provider
-        </button>
       </div>
 
       <ProviderDetailsModal

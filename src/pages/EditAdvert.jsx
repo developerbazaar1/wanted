@@ -9,7 +9,11 @@ import { useAuth } from "../service/auth";
 import { toast } from "react-toastify";
 import ImagePreview from "../components/ImagePreview";
 import { ImgSizeCheck } from "../helper/imageSizeCheck";
-import { useCategory, useSubCategory } from "../service/categoryhelper";
+import {
+  useCategory,
+  useSubCategory,
+  useSubSubCategory,
+} from "../service/categoryhelper";
 import EditAdvertProducts from "../components/EditAdvertProducts";
 import ProductForm from "../components/ProductForm";
 
@@ -25,6 +29,7 @@ const EditAdvertData = () => {
   const [advert, setAdvert] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState();
   const { subcategory } = useSubCategory();
+  const { subsubcategory } = useSubSubCategory();
   const { category } = useCategory();
 
   // handle drag and drop
@@ -36,7 +41,6 @@ const EditAdvertData = () => {
     setValue,
     // reset,
     watch,
-    getValues,
     formState: { errors },
   } = useForm();
 
@@ -119,11 +123,13 @@ const EditAdvertData = () => {
   };
 
   const handleAdvertUpdate = (formData) => {
-    // console.log("inside the advert update", formData);
-    // return;
-
+    console.log("function is firing");
+    console.log(formData);
     setLoading(true);
     const data = castEditadvertData(formData, advert?._id, user?.id);
+    // console.log("inside the advert update", formData);
+    // return;
+    // console.log();
 
     let numOfOldProduct = formData.products.length;
     ProctedApi.updateAdvert(data, token, numOfOldProduct)
@@ -158,8 +164,6 @@ const EditAdvertData = () => {
         setAdvert(res.data.advert);
         let advert = res.data.advert;
         setValue("advertTitle", advert?.advertTitle);
-        // setValue("advertCategory", advert?.advertCategory);
-        // setValue("advertSubCategory", advert?.advertSubCategory);
         setValue("advertPostalCode", advert.advertPostalCode);
         setValue("advertPrice", advert?.advertPrice);
         setValue("advertOfferPrice", advert?.advertOfferPrice);
@@ -613,6 +617,7 @@ const EditAdvertData = () => {
                       errors={errors}
                       subcategory={subcategory}
                       category={category}
+                      subsubcategory={subsubcategory}
                     />
                   )}
 
@@ -632,6 +637,8 @@ const EditAdvertData = () => {
                         setRefresh={setRefresh}
                         subcategory={subcategory}
                         category={category}
+                        subsubcategory={subsubcategory}
+                        errors={errors}
                       />
                     ))}
                 </div>

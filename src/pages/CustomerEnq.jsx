@@ -80,7 +80,7 @@ const CustomerEnq = () => {
             <div className="table-responsive pay-table">
               <table className="table">
                 <thead className="r-thed">
-                  <tr>
+                  <tr className="text-center">
                     <th></th>
                     <th>S.No.</th>
                     <th>Date</th>
@@ -92,7 +92,7 @@ const CustomerEnq = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr className="text-center">
                     <td></td>
                     <td className="serial">01</td>
                     <td className="">16/11/2023</td>
@@ -109,7 +109,7 @@ const CustomerEnq = () => {
                     <td></td>
                     <td></td>
                   </tr>
-                  <tr>
+                  <tr className="text-center">
                     <td></td>
                     <td className="serial">01</td>
                     <td className="">17/11/2023</td>

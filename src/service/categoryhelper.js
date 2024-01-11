@@ -6,3 +6,6 @@ export const useCategory = () => {
 export const useSubCategory = () => {
   return useSelector((state) => state.subcategory);
 };
+export const useSubSubCategory = () => {
+  return useSelector((state) => state.subsubcategory);
+};

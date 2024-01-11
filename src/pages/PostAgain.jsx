@@ -9,7 +9,11 @@ import { useAuth } from "../service/auth";
 import { toast } from "react-toastify";
 import ImagePreview from "../components/ImagePreview";
 import { ImgSizeCheck } from "../helper/imageSizeCheck";
-import { useCategory, useSubCategory } from "../service/categoryhelper";
+import {
+  useCategory,
+  useSubCategory,
+  useSubSubCategory,
+} from "../service/categoryhelper";
 import EditAdvertProducts from "../components/EditAdvertProducts";
 import ProductForm from "../components/ProductForm";
 import Subscriptions from "../components/Subscriptions";
@@ -28,6 +32,7 @@ const PostAgain = () => {
   const [advert, setAdvert] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState();
   const { subcategory } = useSubCategory();
+  const { subsubcategory } = useSubSubCategory();
   const { category } = useCategory();
 
   // handle drag and drop
@@ -45,15 +50,6 @@ const PostAgain = () => {
   // console.log(advert);
 
   //function to handle category change
-  console.log(token);
-  const handleCategoryChange = (event) => {
-    // console.log("inside the subCategory");
-    const selectedValue = event.target.value;
-    const selectedCat = category.find(
-      (cat) => cat.categoryName === selectedValue
-    );
-    setSelectedCategory(selectedCat);
-  };
 
   const handleImageDrop = (e) => {
     e.preventDefault();
@@ -127,7 +123,6 @@ const PostAgain = () => {
     }
     formData["subscription_plan_id"] = selectedSubscription._id;
     // return console.log("this is form data", formData);
-
     setLoading(true);
     const data = castPostAgainAdvert(formData, advert?._id, user?.id);
 
@@ -136,9 +131,6 @@ const PostAgain = () => {
       .then((res) => {
         toast.success(res?.data?.message);
         console.log(res);
-        // setAdvert(res.data.data);
-        // setValue()
-        // addProduct;
         setTimeout(() => {
           window.location.reload();
         }, [1000]);
@@ -190,7 +182,6 @@ const PostAgain = () => {
     let subCat = category?.find(
       (element) => element?.categoryName === advert?.advertCategory
     );
-    console.log("this is subcategory", subCat);
     setSelectedCategory(subCat);
   }, [advert, refresh]);
 
@@ -322,7 +313,7 @@ const PostAgain = () => {
                             className="form-head mb-0 custom_advert_label"
                             htmlFor="latestoffer"
                           >
-                            Latest Offer
+                            Latest Offers
                           </label>
 
                           <input
@@ -333,7 +324,7 @@ const PostAgain = () => {
                             type="radio"
                             name="whereToShow"
                             id="latestoffer"
-                            value="Latest Offer"
+                            value="Latest Offers"
                           />
                         </div>
 
@@ -694,6 +685,7 @@ const PostAgain = () => {
                       errors={errors}
                       category={category}
                       subcategory={subcategory}
+                      subsubcategory={subsubcategory}
                     />
                   )}
 
@@ -713,6 +705,7 @@ const PostAgain = () => {
                         setRefresh={setRefresh}
                         category={category}
                         subcategory={subcategory}
+                        subsubcategory={subsubcategory}
                       />
                     ))}
                 </div>

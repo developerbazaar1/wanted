@@ -14,6 +14,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { subsubcategorySlice } from "../features/subsubcategory";
 
 const persistConfig = {
   key: "root",
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   auth: authSlice.reducer,
   category: categorySlice.reducer,
   subcategory: subcategorySlice.reducer,
+  subsubcategory: subsubcategorySlice.reducer,
   subscription: subscriptionSlice.reducer,
 });
 

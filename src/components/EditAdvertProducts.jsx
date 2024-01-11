@@ -27,7 +27,9 @@ const EditAdvertProducts = ({
   setRefresh,
   subcategory,
   category,
+  subsubcategory,
 }) => {
+  // console.log(product);
   const [settings] = useState({
     // dots: true,
     infinite: true,
@@ -38,6 +40,7 @@ const EditAdvertProducts = ({
   const [addProductImg, setAddProductImg] = useState([]);
   const [newProductImgPreve, setNewProductImgPreve] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
+  const [selectedSubCategory, setselectedSubCategory] = useState();
   const handleProductImageUpdate = (e, productIndex) => {
     e.preventDefault();
     let files = e.target.files;
@@ -132,6 +135,16 @@ const EditAdvertProducts = ({
     );
     setSelectedCategory(selectedCat);
   };
+  const handleSubCategoryChange = (event) => {
+    console.log("inside the subSubCategory");
+    const selectedValue = event.target.value;
+    const selectedSubCat = subcategory.find(
+      (cat) => cat.subCategoryName === selectedValue
+    );
+
+    console.log("selected sub category", selectedSubCat);
+    setselectedSubCategory(selectedSubCat);
+  };
 
   const HandleProductImgRemove = (e, imgId) => {
     if (loading) {
@@ -154,6 +167,8 @@ const EditAdvertProducts = ({
       });
   };
 
+  // console.log(product);
+
   useEffect(() => {
     if (addProductImg.length > 0) {
       setValue(`oldProductImg[${i}]`, addProductImg);
@@ -164,8 +179,15 @@ const EditAdvertProducts = ({
     let subCat = category?.find(
       (element) => element?.categoryName === product?.category
     );
-    console.log("this is subcategory", subCat);
     setSelectedCategory(subCat);
+
+    function setDefaultSubCategory() {
+      let subcat = subcategory?.find(
+        (element) => element?.subCategoryName === product?.subcategory
+      );
+      setselectedSubCategory(subcat);
+    }
+    setDefaultSubCategory();
   }, []);
 
   return (
@@ -173,21 +195,27 @@ const EditAdvertProducts = ({
       <div className="product-details-container mx-0" key={product?._id}>
         <div className="col-md-12-px-0">
           <div className="row">
-            <label
-              className="form-head"
-              htmlFor=""
-              style={{
-                fontSize: "20px",
-              }}
-            >
-              {/* {`Product ${i + 1}`} */}
-              {product?.productName}
-            </label>
             <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
               <div className="product-details-container mb-2 pb-3">
                 <div className="single-product">
                   <div className="advert-product-input row">
                     <div className="mb-1 ">
+                      <label
+                        htmlFor={`productitle${i}`}
+                        className="mb-2 form-head"
+                      >
+                        Product Title
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        placeholder="Enter Product Name"
+                        id={`productitle${i}`}
+                        {...register(`products[${i}].productTitle`)}
+                      />
+                    </div>
+
+                    <div className="mb-1 col-6">
                       <label
                         htmlFor={`productName${i}`}
                         className="mb-2 form-head"
@@ -253,7 +281,7 @@ const EditAdvertProducts = ({
                     </div>
                     <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
-                        htmlFor={`productPrice${i}`}
+                        htmlFor={`productcategory${i}`}
                         className="mb-2 form-head"
                       >
                         Product Category
@@ -277,7 +305,7 @@ const EditAdvertProducts = ({
                     </div>
                     <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
-                        htmlFor={`productPrice${i}`}
+                        htmlFor={`productcategory${i}`}
                         className="mb-2 form-head"
                       >
                         Product Sub Category
@@ -291,6 +319,7 @@ const EditAdvertProducts = ({
                             message: "Product Category is Required",
                           },
                         })}
+                        onClick={(e) => handleSubCategoryChange(e)}
                       >
                         {selectedCategory &&
                           subcategory
@@ -304,6 +333,37 @@ const EditAdvertProducts = ({
                                 value={`${subcate?.subCategoryName}`}
                               >
                                 {subcate?.subCategoryName}
+                              </option>
+                            ))}
+                      </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
+                    </div>
+                    <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
+                      <label
+                        htmlFor={`productSubsubCategory${i}`}
+                        className="mb-2 form-head"
+                      >
+                        Product Sub-Sub Category
+                      </label>
+                      <select
+                        className="form-control"
+                        id={`productSubsubCategory${i}`}
+                        {...register(`products[${i}].subsubcategory`)}
+                      >
+                        <option value="">Select Sub-Sub Category</option>
+                        {selectedSubCategory &&
+                          subsubcategory
+                            ?.filter(
+                              (item) =>
+                                item?.subcategory_id ===
+                                selectedSubCategory?._id
+                            )
+                            .map((subSubcate) => (
+                              <option
+                                key={subSubcate._id}
+                                value={`${subSubcate?.subSubCategoryName}`}
+                              >
+                                {subSubcate?.subSubCategoryName}
                               </option>
                             ))}
                       </select>

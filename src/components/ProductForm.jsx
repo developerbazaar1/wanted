@@ -22,6 +22,7 @@ const ProductForm = ({
   errors,
   category,
   subcategory,
+  subsubcategory,
 }) => {
   const [settings] = useState({
     dots: false,
@@ -34,6 +35,10 @@ const ProductForm = ({
   const [selectedCategories, setSelectedCategories] = useState(
     Array.from({ length: numProducts }, () => [])
   );
+  const [selectedSubCategories, setSubSelectedCategories] = useState(
+    Array.from({ length: numProducts }, () => [])
+  );
+
   const [imagePreviews, setImagePreviews] = useState(
     Array.from({ length: numProducts }, () => [])
   );
@@ -111,6 +116,7 @@ const ProductForm = ({
     }
   };
 
+  console.log("Sub sub category", selectedSubCategories);
   const handleCategoryChange = (event, productIndex) => {
     const selectedValue = event.target.value;
     const selectedCat = category.find(
@@ -152,9 +158,57 @@ const ProductForm = ({
     // setSelectedCategories(dupNewforcate);
   };
 
+  const handleSuCategoryChange = (event, productIndex) => {
+    const selectedValue = event.target.value;
+    const selectedSubCat = subcategory.find(
+      (cat) => cat.subCategoryName === selectedValue
+    );
+    // selectedSubCategories, setSubSelectedCategories;
+    // console.log(selectedSubCat);
+    const newSelectedSubCategories = [...selectedSubCategories];
+    newSelectedSubCategories[productIndex] = selectedSubCat;
+    setSubSelectedCategories(newSelectedSubCategories);
+
+    // Set default category and subcategory for other products
+    for (let i = 0; i < numProducts; i++) {
+      if (i !== productIndex && !newSelectedSubCategories[i]) {
+        newSelectedSubCategories[i] = selectedSubCat;
+      }
+    }
+
+    // Update state with default categories
+    setSubSelectedCategories(newSelectedSubCategories);
+  };
+
   // console.log("This is selected categories", selectedCategories);
 
-  console.log("This is Sub category", selectedCategories);
+  // console.log("This is Sub category", selectedSubCategories);
+
+  const productsTitleInput =
+    numProducts > 0 ? (
+      <div className="mb-2 col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
+        <label htmlFor={`productTitle`} className="mb-2 form-head">
+          Products Title
+        </label>
+        <input
+          className="form-control "
+          type="text"
+          placeholder="Enter Product Title"
+          id={`productTitle`}
+          {...register(`productTitle`, {
+            pattern: {
+              value: /^[ A-Za-z!@#$%^&*()_+{}\[\]:;<>,.?/~`'-]*$/,
+              message: "Invalid Product Title",
+            },
+            required: {
+              value: true,
+              message: "Product Title is Required",
+            },
+          })}
+        />
+      </div>
+    ) : null;
+
   const productForms = [];
   for (let i = 0; i < numProducts; i++) {
     productForms.push(
@@ -168,7 +222,7 @@ const ProductForm = ({
               <div className="product-details-container mb-2 pb-3" key={i}>
                 <div className="single-product">
                   <div className="advert-product-input row">
-                    <div className="mb-2 ">
+                    <div className="mb-2 col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
                         htmlFor={`productName${i}`}
                         className="mb-2 form-head"
@@ -176,7 +230,7 @@ const ProductForm = ({
                         Product Name
                       </label>
                       <input
-                        className="form-control"
+                        className="form-control "
                         type="text"
                         placeholder="Enter Product Name"
                         id={`productName${i}`}
@@ -250,9 +304,7 @@ const ProductForm = ({
                       <select
                         className="form-control"
                         id="productCategory"
-                        {...register(`product[${i}].category`, {
-                          required: true,
-                        })}
+                        {...register(`product[${i}].category`)}
                         onChange={(e) => handleCategoryChange(e, i)}
                         // value={"rahul"}
                       >
@@ -279,7 +331,10 @@ const ProductForm = ({
                         {...register(`product[${i}].subcategory`, {
                           required: true,
                         })}
-                        onChange={(e) => cahndleSubcategory(e, i)}
+                        onChange={(e) => {
+                          cahndleSubcategory(e, i);
+                          handleSuCategoryChange(e, i);
+                        }}
                       >
                         <option value="" key="defaultcat">
                           Select Product Sub Category
@@ -301,6 +356,38 @@ const ProductForm = ({
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
+                    <div
+                      className={`form-group mb-2 position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6`}
+                    >
+                      <label className="form-head" htmlFor="category">
+                        Sub-Sub Category
+                      </label>
+                      <select
+                        className="form-control"
+                        id="productSubsubCategory"
+                        {...register(`product[${i}].subsubcategory`)}
+                      >
+                        <option value="" key="defaultcat">
+                          Select Product Sub Category
+                        </option>
+                        {selectedSubCategories[i] &&
+                          subsubcategory
+                            ?.filter(
+                              (item) =>
+                                item.subcategory_id ===
+                                selectedSubCategories[i]?._id
+                            )
+                            .map((subsubcate) => (
+                              <option
+                                key={subsubcate._id}
+                                value={`${subsubcate?.subSubCategoryName}`}
+                              >
+                                {subsubcate?.subSubCategoryName}
+                              </option>
+                            ))}
+                      </select>
+                      <IoIosArrowDown className="category-dropw-down-toogle" />
+                    </div>
                   </div>
 
                   <div className="ms-3 product-icons">
@@ -309,10 +396,8 @@ const ProductForm = ({
                       title="Edit Product Name"
                     >
                       <MdModeEditOutline
-                        size="20"
-                        style={{
-                          cursor: "pointer",
-                        }}
+                        size="25"
+                        className="addMoreProductImgIcon"
                       />
                     </label>
 
@@ -376,7 +461,12 @@ const ProductForm = ({
     );
   }
 
-  return <>{productForms}</>;
+  return (
+    <>
+      {productsTitleInput}
+      {productForms}
+    </>
+  );
 };
 
 export default ProductForm;

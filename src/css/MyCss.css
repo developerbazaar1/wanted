@@ -402,9 +402,15 @@ th {
 
 .protfilo_prew_image {
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   width: 100%;
 }
+
+/* .zoom-slider {
+  width: 480px;
+  height: 480px;
+  object-fit: fill;
+} */
 
 .protfilo_prew_image_remove_button {
   position: absolute;
@@ -1286,12 +1292,20 @@ input:checked + .slider:before {
   /* justify-content: center; */
   align-items: center;
   gap: 5px;
-  text-decoration: underline !important;
+  /* text-decoration: underline !important; */
   padding: 2px 0px;
 }
 
 .manage-advertDropDown {
+  background-color: #fefcff !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23) !important;
   padding: 3px 5px 4px 7px !important;
+  border: unset !important;
+  border-radius: 3px !important;
+  -webkit-border-radius: 3px !important;
+  -moz-border-radius: 3px !important;
+  -ms-border-radius: 3px !important;
+  -o-border-radius: 3px !important;
 }
 
 .manage-advert-btn {
@@ -1318,3 +1332,40 @@ input:checked + .slider:before {
   top: 47px;
 }
 /* style for category dropdown toogle end*/
+
+/* style for the pagantion end */
+
+/* CustomPagination.css */
+
+.custom-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.page-number {
+  cursor: pointer;
+  padding: 8px 12px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.page-number.active {
+  background-color: #17c737;
+  color: #fff;
+  border: 1px solid #17c737;
+}
+
+.page-number.disabled {
+  color: #ddd;
+  cursor: not-allowed;
+}
+
+.page-number.prev,
+.page-number.next {
+  font-weight: bold;
+}
+
+/* style for the pagantion start */

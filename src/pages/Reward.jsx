@@ -71,7 +71,7 @@ const Reward = () => {
             <div className="table-responsive">
               <table className="table">
                 <thead className="r-thed">
-                  <tr>
+                  <tr className="text-center">
                     <th>S.No.</th>
                     <th>Date</th>
                     <th>User Name</th>
@@ -81,7 +81,7 @@ const Reward = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr className="text-center">
                     <td className="serial">01</td>
                     <td className="">12/09/2023</td>
                     <td className="user">Percy Boyle</td>
@@ -105,7 +105,7 @@ const Reward = () => {
                     </td>
                     <td>2 Rewards</td>
                   </tr>
-                  <tr>
+                  <tr className="text-center">
                     <td className="serial">02</td>
                     <td className="">08/09/2023</td>
                     <td className="user">Debbie Brennan</td>
@@ -129,7 +129,7 @@ const Reward = () => {
                     </td>
                     <td>1 Rewards</td>
                   </tr>
-                  <tr>
+                  <tr className="text-center">
                     <td className="serial">03</td>
                     <td className="">05/09/2023</td>
                     <td className="user">Jack</td>

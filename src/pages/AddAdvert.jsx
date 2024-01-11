@@ -9,8 +9,6 @@ const allowedTypes = [
   "image/ai",
   "image/avif",
 ];
-import { IoIosArrowDown } from "react-icons/io";
-
 import { useForm } from "react-hook-form";
 import { ProctedApi } from "../config/axiosUtils";
 import { useAuth } from "../service/auth";
@@ -18,7 +16,11 @@ import { castAddAdvert } from "../helper/castAddAdvert";
 import { toast } from "react-toastify";
 import Spiner from "../components/Spiner";
 import { ImgSizeCheck } from "../helper/imageSizeCheck";
-import { useCategory, useSubCategory } from "../service/categoryhelper";
+import {
+  useCategory,
+  useSubCategory,
+  useSubSubCategory,
+} from "../service/categoryhelper";
 import { getCurrentLocation } from "../helper/getCurrentLocation";
 import AddAdvertTopHead from "../components/AddAdvertTopHead";
 import Subscriptions from "../components/Subscriptions";
@@ -37,6 +39,7 @@ const AddAdvert = () => {
   const fileInputRef = useRef(null);
   const { subcategory } = useSubCategory();
   const { category } = useCategory();
+  const { subsubcategory } = useSubSubCategory();
 
   const {
     register,
@@ -57,13 +60,9 @@ const AddAdvert = () => {
 
   const HandleAddadvertSubmit = (formData) => {
     formData["subscription_plan_id"] = selectedSubscription._id;
-    // console.log(formData);
-    // console.log("submit is firing");
-    // return;
     setLoading(true);
     const data = castAddAdvert(formData, user, portfolio_id);
-    //
-    // return;
+
     ProctedApi.AddAdvert(data, token)
       .then((response) => {
         console.log(response);
@@ -268,7 +267,7 @@ const AddAdvert = () => {
                             className="form-head mb-0 custom_advert_label"
                             htmlFor="latestoffer"
                           >
-                            Latest Offer
+                            Latest Offers
                           </label>
 
                           <input
@@ -279,7 +278,7 @@ const AddAdvert = () => {
                             type="radio"
                             name="userSearch"
                             id="latestoffer"
-                            value="Latest Offer"
+                            value="Latest Offers"
                           />
                         </div>
 
@@ -637,6 +636,7 @@ const AddAdvert = () => {
                       </div>
                     </div>
                   </div>
+
                   {product === "YesAddProduct" && (
                     <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                       <div className={`form-group`}>
@@ -669,6 +669,7 @@ const AddAdvert = () => {
                       errors={errors}
                       category={category}
                       subcategory={subcategory}
+                      subsubcategory={subsubcategory}
                     />
                   )}
                 </div>

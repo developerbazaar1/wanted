@@ -28,6 +28,7 @@ import Plans from "./components/Plans";
 import OnlyAdvertProductPreview from "./Test/OnlyPreviewPage";
 import EditAdvertData from "./pages/EditAdvert";
 import ImageCrasuel from "./Test";
+import { setsubsubcategory } from "./features/subsubcategory";
 function App() {
   const { isLoggedIn, token, portfolio_id, user } = useAuth();
   const dispatch = useDispatch();
@@ -69,6 +70,22 @@ function App() {
       });
   };
 
+  const fetchsubSubCategories = async () => {
+    categoriesApi
+      .subSubgetCategory()
+      .then((res) => {
+        // console.log(res.data.subSubCategory);
+        dispatch(
+          setsubsubcategory({
+            subsubcategory: res?.data?.subSubCategory,
+          })
+        );
+      })
+      .catch((e) => {
+        // console.log(e);
+      });
+  };
+
   const fetchsubscription = async () => {
     getUserSubscription(token, user?.id, portfolio_id)
       .then((res) => {
@@ -89,6 +106,7 @@ function App() {
     fetchCategories();
     fetchsubCategories();
     fetchsubscription();
+    fetchsubSubCategories();
   });
   return (
     <>

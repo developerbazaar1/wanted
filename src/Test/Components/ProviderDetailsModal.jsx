@@ -18,7 +18,7 @@ const ProviderDetailsModal = ({
     >
       <Modal.Body>
         <div className="text-end" onClick={handleCloseModal}>
-          <RxCross2 size={25} color="black" />
+          <RxCross2 size={25} color="black" className="pointer" />
         </div>
         <h4 className="text-center">Provider Details</h4>
         <div className="row mb-1">
