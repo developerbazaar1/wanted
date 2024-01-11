@@ -64,8 +64,8 @@ const getsubSubCategoryController = async (req, res, async) => {
         });
       });
 
-    console.log(subCategory);
-    console.log(SubSubCategoryModal);
+    // console.log(subCategory);
+    // console.log(SubSubCategoryModal);
   } catch (error) {
     // console.error(error);
     res
