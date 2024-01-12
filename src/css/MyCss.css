@@ -890,7 +890,7 @@ span.plan-month {
   width: 0;
 }
 .advert__tabel_container .advert-table {
-  padding-bottom: 60px;
+  padding-bottom: 98px;
 }
 
 .prduct-preview-main-container {
@@ -911,7 +911,9 @@ span.plan-month {
   right: 8px;
 }
 .advert__tabel_container {
-  /* overflow-x: auto; */
+  overflow: scroll;
+  max-width: 1195px !important;
+  overflow-y: auto;
   width: 100%;
   max-width: 100%;
   /* min-height: 400px; */
@@ -1369,3 +1371,11 @@ input:checked + .slider:before {
 }
 
 /* style for the pagantion start */
+
+.custom-badge {
+  vertical-align: inherit !important;
+  font-family: Quicksand !important;
+  font-size: 15px !important;
+  font-style: normal !important;
+  font-weight: 550 !important;
+}

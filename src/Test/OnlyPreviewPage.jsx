@@ -1,12 +1,10 @@
 import "./AdvertProductPreview.css";
-import BeautySpaIcon from "../assets/Development/BeautyAndSpa.png";
 import { useAuth } from "../service/auth";
 import { useEffect, useState } from "react";
 import { getOnlyAdvertPreviewData } from "../config/axiosUtils";
 import { Link, useLocation } from "react-router-dom";
 import Spiner from "../components/Spiner";
 import ProductCrasuel from "./Components/ProductCrasuel";
-// import { useCategory } from "../service/categoryhelper";
 import { FaInfoCircle } from "react-icons/fa";
 import ProviderDetailsModal from "./Components/ProviderDetailsModal";
 import MainAdvertImagesCarousel from "./Components/MainAdvertImagesCarousel";
@@ -23,8 +21,8 @@ const OnlyAdvertProductPreview = () => {
 
   const [loading, setLoading] = useState(false);
   // let { advertid } = useParams();
-  const advertid = localStorage.getItem("advertId");
-  // let { advertid } = useLocation().state;
+  // const advertid = localStorage.getItem("advertId");
+  let { advertid } = useLocation().state;
   // console.log(state);
   const { user, token } = useAuth();
 
@@ -49,11 +47,6 @@ const OnlyAdvertProductPreview = () => {
         setLoading(false);
       });
   }, [advertid]);
-
-  const handleClick = (Id) => {
-    // Store the state in localStorage
-    localStorage.setItem("advertId", Id);
-  };
 
   if (loading) {
     return (
@@ -285,13 +278,13 @@ const OnlyAdvertProductPreview = () => {
               </div>
               <div>{previewData?.data?.advert?.advertLocation}</div>
               <div className="icon_cat_container">
-                <div className="detail_icon">
+                {/* <div className="detail_icon">
                   <img src={BeautySpaIcon} alt="Ico" />
                 </div>
                 <div>
                   {previewData?.data?.advert?.advertCategory}/
                   {previewData?.data?.advert?.advertSubCategory}
-                </div>
+                </div> */}
               </div>
               <div className="details_provider_favoruite">
                 <svg
@@ -475,8 +468,6 @@ const OnlyAdvertProductPreview = () => {
                   state={{ advertid: ads._id }}
                   className="details_provider_ads"
                   key={ads?._id}
-                  target="_blank"
-                  onClick={() => handleClick(ads._id)}
                 >
                   <div>
                     <div className="detials_provider_img">

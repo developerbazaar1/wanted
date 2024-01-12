@@ -130,10 +130,10 @@ const Advert = () => {
     });
   };
 
-  const handleClick = (Id) => {
-    // Store the state in localStorage
-    localStorage.setItem("advertId", Id);
-  };
+  // const handleClick = (Id) => {
+  //   // Store the state in localStorage
+  //   localStorage.setItem("advertId", Id);
+  // };
 
   useEffect(() => {
     getUserAdvert();
@@ -215,20 +215,22 @@ const Advert = () => {
                             : DatedFormated(advert?.createdAt)}
                         </td>
                         {advert.advertStatus === "active" ? (
-                          <td
-                            style={{
-                              color: "#2df54f",
-                            }}
-                          >
-                            Active
+                          <td>
+                            <span
+                              className="badge custom-badge"
+                              style={{
+                                color: "black",
+                                backgroundColor: "#2df54f",
+                              }}
+                            >
+                              Active
+                            </span>
                           </td>
                         ) : (
-                          <td
-                            style={{
-                              color: "red",
-                            }}
-                          >
-                            expired
+                          <td>
+                            <span className="badge text-bg-danger custom-badge">
+                              expired
+                            </span>
                           </td>
                         )}
 
@@ -252,10 +254,9 @@ const Advert = () => {
                               <li className="pointer">
                                 <Link
                                   to={`/advert-preview`}
-                                  onClick={() => handleClick(advert._id)}
+                                  // onClick={() => handleClick(advert._id)}
                                   state={{ advertid: advert._id }}
                                   className="advert-preview manage-advert-btn"
-                                  target="_blank"
                                 >
                                   <TiEyeOutline size={21} />
                                   <span>Preview</span>
