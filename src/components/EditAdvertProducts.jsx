@@ -192,8 +192,8 @@ const EditAdvertProducts = ({
 
   return (
     <>
-      <div className="product-details-container mx-0" key={product?._id}>
-        <div className="col-md-12-px-0">
+      <div className="product-details-container mb-4" key={product?._id}>
+        <div className="col-md-12-px-0 product-padding">
           <div className="row">
             <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
               <div className="product-details-container mb-2 pb-3">
@@ -461,7 +461,7 @@ const EditAdvertProducts = ({
           </div>
         </div>
 
-        <hr />
+        {/* <hr /> */}
       </div>
     </>
   );

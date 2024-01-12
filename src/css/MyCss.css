@@ -910,6 +910,14 @@ span.plan-month {
   z-index: 99;
   right: 8px;
 }
+.selected-product-img-preview .slick-prev {
+  z-index: 99;
+  left: 10px;
+}
+.selected-product-img-preview .slick-next {
+  z-index: 99;
+  right: 10px;
+}
 .advert__tabel_container {
   overflow: scroll;
   max-width: 1195px !important;
@@ -1378,4 +1386,16 @@ input:checked + .slider:before {
   font-size: 15px !important;
   font-style: normal !important;
   font-weight: 550 !important;
+}
+
+.product-padding {
+  border-radius: 3px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.product-form-padding {
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 5px 9px;
 }

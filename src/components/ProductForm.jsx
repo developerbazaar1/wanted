@@ -186,26 +186,28 @@ const ProductForm = ({
 
   const productsTitleInput =
     numProducts > 0 ? (
-      <div className="mb-2 col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
-        <label htmlFor={`productTitle`} className="mb-2 form-head">
-          Products Title
-        </label>
-        <input
-          className="form-control "
-          type="text"
-          placeholder="Enter Product Title"
-          id={`productTitle`}
-          {...register(`productTitle`, {
-            pattern: {
-              value: /^[ A-Za-z!@#$%^&*()_+{}\[\]:;<>,.?/~`'-]*$/,
-              message: "Invalid Product Title",
-            },
-            required: {
-              value: true,
-              message: "Product Title is Required",
-            },
-          })}
-        />
+      <div className="row">
+        <div className="mb-2 col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
+          <label htmlFor={`productTitle`} className="mb-2 form-head">
+            Products Title
+          </label>
+          <input
+            className="form-control "
+            type="text"
+            placeholder="Enter Product Title"
+            id={`productTitle`}
+            {...register(`productTitle`, {
+              pattern: {
+                value: /^[ A-Za-z!@#$%^&*()_+{}\[\]:;<>,.?/~`'-]*$/,
+                message: "Invalid Product Title",
+              },
+              required: {
+                value: true,
+                message: "Product Title is Required",
+              },
+            })}
+          />
+        </div>
       </div>
     ) : null;
 
@@ -456,16 +458,21 @@ const ProductForm = ({
             </div>
           </div>
         </div>
-        <hr />
       </div>
     );
   }
 
   return (
-    <>
-      {productsTitleInput}
-      {productForms}
-    </>
+    <div>
+      {numProducts > 0 && (
+        <div>
+          <div className="col-12 product-form-padding mb-4">
+            {productsTitleInput}
+            {productForms}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
