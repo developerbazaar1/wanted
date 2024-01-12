@@ -824,10 +824,10 @@ span.plan-month {
 
 .selected-product-img-preview {
   width: 100%;
-  height: 254px;
+  height: 321px;
   padding: 9px;
   border-radius: 5px;
-  border: 2px solid #d2d2d2;
+  border: 1px solid #d2d2d2;
 }
 
 .product-prevImg-del-icon {
@@ -1389,13 +1389,19 @@ input:checked + .slider:before {
 }
 
 .product-padding {
-  border-radius: 3px;
-  border: 1px solid black;
+  border-radius: 2px;
   padding: 10px;
+  background-color: #ffffff !important;
+  box-shadow: rgba(0, 0, 0, -1.75) 0px 0.0625em 0.0625em,
+    rgba(0, 0, 0, 0.2) 0px 0.125em 0.5em,
+    rgba(254, 254, 254, 0.1) 0px 0px 0px 1px inset;
 }
 
 .product-form-padding {
-  border: 1px solid black;
-  border-radius: 3px;
-  padding: 5px 9px;
+  border-radius: 2px;
+  padding: 10px;
+  background-color: #ffffff !important;
+  box-shadow: rgba(0, 0, 0, -1.75) 0px 0.0625em 0.0625em,
+    rgba(0, 0, 0, 0.2) 0px 0.125em 0.5em,
+    rgba(254, 254, 254, 0.1) 0px 0px 0px 1px inset;
 }

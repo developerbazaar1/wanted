@@ -419,7 +419,7 @@ const EditAdvertProducts = ({
                     <img
                       style={{
                         width: "100%",
-                        height: "238px",
+                        height: "299px",
                         objectFit: "cover",
                       }}
                       src={imgprev}
@@ -441,7 +441,7 @@ const EditAdvertProducts = ({
                       alt={`Product ${i + 1} - Image ${imgIndex + 1}`}
                       style={{
                         width: "100%",
-                        height: "238px",
+                        height: "299px",
                         objectFit: "cover",
                       }}
                       className=""
