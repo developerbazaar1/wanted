@@ -188,6 +188,7 @@ const EditAdvertProducts = ({
       setselectedSubCategory(subcat);
     }
     setDefaultSubCategory();
+    console.log("inside edit advert Products");
   }, []);
 
   return (

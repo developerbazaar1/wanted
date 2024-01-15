@@ -44,18 +44,6 @@ const EditAdvertData = () => {
     formState: { errors },
   } = useForm();
 
-  // console.log(advert);
-
-  //function to handle category change
-  const handleCategoryChange = (event) => {
-    console.log("inside the subCategory");
-    const selectedValue = event.target.value;
-    const selectedCat = category.find(
-      (cat) => cat.categoryName === selectedValue
-    );
-    setSelectedCategory(selectedCat);
-  };
-
   const handleImageDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
@@ -179,15 +167,7 @@ const EditAdvertData = () => {
       });
   }, [_id, refresh]);
 
-  useEffect(() => {
-    let subCat = category?.find(
-      (element) => element?.categoryName === advert?.advertCategory
-    );
-    console.log("this is subcategory", subCat);
-    setSelectedCategory(subCat);
-  }, [advert, refresh]);
-
-  // console.log(getValues("porducts"));
+  // variable to store number of products
   let product = watch("addProduct");
 
   // console.log("default selected sub category", selectedCategory);
