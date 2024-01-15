@@ -1,12 +1,28 @@
+const cloudinary = require("cloudinary");
+const { INTERNAL_SERVER_ERROR } = require("../httpStatusCode");
+
 const profileImageHelper = (fieldName) => async (req, res, next) => {
   let file = req.file;
-  if (req.file === undefined) {
-    next();
-    return;
-  }
-
   try {
-  } catch (error) {}
+    if (req.file === undefined) {
+      next();
+      return;
+    }
+
+    let imgUrls = await uploadToCloudinary(req.file);
+    req.urls = imgUrls;
+    console.log(req.urls);
+    next();
+  } catch (error) {
+    console.error("ERROR IN CATCH BLOCK->", error);
+    const status = error.status || INTERNAL_SERVER_ERROR;
+    const message = error.message || "Internal server error, try later!";
+
+    return res.status(status).json({
+      error: message,
+      status: "error",
+    });
+  }
 };
 
 const uploadToCloudinary = async (file) => {

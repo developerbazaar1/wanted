@@ -18,14 +18,19 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   userProfilePic: {
-    type: String,
+    imgUrl: {
+      type: String,
+    },
+    imgPublicId: {
+      type: String,
+    },
   },
   userQRcode: {
     type: String,
   },
   role: {
     type: String,
-    enum: ["user,vendor,admin"],
+    enum: ["user", "vendor", "admin"],
     required: true,
   },
 });

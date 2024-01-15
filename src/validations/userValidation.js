@@ -1,9 +1,12 @@
+const { encryptPassword } = require("../config/utlis");
+const bcrypt = require("bcryptjs");
 const {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
   UNAUTHORIZED,
 } = require("../httpStatusCode");
 const validator = require("validator");
+const userModal = require("../models/userModels/userModal");
 
 /**
  *
@@ -14,7 +17,7 @@ const validator = require("validator");
  */
 const usersignupValidator = (req, res, next) => {
   try {
-    console.log("inside user signup validation");
+    // console.log("inside user signup validation");
     const { email, password, userName } = req.body;
     if (!email || !userName || !password) {
       return res.status(BAD_REQUEST).json({
@@ -38,17 +41,14 @@ const usersignupValidator = (req, res, next) => {
       });
     }
 
-    // Check if userName is not empty
     if (!userName) {
       return res
         .status(BAD_REQUEST)
         .json({ status: "error", message: "User name is required" });
     }
 
-    // If all validations pass, call next to continue to the next middleware or route handler
     next();
   } catch (error) {
-    // Handle any unexpected errors here
     // console.log(error);
     res
       .status(INTERNAL_SERVER_ERROR)
@@ -100,6 +100,8 @@ const userLoginValidation = async (req, res, next) => {
 
 const updateProfileValidator = async (req, res, next) => {
   let { oldPassword, newPassword, id } = req.body;
+  let user = req.user;
+  // console.log(user);
 
   try {
     if (!id) {
@@ -109,22 +111,53 @@ const updateProfileValidator = async (req, res, next) => {
       });
     }
 
-    if (oldPassword) {
+    if (oldPassword || newPassword) {
       if (!newPassword) {
         return res.status(BAD_REQUEST).json({
           status: "error",
           message: "Please Provide New Password!",
         });
-      }
-      if (newPassword.length < 6) {
+      } else if (newPassword.length < 6) {
         return res.status(BAD_REQUEST).json({
           status: "error",
-          message: "New Password must at least 6 Character Long!",
+          message: "New Password must contain at least 6 digit!",
+        });
+      } else if (!oldPassword) {
+        return res.status(BAD_REQUEST).json({
+          status: "error",
+          message: "Please Provide Old Password!",
         });
       }
+
+      const userExist = await userModal.findOne({
+        _id: user._id,
+      });
+
+      if (!userExist) {
+        return res.status(BAD_REQUEST).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      const passwordMatch = await bcrypt.compare(
+        oldPassword,
+        userExist.password
+      );
+
+      if (!passwordMatch) {
+        return res.status(BAD_REQUEST).json({
+          success: false,
+          message: "Incorrect old password",
+        });
+      }
+
+      const hashPassword = await encryptPassword(newPassword);
+      req.body.newPassword = hashPassword;
     }
     next();
   } catch (error) {
+    console.error(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal Server Error!",

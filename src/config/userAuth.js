@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const ProviderUser = require("../models/providerModel/providerUser");
+const userModal = require("../models/userModels/userModal");
 
-async function auth(req, res, next) {
+async function userAuth(req, res, next) {
   const token = req.header("Authorization");
   // console.log(token);
 
@@ -14,7 +14,7 @@ async function auth(req, res, next) {
     req.user = decoded;
     // console.log("decode", decoded._id);
     let id = decoded._id;
-    const user = await ProviderUser.findById(id);
+    const user = await userModal.findById(id);
     // console.log("user", user);
     if (!user) {
       return res.status(401).json({
@@ -22,6 +22,7 @@ async function auth(req, res, next) {
       });
     }
     req.user = user;
+    // console.log(user);
     next();
   } catch (e) {
     res.status(401).json({
@@ -30,4 +31,4 @@ async function auth(req, res, next) {
   }
 }
 
-module.exports = auth;
+module.exports = userAuth;

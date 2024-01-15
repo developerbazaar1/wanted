@@ -83,7 +83,7 @@ const deleteProductImgController = async (req, res) => {
       .productImg.find((img) => img._id.toString() === imageId);
 
     // Find the if image is not exit
-    console.log(deletedImage);
+    // console.log(deletedImage);
     if (!deletedImage) {
       return res.status(404).json({
         status: "error",

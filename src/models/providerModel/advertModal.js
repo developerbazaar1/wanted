@@ -12,6 +12,7 @@ const advertModal = new mongoose.Schema({
   advertTitle: {
     type: String,
     required: true,
+    index: true,
   },
   advertVisibility: {
     type: Boolean,
@@ -31,14 +32,17 @@ const advertModal = new mongoose.Schema({
   advertLocation: {
     type: String,
     required: true,
+    index: true,
   },
   advertPostalCode: {
     type: String,
     required: true,
+    index: true,
   },
   advertDescription: {
     type: String,
     required: true,
+    index: true,
   },
   whereToShow: {
     type: String,
@@ -69,11 +73,13 @@ const advertModal = new mongoose.Schema({
       productTitle: {
         type: String,
         required: true,
+        index: true,
       },
 
       productName: {
         type: String,
         required: true,
+        index: true,
       },
       product_id: {
         type: String,
@@ -86,13 +92,16 @@ const advertModal = new mongoose.Schema({
       category: {
         type: String,
         // required: true,
+        index: true,
       },
       subcategory: {
         type: String,
         // required: true,
+        index: true,
       },
       subsubcategory: {
         type: String,
+        index: true,
       },
       productImg: [
         {
@@ -118,6 +127,19 @@ const advertModal = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+advertModal.index({
+  advertTitle: 1,
+  advertLocation: 1,
+  advertPostalCode: 1,
+  "products.productTitle": 1,
+  "products.productName": 1,
+  "products.product_id": 1,
+  "products.productPrice": 1,
+  "products.category": 1,
+  "products.subcategory": 1,
+  "products.subsubcategory": 1,
 });
 
 module.exports = mongoose.model("AdvertModal", advertModal);

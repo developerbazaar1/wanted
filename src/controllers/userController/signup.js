@@ -29,6 +29,7 @@ const userSignupController = async (req, res) => {
       phoneNumber: "",
       userProfilePic: "",
       userQRcode: "",
+      role: "user",
     });
 
     if (!user) {
@@ -48,12 +49,13 @@ const userSignupController = async (req, res) => {
           phoneNumber: user.phoneNumber,
           userProfilePic: user.userProfilePic,
           userQRcode: user.userQRcode,
+          role: user.role,
         },
         token,
       });
     }
   } catch (error) {
-    // console.log(error, "in provider signup router");
+    // console.log(error, "in user signup router");
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",

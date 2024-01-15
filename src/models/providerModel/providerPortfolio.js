@@ -4,6 +4,7 @@ const providerPortfolioModal = new mongoose.Schema({
   storeName: {
     type: String,
     // required: false,
+    index: true,
   },
   storeEmail: {
     type: String,
@@ -13,14 +14,17 @@ const providerPortfolioModal = new mongoose.Schema({
   storeCategory: {
     type: String,
     // required: false,
+    index: true,
   },
   storeAddress: {
     type: String,
     // required: false,
+    index: true,
   },
   storeDescription: {
     type: String,
     // required: false,
+    index: true,
   },
   storeWebsite: {
     type: String,
@@ -33,6 +37,7 @@ const providerPortfolioModal = new mongoose.Schema({
   storeSubCategory: {
     type: String,
     // required: false,
+    index: true,
   },
   storeThumbNail: {
     type: String,
@@ -47,6 +52,14 @@ const providerPortfolioModal = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+});
+
+providerPortfolioModal.index({
+  storeName: 1,
+  storeCategory: 1,
+  storeSubCategory: 1,
+  storeAddress: 1,
+  storeDescription: 1,
 });
 
 module.exports = mongoose.model("ProviderPortfolio", providerPortfolioModal);
