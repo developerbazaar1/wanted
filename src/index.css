@@ -2608,10 +2608,6 @@ input[type="checkbox"] {
 }
 
 @media screen and (min-width: 772px) {
-  .top__nav {
-    padding: 0 70px;
-  }
-
   .top_button_nav {
     display: flex;
     justify-content: flex-end;
@@ -2889,7 +2885,7 @@ input[type="checkbox"] {
 
 @media screen and (min-width: 772px) {
   .top__nav {
-    padding: 3px 70px;
+    padding: 3px 37px;
   }
 
   .top_button_nav {
@@ -2933,7 +2929,7 @@ input[type="checkbox"] {
   min-height: calc(100vh - 50px);
   margin-top: 20px;
   /* padding: 30px; */
-  padding: 15px 66px 30px 66px;
+  padding: 15px 43px 30px 43px;
   /* padding: 15px 49px 10px 49px; */
   /* background-color: #e5e5e5; */
   /* background-color: #fafeff; */

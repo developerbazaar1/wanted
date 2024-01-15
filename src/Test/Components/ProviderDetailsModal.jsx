@@ -1,13 +1,24 @@
 import Modal from "react-bootstrap/Modal";
+import { useState } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import CatIcon from "../../assets/Development/FoodAndBeverage.png";
+import phoneCall from "../../assets/Development/phonecall.png";
+import locationIcon from "../../assets/Development/placeholder.png";
+import webIcon from "../../assets/Development/web.png";
+import Email from "../../assets/Development/email.png";
 const ProviderDetailsModal = ({
   showProviderDetialsModal,
   setShowProviderDetialsModal,
   portfolio,
 }) => {
+  const [showFullDescription, setShowFullDescription] = useState(false);
   function handleCloseModal() {
     setShowProviderDetialsModal(false);
+  }
+
+  function handleReadMore() {
+    setShowFullDescription(!showFullDescription);
   }
   return (
     <Modal
@@ -21,63 +32,76 @@ const ProviderDetailsModal = ({
           <RxCross2 size={25} color="black" className="pointer" />
         </div>
         <h4 className="text-center">Provider Details</h4>
-        <div className="row mb-1">
-          <div className="details-left-container col-lg-6 col-12">
-            <div className="row mb-1">
-              <div className="col-5 store-detaisl-label"> Name:</div>
-              <div className="col-7 store-details-info">
-                {portfolio?.storeName}
-              </div>
-            </div>
-            <div className="row mb-1">
-              <div className="col-5 store-detaisl-label"> Email:</div>
-              <div className="col-7 store-details-info">
-                {" "}
-                {portfolio?.storeEmail}
-              </div>
-            </div>
-            <div className="row mb-1">
-              <div className="col-5 store-detaisl-label"> Contact:</div>
-              <div className="col-7 store-details-info">
-                {" "}
-                {portfolio?.storeContactDetails}
-              </div>
-            </div>
-          </div>
+        <div className="frame-parent">
+          <div className="frame-wrapper">
+            <div className="raybella-nails-parent">
+              <div className="raybella-nails"> {portfolio?.storeName}</div>
 
-          {/* right container start */}
-          <div className="details-right-container col-lg-6 col-12">
-            <div className="row mb-1">
-              <div className="col-5 store-detaisl-label"> Website:</div>
-              <div className="col-7 store-details-info">
-                {" "}
-                <Link to={portfolio?.storeWebsite} target="_blank">
-                  Website Url
-                </Link>
+              <div className="row"></div>
+              <div className="frame-group">
+                <div className="rectangle-parent">
+                  <img className="frame-child" alt="" src={locationIcon} />
+
+                  <div className="north-lake-shore">
+                    {portfolio?.storeAddress}
+                  </div>
+                </div>
+                <div className="rectangle-group">
+                  <img className="frame-item" alt="" src={CatIcon} />
+
+                  <div className="north-lake-shore ms-1">Beauty & Spa</div>
+                  <div className="north-lake-shore">/</div>
+                  <div className="north-lake-shore">Salon</div>
+                </div>
               </div>
-            </div>
-            <div className="row mb-1">
-              <div className="col-5 store-detaisl-label"> Category:</div>
-              <div className="col-7 store-details-info">
-                {portfolio?.storeCategory}
-              </div>
-            </div>
-            <div className="row mb-1">
-              <div className="col-5 store-detaisl-label">Sub-Category:</div>
-              <div className="col-7 store-details-info">
-                {portfolio?.storeSubCategory}
+              <div className="frame-group ms-1">
+                <div className="rectangle-group">
+                  <img className="frame-item" alt="" src={webIcon} />
+
+                  <Link target="_blank" className="north-lake-shore ">
+                    Web Site
+                  </Link>
+                </div>
+                <div className="rectangle-group">
+                  <img className="frame-item" alt="" src={phoneCall} />
+
+                  <div className="north-lake-shore">
+                    {portfolio?.storeContactDetails}
+                  </div>
+                </div>
+                <div className="rectangle-group">
+                  <img className="frame-item" alt="" src={Email} />
+
+                  <div className="north-lake-shore">
+                    {portfolio?.storeEmail}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className="col-12">
-            <div className="row mb-1">
-              <div className="store-detaisl-label col-3"> Location:</div>
-              <div className="col-9">{portfolio?.storeAddress}</div>
+          <div className="about-this-service-parent">
+            <div className="about-this-service">About This Service</div>
+            <div className="promotional-value-expires">
+              {showFullDescription ? (
+                <>{portfolio?.storeDescription}</>
+              ) : (
+                <>
+                  {portfolio?.storeDescription?.slice(0, 250)}
+                  <button
+                    onClick={handleReadMore}
+                    style={{
+                      color: "green",
+                      border: "0",
+                      backgroundColor: "unset",
+                      padding: "0",
+                    }}
+                    className="read-more-link pointer ms-1"
+                  >
+                    Read More
+                  </button>
+                </>
+              )}
             </div>
-          </div>
-          <div className="col-12">
-            <div className="store-detaisl-label">Description:</div>
-            <p className="">{portfolio?.storeDescription}</p>
           </div>
         </div>
       </Modal.Body>

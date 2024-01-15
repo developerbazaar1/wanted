@@ -85,14 +85,22 @@ const PaymentHistroy = () => {
                       <td className="amount">£ {payment?.amount}</td>
 
                       {payment?.status ? (
-                        <td className="pay-recieved">Received</td>
+                        <td className="pay-recieved">
+                          <span
+                            className="badge custom-badge"
+                            style={{
+                              color: "black",
+                              backgroundColor: "#2df54f",
+                            }}
+                          >
+                            Received
+                          </span>
+                        </td>
                       ) : (
-                        <td
-                          style={{
-                            color: "red",
-                          }}
-                        >
-                          Canceled
+                        <td>
+                          <span className="badge text-bg-danger custom-badge">
+                            Canceled
+                          </span>
                         </td>
                       )}
                       <td></td>

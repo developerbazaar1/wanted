@@ -62,7 +62,7 @@ const DashBoard = () => {
         )}
 
         {/* <!-- :: card row start here --> */}
-        <div className="row">
+        <div className="row mt-4 mb-4">
           {/* <!-- :: card 01 --> */}
           <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
             <Link to="/advert" className="db-card-redirect">

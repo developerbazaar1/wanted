@@ -96,7 +96,7 @@ th {
 
 @media screen and (min-width: 650px) {
   .vendor_nav > div {
-    margin: 0 4rem;
+    margin: 0 2rem;
   }
 
   .vendor_profile_name,
@@ -920,7 +920,7 @@ span.plan-month {
 }
 .advert__tabel_container {
   overflow: scroll;
-  max-width: 1195px !important;
+  /* max-width: 1195px !important; */
   overflow-y: auto;
   width: 100%;
   max-width: 100%;
@@ -1001,8 +1001,8 @@ span.plan-month {
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 54px;
+  height: 24px;
 }
 
 .switch input {
@@ -1023,7 +1023,7 @@ span.plan-month {
   transition: 0.4s;
 }
 
-.slider:before {
+/* .slider:before {
   position: absolute;
   content: "";
   height: 26px;
@@ -1031,6 +1031,18 @@ span.plan-month {
   left: 4px;
   bottom: 4px;
   background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+} */
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 6px;
+  bottom: 4px;
+  background-color: #fff;
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -1168,9 +1180,7 @@ input:checked + .slider:before {
     text-align: -webkit-right;
   }
   .advert-content {
-    /* margin-top: 20px; */
-
-    padding: 15px 66px 0px 66px;
+    padding: 15px 43px 0px 43px;
     -webkit-transition: margin-left 0.3s ease;
     -o-transition: margin-left 0.3s ease;
     transition: margin-left 0.3s ease;

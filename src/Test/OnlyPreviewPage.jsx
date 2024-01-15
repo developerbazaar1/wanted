@@ -30,7 +30,7 @@ const OnlyAdvertProductPreview = () => {
     setLoading(true);
     getOnlyAdvertPreviewData(token, advertid, user?.id)
       .then((res) => {
-        console.log(res?.data?.advertPreview);
+        // console.log(res?.data?.advertPreview);
         setpreviewData({
           data: res?.data?.advertPreview,
           status: "successfull",

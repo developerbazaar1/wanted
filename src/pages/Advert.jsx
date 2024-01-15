@@ -10,11 +10,14 @@ import Swal from "sweetalert2";
 import NoDataFound from "../components/NoDataFound";
 import NoAdvertImg from "../assets/NoAdvert.png";
 import { BiRepost } from "react-icons/bi";
+import { PiShareFat } from "react-icons/pi";
 import { TiEyeOutline } from "react-icons/ti";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { VscOpenPreview } from "react-icons/vsc";
 import CustomPagination from "../components/CustomePagination";
 const Advert = () => {
   const [loading, setLoading] = useState(false);
@@ -180,13 +183,13 @@ const Advert = () => {
             </div>
           </div>
 
-          <div className="advert__tabel_container">
+          <div className="advert__tabel_container mt-4 mb-3">
             <div className="advert-table">
               <table className="table">
                 <thead className="r-thed">
                   <tr className="text-center">
                     <th>S.No.</th>
-                    <th>Advert Name</th>
+                    <th className="text-start">Advert Name</th>
                     <th>Where To Show</th>
                     <th>Advert Price</th>
                     <th>Creation Date</th>
@@ -203,7 +206,7 @@ const Advert = () => {
                         <td className="serial">
                           {index + 1 + indexOfFirstItem}
                         </td>
-                        <td className="advert_name_cell">
+                        <td className="advert_name_cell text-start">
                           {advert?.advertTitle}
                         </td>
                         <td className="user">{advert?.whereToShow}</td>
@@ -258,7 +261,8 @@ const Advert = () => {
                                   state={{ advertid: advert._id }}
                                   className="advert-preview manage-advert-btn"
                                 >
-                                  <TiEyeOutline size={21} />
+                                  <VscOpenPreview size={19} />
+
                                   <span>Preview</span>
                                 </Link>
                               </li>
@@ -268,7 +272,7 @@ const Advert = () => {
                                   state={{ _id: advert._id }}
                                   className="postAgain-ling manage-advert-btn"
                                 >
-                                  <BiRepost size={20} />
+                                  <PiShareFat size={20} />
                                   <span>Post Again</span>
                                 </Link>
                               </li>
@@ -298,7 +302,7 @@ const Advert = () => {
                                 className="pointer mt-2 delete_advert manage-advert-btn"
                                 onClick={() => handleDelete(advert._id)}
                               >
-                                <RiDeleteBinLine size={19} />
+                                <AiOutlineDelete size={19} />
                                 <span>Delete</span>
                               </li>
                             </ul>
