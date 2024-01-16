@@ -25,15 +25,10 @@ const EditAdvertData = () => {
   const [refresh, setRefresh] = useState(false);
   const { user, token } = useAuth();
   const fileInputRef = useRef(null);
-  // const [selectedSubscription, setselectedSubscription] = useState(null);
   const [advert, setAdvert] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState();
   const { subcategory } = useSubCategory();
   const { subsubcategory } = useSubSubCategory();
   const { category } = useCategory();
-
-  // handle drag and drop
-  // console.log(state);
 
   const {
     register,
@@ -111,7 +106,8 @@ const EditAdvertData = () => {
   };
 
   const handleAdvertUpdate = (formData) => {
-    console.log("function is firing");
+    console.log("function is firing", formData);
+    return;
     setLoading(true);
     const data = castEditadvertData(formData, advert?._id, user?.id);
     // console.log("inside the advert update", formData);

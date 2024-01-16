@@ -167,8 +167,6 @@ const EditAdvertProducts = ({
       });
   };
 
-  // console.log(product);
-
   useEffect(() => {
     if (addProductImg.length > 0) {
       setValue(`oldProductImg[${i}]`, addProductImg);
@@ -188,7 +186,10 @@ const EditAdvertProducts = ({
       setselectedSubCategory(subcat);
     }
     setDefaultSubCategory();
-    console.log("inside edit advert Products");
+
+    setValue(`products[${i}].subcategory`, product?.subcategory);
+    setValue(`products[${i}].subcategory`, product?.subsubcategory);
+    // console.log("inside edit advert Products");
   }, []);
 
   return (
