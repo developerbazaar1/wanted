@@ -107,7 +107,7 @@ const EditAdvertData = () => {
 
   const handleAdvertUpdate = (formData) => {
     console.log("function is firing", formData);
-    return;
+    // return;
     setLoading(true);
     const data = castEditadvertData(formData, advert?._id, user?.id);
     // console.log("inside the advert update", formData);
@@ -610,9 +610,9 @@ const EditAdvertData = () => {
                         setLoading={setLoading}
                         token={token}
                         setRefresh={setRefresh}
-                        subcategory={subcategory}
-                        category={category}
-                        subsubcategory={subsubcategory}
+                        Localsubcategory={subcategory}
+                        Localcategory={category}
+                        Localsubsubcategory={subsubcategory}
                         errors={errors}
                       />
                     ))}

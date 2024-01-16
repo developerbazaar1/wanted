@@ -25,9 +25,9 @@ const EditAdvertProducts = ({
   setLoading,
   token,
   setRefresh,
-  subcategory,
-  category,
-  subsubcategory,
+  Localsubcategory,
+  Localcategory,
+  Localsubsubcategory,
 }) => {
   // console.log(product);
   const [settings] = useState({
@@ -130,7 +130,7 @@ const EditAdvertProducts = ({
   const handleCategoryChange = (event) => {
     console.log("inside the subCategory");
     const selectedValue = event.target.value;
-    const selectedCat = category.find(
+    const selectedCat = Localcategory.find(
       (cat) => cat.categoryName === selectedValue
     );
     setSelectedCategory(selectedCat);
@@ -138,7 +138,7 @@ const EditAdvertProducts = ({
   const handleSubCategoryChange = (event) => {
     console.log("inside the subSubCategory");
     const selectedValue = event.target.value;
-    const selectedSubCat = subcategory.find(
+    const selectedSubCat = Localsubcategory.find(
       (cat) => cat.subCategoryName === selectedValue
     );
 
@@ -174,13 +174,13 @@ const EditAdvertProducts = ({
   }, [addProductImg]);
 
   useEffect(() => {
-    let subCat = category?.find(
+    let subCat = Localcategory?.find(
       (element) => element?.categoryName === product?.category
     );
     setSelectedCategory(subCat);
 
     function setDefaultSubCategory() {
-      let subcat = subcategory?.find(
+      let subcat = Localsubcategory?.find(
         (element) => element?.subCategoryName === product?.subcategory
       );
       setselectedSubCategory(subcat);
@@ -299,7 +299,7 @@ const EditAdvertProducts = ({
                         })}
                         onChange={handleCategoryChange}
                       >
-                        {category?.map((cat) => (
+                        {Localcategory?.map((cat) => (
                           <option key={cat._id}>{cat.categoryName}</option>
                         ))}
                       </select>
@@ -324,19 +324,16 @@ const EditAdvertProducts = ({
                         onClick={(e) => handleSubCategoryChange(e)}
                       >
                         {selectedCategory &&
-                          subcategory
-                            ?.filter(
-                              (item) =>
-                                item.category_id === selectedCategory?._id
-                            )
-                            .map((subcate) => (
-                              <option
-                                key={subcate._id}
-                                value={`${subcate?.subCategoryName}`}
-                              >
-                                {subcate?.subCategoryName}
-                              </option>
-                            ))}
+                          Localsubcategory?.filter(
+                            (item) => item.category_id === selectedCategory?._id
+                          ).map((subcate) => (
+                            <option
+                              key={subcate._id}
+                              value={`${subcate?.subCategoryName}`}
+                            >
+                              {subcate?.subCategoryName}
+                            </option>
+                          ))}
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
@@ -354,20 +351,17 @@ const EditAdvertProducts = ({
                       >
                         <option value="">Select Sub-Sub Category</option>
                         {selectedSubCategory &&
-                          subsubcategory
-                            ?.filter(
-                              (item) =>
-                                item?.subcategory_id ===
-                                selectedSubCategory?._id
-                            )
-                            .map((subSubcate) => (
-                              <option
-                                key={subSubcate._id}
-                                value={`${subSubcate?.subSubCategoryName}`}
-                              >
-                                {subSubcate?.subSubCategoryName}
-                              </option>
-                            ))}
+                          Localsubsubcategory?.filter(
+                            (item) =>
+                              item?.subcategory_id === selectedSubCategory?._id
+                          ).map((subSubcate) => (
+                            <option
+                              key={subSubcate._id}
+                              value={`${subSubcate?.subSubCategoryName}`}
+                            >
+                              {subSubcate?.subSubCategoryName}
+                            </option>
+                          ))}
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
