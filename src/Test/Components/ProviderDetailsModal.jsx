@@ -37,16 +37,17 @@ const ProviderDetailsModal = ({
             <div className="raybella-nails-parent">
               <div className="raybella-nails"> {portfolio?.storeName}</div>
 
-              <div className="row"></div>
-              <div className="frame-group">
-                <div className="rectangle-parent">
-                  <img className="frame-child" alt="" src={locationIcon} />
+              <div className="row">
+                <div className="frame-group">
+                  <div className="rectangle-parent">
+                    <img className="frame-child" alt="" src={locationIcon} />
 
-                  <div className="north-lake-shore">
-                    {portfolio?.storeAddress}
+                    <div className="north-lake-shore">
+                      {portfolio?.storeAddress}
+                    </div>
                   </div>
                 </div>
-                <div className="rectangle-group">
+                <div className="d-flex ms-1 mt-2">
                   <img className="frame-item" alt="" src={CatIcon} />
 
                   <div className="north-lake-shore ms-1">Beauty & Spa</div>
@@ -54,7 +55,8 @@ const ProviderDetailsModal = ({
                   <div className="north-lake-shore">Salon</div>
                 </div>
               </div>
-              <div className="frame-group ms-1">
+
+              <div className="frame-group provider-details-contact ms-1 mt-2">
                 <div className="rectangle-group">
                   <img className="frame-item" alt="" src={webIcon} />
 

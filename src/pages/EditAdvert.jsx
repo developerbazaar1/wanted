@@ -112,7 +112,6 @@ const EditAdvertData = () => {
 
   const handleAdvertUpdate = (formData) => {
     console.log("function is firing");
-    console.log(formData);
     setLoading(true);
     const data = castEditadvertData(formData, advert?._id, user?.id);
     // console.log("inside the advert update", formData);

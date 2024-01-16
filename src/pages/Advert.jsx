@@ -9,10 +9,7 @@ import { DatedFormated } from "../helper/ToDate";
 import Swal from "sweetalert2";
 import NoDataFound from "../components/NoDataFound";
 import NoAdvertImg from "../assets/NoAdvert.png";
-import { BiRepost } from "react-icons/bi";
 import { PiShareFat } from "react-icons/pi";
-import { TiEyeOutline } from "react-icons/ti";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -155,7 +152,7 @@ const Advert = () => {
               {/* <!-- top head --> */}
 
               <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-left self-center">
-                <div className="back-btn">
+                <div className="back-btn ">
                   <Link to=".." className="b-btn">
                     <IoIosArrowRoundBack size={24} />
                     Back
@@ -169,7 +166,7 @@ const Advert = () => {
               </div>
               <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
                 <div className="create-add-btn">
-                  <Link to="/addAdvert" className="add-adwart-btn">
+                  <Link to="/addAdvert" className="add-adwart-btn text-white">
                     Add A New Advert <IoMdAddCircleOutline size={22} />
                   </Link>
                 </div>
@@ -220,9 +217,8 @@ const Advert = () => {
                         {advert.advertStatus === "active" ? (
                           <td>
                             <span
-                              className="badge custom-badge"
+                              className="badge custom-badge text-white"
                               style={{
-                                color: "black",
                                 backgroundColor: "#2df54f",
                               }}
                             >
@@ -231,8 +227,8 @@ const Advert = () => {
                           </td>
                         ) : (
                           <td>
-                            <span className="badge text-bg-danger custom-badge">
-                              expired
+                            <span className="badge text-bg-danger custom-badge text-white">
+                              Expired
                             </span>
                           </td>
                         )}

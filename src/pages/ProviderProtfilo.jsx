@@ -201,7 +201,7 @@ const ProviderProtfilo = () => {
             <div className="row">
               {/* <!-- top head --> */}
 
-              <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-left self-center">
+              <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12 text-left self-center">
                 <div className="back-btn">
                   <Link to=".." className="b-btn">
                     <svg
@@ -239,7 +239,7 @@ const ProviderProtfilo = () => {
                   </p>
                 </div>
               </div>
-              <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
+              {/* <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
                 <div className="create-add-btn">
                   <Link to="/viewproducts" className="add-adwart-btn">
                     View/Add Your Store Products{" "}
@@ -269,9 +269,9 @@ const ProviderProtfilo = () => {
                     </svg>
                   </Link>
                 </div>
-              </div>
+              </div> */}
               {/* <!-- top image --> */}
-              <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-end">
+              <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12 text-end">
                 <div className="top-image">
                   <img className="t-img w-150" src={ProviderTop} />
                 </div>

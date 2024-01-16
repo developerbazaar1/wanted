@@ -440,7 +440,7 @@ const ProductForm = ({
                         src={preview}
                         style={{
                           width: "100%",
-                          height: "299px",
+                          height: "242px",
                           objectFit: "cover",
                         }}
                         alt={`Product ${i + 1} - Image ${imgIndex + 1}`}

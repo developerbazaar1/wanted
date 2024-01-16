@@ -87,9 +87,8 @@ const PaymentHistroy = () => {
                       {payment?.status ? (
                         <td className="pay-recieved">
                           <span
-                            className="badge custom-badge"
+                            className="badge custom-badge text-white"
                             style={{
-                              color: "black",
                               backgroundColor: "#2df54f",
                             }}
                           >
@@ -98,7 +97,7 @@ const PaymentHistroy = () => {
                         </td>
                       ) : (
                         <td>
-                          <span className="badge text-bg-danger custom-badge">
+                          <span className="badge text-bg-danger text-white custom-badge">
                             Canceled
                           </span>
                         </td>

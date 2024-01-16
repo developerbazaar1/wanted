@@ -50,8 +50,10 @@ const Reward = () => {
               </div>
               <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12 text-center self-center">
                 <div className="create-add-btn">
-                  <div className="text-info-rewards">
-                    <p>Rewards Can Only Redeem From Mobile App</p>
+                  <div className="text-info-rewards ">
+                    <p className="text-white">
+                      Rewards Can Only Redeem From Mobile App
+                    </p>
                   </div>
                 </div>
               </div>
@@ -76,7 +78,7 @@ const Reward = () => {
                     <th>Date</th>
                     <th>User Name</th>
                     <th>Reward Description</th>
-                    <th>Points Collected</th>
+                    <th width="20%">Points Collected</th>
                     <th>Rewards Used</th>
                   </tr>
                 </thead>
