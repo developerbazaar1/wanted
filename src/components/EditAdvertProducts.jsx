@@ -6,6 +6,11 @@ import { ImgSizeCheck } from "../helper/imageSizeCheck";
 import { ProctedApi } from "../config/axiosUtils";
 import Swal from "sweetalert2";
 import Slider from "react-slick";
+import {
+  useCategory,
+  useSubCategory,
+  useSubSubCategory,
+} from "../service/categoryhelper";
 const allowedTypes = [
   "image/jpeg",
   "image/png",
@@ -25,9 +30,6 @@ const EditAdvertProducts = ({
   setLoading,
   token,
   setRefresh,
-  Localsubcategory,
-  Localcategory,
-  Localsubsubcategory,
 }) => {
   // console.log(product);
   const [settings] = useState({
@@ -41,6 +43,11 @@ const EditAdvertProducts = ({
   const [newProductImgPreve, setNewProductImgPreve] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedSubCategory, setselectedSubCategory] = useState();
+  const Localcategory = useCategory().category;
+  const Localsubcategory = useSubCategory().subcategory;
+  const Localsubsubcategory = useSubSubCategory().subsubcategory;
+
+  // console.log("thsi is local my category", MyCate.category);
   const handleProductImageUpdate = (e, productIndex) => {
     e.preventDefault();
     let files = e.target.files;
@@ -185,10 +192,12 @@ const EditAdvertProducts = ({
       );
       setselectedSubCategory(subcat);
     }
-    setDefaultSubCategory();
+    if (product?.subcategory) {
+      setDefaultSubCategory();
+    }
 
-    // setValue(`products[${i}].subcategory`, product?.subcategory);
-    // setValue(`products[${i}].subcategory`, product?.subsubcategory);
+    setValue(`products[${i}].subcategory`, product?.subcategory);
+    setValue(`products[${i}].subsubcategory`, product?.subsubcategory);
     // console.log("inside edit advert Products");
   }, []);
 
@@ -307,22 +316,20 @@ const EditAdvertProducts = ({
                     </div>
                     <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
-                        htmlFor={`productcategory${i}`}
+                        htmlFor={`products[${i}].subcategory`}
                         className="mb-2 form-head"
                       >
                         Product Sub Category
                       </label>
                       <select
                         className="form-control"
-                        id={`productcategory${i}`}
-                        {...register(`products[${i}].subcategory`, {
-                          required: {
-                            value: true,
-                            message: "Product Category is Required",
-                          },
-                        })}
+                        id={`products[${i}].subcategory`}
+                        {...register(`products[${i}].subcategory`)}
                         onClick={(e) => handleSubCategoryChange(e)}
                       >
+                        {!product?.subcategory && (
+                          <option>Select Sub Category</option>
+                        )}
                         {selectedCategory &&
                           Localsubcategory?.filter(
                             (item) => item.category_id === selectedCategory?._id
