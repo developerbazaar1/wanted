@@ -197,9 +197,13 @@ const EditAdvertProducts = ({
     }
 
     setValue(`products[${i}].subcategory`, product?.subcategory);
-    setValue(`products[${i}].subsubcategory`, product?.subsubcategory);
+
+    if (product?.subsubcategory) {
+      setValue(`products[${i}].subsubcategory`, product?.subsubcategory);
+    }
+
     // console.log("inside edit advert Products");
-  }, []);
+  }, [product]);
 
   return (
     <>
@@ -292,14 +296,14 @@ const EditAdvertProducts = ({
                     </div>
                     <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
-                        htmlFor={`productcategory${i}`}
+                        htmlFor={`products[${i}].category`}
                         className="mb-2 form-head"
                       >
                         Product Category
                       </label>
                       <select
                         className="form-control"
-                        id={`productcategory${i}`}
+                        id={`products[${i}].category`}
                         {...register(`products[${i}].category`, {
                           required: {
                             value: true,
@@ -325,7 +329,7 @@ const EditAdvertProducts = ({
                         className="form-control"
                         id={`products[${i}].subcategory`}
                         {...register(`products[${i}].subcategory`)}
-                        onClick={(e) => handleSubCategoryChange(e)}
+                        onChange={(e) => handleSubCategoryChange(e)}
                       >
                         {!product?.subcategory && (
                           <option>Select Sub Category</option>
@@ -346,14 +350,14 @@ const EditAdvertProducts = ({
                     </div>
                     <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
-                        htmlFor={`productSubsubCategory${i}`}
+                        htmlFor={`products[${i}].subsubcategory`}
                         className="mb-2 form-head"
                       >
                         Product Sub-Sub Category
                       </label>
                       <select
                         className="form-control"
-                        id={`productSubsubCategory${i}`}
+                        id={`products[${i}].subsubcategory`}
                         {...register(`products[${i}].subsubcategory`)}
                       >
                         <option value="">Select Sub-Sub Category</option>
