@@ -37,12 +37,12 @@ const ProviderDetailsModal = ({
             <div className="raybella-nails-parent">
               <div className="raybella-nails"> {portfolio?.storeName}</div>
 
-              <div className="row">
+              <div className="row gap-2">
                 <div className="frame-group">
                   <div className="rectangle-parent">
                     <img className="frame-child" alt="" src={locationIcon} />
 
-                    <div className="north-lake-shore">
+                    <div className="north-lake-shore align-self-center">
                       {portfolio?.storeAddress}
                     </div>
                   </div>
@@ -50,9 +50,18 @@ const ProviderDetailsModal = ({
                 <div className="d-flex ms-1 mt-2">
                   <img className="frame-item" alt="" src={CatIcon} />
 
-                  <div className="north-lake-shore ms-1">Beauty & Spa</div>
+                  <div
+                    className="north-lake-shore"
+                    style={{
+                      marginLeft: "0.75rem",
+                    }}
+                  >
+                    {portfolio?.storeCategory}
+                  </div>
                   <div className="north-lake-shore">/</div>
-                  <div className="north-lake-shore">Salon</div>
+                  <div className="north-lake-shore">
+                    {portfolio?.storeSubCategory}
+                  </div>
                 </div>
               </div>
 
@@ -99,7 +108,7 @@ const ProviderDetailsModal = ({
                     }}
                     className="read-more-link pointer ms-1"
                   >
-                    Read More
+                    Read More &#8594;
                   </button>
                 </>
               )}

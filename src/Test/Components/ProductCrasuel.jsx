@@ -20,7 +20,7 @@ const ProductCrasuel = ({ product, unique }) => {
     <>
       <div className="col-sm-12 col-xs-12 col-md-6 col-lg-4 col-xl-4 col-lg-4">
         <div className="d-flex gap-2">
-          <h5 className="text-capitalize">{product?.productName}</h5>
+          <h5 className="text-capitalize">{product?.productName}</h5> ||
           <span>{product?.product_id}</span> ||
           <span className="preview_product_price">
             $ {product?.productPrice}
