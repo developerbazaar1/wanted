@@ -172,7 +172,6 @@ const EditAdvertData = () => {
         // Set selectedImage and fileName based on the existing advert data
         setSelectedImage(res.data.advert?.advertImage?.imgUrl);
         setfileName(res.data.advert?.advertImage?.imgName);
-        // ... (other code)
       })
       .catch((e) => {
         console.log(e);
