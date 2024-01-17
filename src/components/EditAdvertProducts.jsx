@@ -187,8 +187,8 @@ const EditAdvertProducts = ({
     }
     setDefaultSubCategory();
 
-    setValue(`products[${i}].subcategory`, product?.subcategory);
-    setValue(`products[${i}].subcategory`, product?.subsubcategory);
+    // setValue(`products[${i}].subcategory`, product?.subcategory);
+    // setValue(`products[${i}].subcategory`, product?.subsubcategory);
     // console.log("inside edit advert Products");
   }, []);
 

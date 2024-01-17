@@ -145,14 +145,34 @@ const EditAdvertData = () => {
       .then((res) => {
         console.log(res);
         setAdvert(res.data.advert);
-        let advert = res.data.advert;
-        setValue("advertTitle", advert?.advertTitle);
-        setValue("advertPostalCode", advert.advertPostalCode);
-        setValue("advertPrice", advert?.advertPrice);
-        setValue("advertOfferPrice", advert?.advertOfferPrice);
-        setValue("advertLocation", advert?.advertLocation);
-        setValue("advertDescription", advert?.advertDescription);
-        setValue("products", advert?.products);
+        // Set values for non-dropdown fields
+        setValue("advertTitle", res.data.advert?.advertTitle);
+        setValue("advertPostalCode", res.data.advert?.advertPostalCode);
+        setValue("advertPrice", res.data.advert?.advertPrice);
+        setValue("advertOfferPrice", res.data.advert?.advertOfferPrice);
+        setValue("advertLocation", res.data.advert?.advertLocation);
+        setValue("advertDescription", res.data.advert?.advertDescription);
+        setValue("products", res.data.advert?.products);
+        // Set value for the 'addProduct' radio button group
+        setValue(
+          "addProduct",
+          res.data.advert?.products.length > 0
+            ? "YesAddProduct"
+            : "NoAddProduct"
+        );
+        // Set value for 'numberofProduct' dropdown
+        setValue("numberofProduct", res.data.advert?.products.length || "1");
+        // Set value for subcategory dropdown based on the first product's subcategory
+        if (res.data.advert?.products.length > 0) {
+          setValue(
+            "advertSubCategory",
+            res.data.advert?.products[0]?.subcategory
+          );
+        }
+        // Set selectedImage and fileName based on the existing advert data
+        setSelectedImage(res.data.advert?.advertImage?.imgUrl);
+        setfileName(res.data.advert?.advertImage?.imgName);
+        // ... (other code)
       })
       .catch((e) => {
         console.log(e);
