@@ -145,26 +145,6 @@ const EditAdvertData = () => {
       .then((res) => {
         // console.log(res);
         setAdvert(res.data.advert);
-        console.log(res.data.advert);
-
-        const {
-          advertTitle,
-          advertPostalCode,
-          advertPrice,
-          advertOfferPrice,
-          advertLocation,
-          advertDescription,
-          products,
-        } = res.data.advert;
-
-        // Set form values asynchronously
-        // setValue("advertTitle", advertTitle);
-        // setValue("advertPostalCode", advertPostalCode);
-        // setValue("advertPrice", advertPrice);
-        // setValue("advertOfferPrice", advertOfferPrice);
-        // setValue("advertLocation", advertLocation);
-        // setValue("advertDescription", advertDescription);
-        // setValue("products", products);
       })
       .catch((e) => {
         console.log(e);
@@ -183,7 +163,7 @@ const EditAdvertData = () => {
     loadAdvert();
   }, [refresh]);
 
-  console.log("live test");
+  // console.log("live test");
 
   // variable to store number of products to be added
   let product = watch("addProduct");

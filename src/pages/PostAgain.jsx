@@ -30,7 +30,6 @@ const PostAgain = () => {
   const fileInputRef = useRef(null);
   // const [selectedSubscription, setselectedSubscription] = useState(null);
   const [advert, setAdvert] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState();
   const { subcategory } = useSubCategory();
   const { subsubcategory } = useSubSubCategory();
   const { category } = useCategory();
@@ -42,7 +41,7 @@ const PostAgain = () => {
     register,
     handleSubmit,
     setValue,
-    // reset,
+    reset,
     watch,
     formState: { errors },
   } = useForm();
@@ -156,19 +155,7 @@ const PostAgain = () => {
     setLoading(true);
     ProctedApi.getSingleAdvert(token, _id)
       .then((res) => {
-        console.log(res);
-        setAdvert(res.data.advert);
-        let advert = res.data.advert;
-        setValue("advertTitle", advert?.advertTitle);
-        // setValue("advertCategory", advert?.advertCategory);
-        // setValue("advertSubCategory", advert?.advertSubCategory);
-        setValue("advertPostalCode", advert.advertPostalCode);
-        setValue("advertPrice", advert?.advertPrice);
-        setValue("advertOfferPrice", advert?.advertOfferPrice);
-        setValue("advertLocation", advert?.advertLocation);
-        setValue("advertDescription", advert?.advertDescription);
-        setValue("products", advert?.products);
-        setValue("whereToShow", advert?.whereToShow);
+        setAdvert(res?.data?.advert);
       })
       .catch((e) => {
         console.log(e);
@@ -179,11 +166,8 @@ const PostAgain = () => {
   }, [_id, refresh]);
 
   useEffect(() => {
-    let subCat = category?.find(
-      (element) => element?.categoryName === advert?.advertCategory
-    );
-    setSelectedCategory(subCat);
-  }, [advert, refresh]);
+    reset(advert);
+  }, [advert]);
 
   // console.log(getValues("porducts"));
   let product = watch("addProduct");
@@ -691,10 +675,14 @@ const PostAgain = () => {
 
                   {/* //components for advert product */}
                   {advert?.products?.length > 0 &&
-                    advert?.products?.map((product, i) => (
+                    advert?.products?.map((productEelement, i) => (
                       <EditAdvertProducts
-                        key={product._id}
-                        product={product}
+                        Products={advert?.products}
+                        key={productEelement._id}
+                        productEelement={productEelement}
+                        Localsubcategory={subcategory}
+                        Localsubsubcategory={subsubcategory}
+                        Localcategory={category}
                         i={i}
                         register={register}
                         setValue={setValue}
@@ -703,9 +691,7 @@ const PostAgain = () => {
                         setLoading={setLoading}
                         token={token}
                         setRefresh={setRefresh}
-                        category={category}
-                        subcategory={subcategory}
-                        subsubcategory={subsubcategory}
+                        errors={errors}
                       />
                     ))}
                 </div>
