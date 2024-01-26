@@ -34,21 +34,10 @@ const EditAdvertData = () => {
     register,
     handleSubmit,
     setValue,
-    // reset,
+    reset,
     watch,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      advertTitle: "",
-      advertPostalCode: "",
-      advertPrice: "",
-      advertOfferPrice: "",
-      advertLocation: "",
-      advertDescription: "",
-      products: "",
-    },
-    advert,
-  });
+  } = useForm();
 
   const handleImageDrop = (e) => {
     e.preventDefault();
@@ -169,13 +158,13 @@ const EditAdvertData = () => {
         } = res.data.advert;
 
         // Set form values asynchronously
-        setValue("advertTitle", advertTitle);
-        setValue("advertPostalCode", advertPostalCode);
-        setValue("advertPrice", advertPrice);
-        setValue("advertOfferPrice", advertOfferPrice);
-        setValue("advertLocation", advertLocation);
-        setValue("advertDescription", advertDescription);
-        setValue("products", products);
+        // setValue("advertTitle", advertTitle);
+        // setValue("advertPostalCode", advertPostalCode);
+        // setValue("advertPrice", advertPrice);
+        // setValue("advertOfferPrice", advertOfferPrice);
+        // setValue("advertLocation", advertLocation);
+        // setValue("advertDescription", advertDescription);
+        // setValue("products", products);
       })
       .catch((e) => {
         console.log(e);
@@ -187,8 +176,14 @@ const EditAdvertData = () => {
   }
 
   useEffect(() => {
+    reset(advert);
+  }, [advert]);
+
+  useEffect(() => {
     loadAdvert();
   }, [refresh]);
+
+  console.log("live test");
 
   // variable to store number of products to be added
   let product = watch("addProduct");
