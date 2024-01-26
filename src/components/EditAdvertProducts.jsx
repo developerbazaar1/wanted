@@ -6,11 +6,6 @@ import { ImgSizeCheck } from "../helper/imageSizeCheck";
 import { ProctedApi } from "../config/axiosUtils";
 import Swal from "sweetalert2";
 import Slider from "react-slick";
-import {
-  useCategory,
-  useSubCategory,
-  useSubSubCategory,
-} from "../service/categoryhelper";
 const allowedTypes = [
   "image/jpeg",
   "image/png",
@@ -21,7 +16,10 @@ const allowedTypes = [
 ];
 
 const EditAdvertProducts = ({
-  product,
+  Localcategory,
+  Localsubcategory,
+  Localsubsubcategory,
+  productEelement,
   i,
   register,
   setValue,
@@ -43,9 +41,6 @@ const EditAdvertProducts = ({
   const [newProductImgPreve, setNewProductImgPreve] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedSubCategory, setselectedSubCategory] = useState();
-  const Localcategory = useCategory().category;
-  const Localsubcategory = useSubCategory().subcategory;
-  const Localsubsubcategory = useSubSubCategory().subsubcategory;
 
   // console.log("thsi is local my category", MyCate.category);
   const handleProductImageUpdate = (e, productIndex) => {
@@ -118,7 +113,7 @@ const EditAdvertProducts = ({
       return;
     }
     setLoading(true);
-    ProctedApi.deleteadvertProduct(token, advertId, product._id)
+    ProctedApi.deleteadvertProduct(token, advertId, productEelement._id)
       .then((res) => {
         console.log(res);
         Swal.fire("Deleted!", "Your item has been deleted.", "success");
@@ -135,7 +130,7 @@ const EditAdvertProducts = ({
   };
 
   const handleCategoryChange = (event) => {
-    console.log("inside the subCategory");
+    // console.log("inside the subCategory");
     const selectedValue = event.target.value;
     const selectedCat = Localcategory.find(
       (cat) => cat.categoryName === selectedValue
@@ -143,7 +138,7 @@ const EditAdvertProducts = ({
     setSelectedCategory(selectedCat);
   };
   const handleSubCategoryChange = (event) => {
-    console.log("inside the subSubCategory");
+    // console.log("inside the subSubCategory");
     const selectedValue = event.target.value;
     const selectedSubCat = Localsubcategory.find(
       (cat) => cat.subCategoryName === selectedValue
@@ -158,7 +153,12 @@ const EditAdvertProducts = ({
       return;
     }
     e.stopPropagation();
-    ProctedApi.deleteadvertProductImage(token, advertId, product._id, imgId)
+    ProctedApi.deleteadvertProductImage(
+      token,
+      advertId,
+      productEelement._id,
+      imgId
+    )
       .then((res) => {
         console.log(res.data);
         console.log(res.data.message);
@@ -173,41 +173,50 @@ const EditAdvertProducts = ({
         setLoading(false);
       });
   };
-
+  // useeffect to set the new image of old product
   useEffect(() => {
     if (addProductImg.length > 0) {
       setValue(`oldProductImg[${i}]`, addProductImg);
     }
   }, [addProductImg]);
 
+  //code to set the value of product category and sub category
   useEffect(() => {
-    let subCat = Localcategory?.find(
-      (element) => element?.categoryName === product?.category
+    // find the default category and set it to the selectedCategory state
+    let Cate = Localcategory?.find(
+      (element) => element?.categoryName === productEelement?.category
     );
-    setSelectedCategory(subCat);
+    setSelectedCategory(Cate);
 
     function setDefaultSubCategory() {
       let subcat = Localsubcategory?.find(
-        (element) => element?.subCategoryName === product?.subcategory
+        (element) => element?.subCategoryName === productEelement?.subcategory
       );
       setselectedSubCategory(subcat);
-    }
-    if (product?.subcategory) {
-      setDefaultSubCategory();
+      // console.log("default sub cateogry", subcat);
     }
 
-    setValue(`products[${i}].subcategory`, product?.subcategory);
+    setDefaultSubCategory();
 
-    if (product?.subsubcategory) {
-      setValue(`products[${i}].subsubcategory`, product?.subsubcategory);
-    }
+    // setValue("products", Products);
+    // setValue(`products[${i}].subcategory`, productEelement?.subcategory);
+
+    // if (productEelement?.subsubcategory) {
+    //   setValue(
+    //     `products[${i}].subsubcategory`,
+    //     productEelement?.subsubcategory
+    //   );
+    // }
 
     // console.log("inside edit advert Products");
-  }, [product]);
+  }, []);
 
   return (
     <>
-      <div className="product-details-container mb-4" key={product?._id}>
+      <div
+        className="product-details-container mb-4"
+        key={productEelement?._id}
+      >
         <div className="col-md-12-px-0 product-padding">
           <div className="row">
             <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
@@ -226,7 +235,7 @@ const EditAdvertProducts = ({
                         type="text"
                         placeholder="Enter Product Name"
                         id={`productitle${i}`}
-                        {...register(`products[${i}].productTitle`)}
+                        {...register(`products.${i}.productTitle`)}
                       />
                     </div>
 
@@ -242,7 +251,7 @@ const EditAdvertProducts = ({
                         type="text"
                         placeholder="Enter Product Name"
                         id={`productName${i}`}
-                        {...register(`products[${i}].productName`)}
+                        {...register(`products.${i}.productName`)}
                       />
                     </div>
                     <div className="mb-1 col-6">
@@ -257,7 +266,7 @@ const EditAdvertProducts = ({
                         type="text"
                         placeholder="Enter Product Id"
                         id={`product_id${i}`}
-                        {...register(`products[${i}].product_id`, {
+                        {...register(`products.${i}.product_id`, {
                           pattern: {
                             value: /^[ A-Za-z0-9._%+-]*$/,
                             message: "Invalid Product iD",
@@ -282,7 +291,7 @@ const EditAdvertProducts = ({
                         type="text"
                         placeholder="Enter Product Price"
                         id={`productPrice${i}`}
-                        {...register(`products[${i}].productPrice`, {
+                        {...register(`products.${i}.productPrice`, {
                           pattern: {
                             value: /^\d+$/,
                             message: "Invalid Product Price",
@@ -296,7 +305,7 @@ const EditAdvertProducts = ({
                     </div>
                     <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
-                        htmlFor={`products[${i}].category`}
+                        htmlFor={`products${i}.category`}
                         className="mb-2 form-head"
                       >
                         Product Category
@@ -304,13 +313,13 @@ const EditAdvertProducts = ({
                       <select
                         className="form-control"
                         id={`products[${i}].category`}
-                        {...register(`products[${i}].category`, {
+                        {...register(`products.${i}.category`, {
                           required: {
                             value: true,
                             message: "Product Category is Required",
                           },
                         })}
-                        onChange={handleCategoryChange}
+                        onClick={handleCategoryChange}
                       >
                         {Localcategory?.map((cat) => (
                           <option key={cat._id}>{cat.categoryName}</option>
@@ -320,7 +329,7 @@ const EditAdvertProducts = ({
                     </div>
                     <div className="position-relative col-12 col-sm-6 col-md-12 col-lg-12 col-xl-6">
                       <label
-                        htmlFor={`products[${i}].subcategory`}
+                        htmlFor={`products${i}.subcategory`}
                         className="mb-2 form-head"
                       >
                         Product Sub Category
@@ -328,23 +337,22 @@ const EditAdvertProducts = ({
                       <select
                         className="form-control"
                         id={`products[${i}].subcategory`}
-                        {...register(`products[${i}].subcategory`)}
-                        onChange={(e) => handleSubCategoryChange(e)}
+                        {...register(`products.${i}.subcategory`)}
+                        onClick={(e) => handleSubCategoryChange(e)}
                       >
-                        {!product?.subcategory && (
+                        {!productEelement?.subcategory && (
                           <option>Select Sub Category</option>
                         )}
-                        {selectedCategory &&
-                          Localsubcategory?.filter(
-                            (item) => item.category_id === selectedCategory?._id
-                          ).map((subcate) => (
-                            <option
-                              key={subcate._id}
-                              value={`${subcate?.subCategoryName}`}
-                            >
-                              {subcate?.subCategoryName}
-                            </option>
-                          ))}
+                        {Localsubcategory?.filter(
+                          (item) => item.category_id === selectedCategory?._id
+                        ).map((subcate) => (
+                          <option
+                            key={subcate._id}
+                            value={`${subcate?.subCategoryName}`}
+                          >
+                            {subcate?.subCategoryName}
+                          </option>
+                        ))}
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
@@ -358,21 +366,20 @@ const EditAdvertProducts = ({
                       <select
                         className="form-control"
                         id={`products[${i}].subsubcategory`}
-                        {...register(`products[${i}].subsubcategory`)}
+                        {...register(`products.${i}.subsubcategory`)}
                       >
                         <option value="">Select Sub-Sub Category</option>
-                        {selectedSubCategory &&
-                          Localsubsubcategory?.filter(
-                            (item) =>
-                              item?.subcategory_id === selectedSubCategory?._id
-                          ).map((subSubcate) => (
-                            <option
-                              key={subSubcate._id}
-                              value={`${subSubcate?.subSubCategoryName}`}
-                            >
-                              {subSubcate?.subSubCategoryName}
-                            </option>
-                          ))}
+                        {Localsubsubcategory?.filter(
+                          (item) =>
+                            item?.subcategory_id === selectedSubCategory?._id
+                        ).map((subSubcate) => (
+                          <option
+                            key={subSubcate._id}
+                            value={`${subSubcate?.subSubCategoryName}`}
+                          >
+                            {subSubcate?.subSubCategoryName}
+                          </option>
+                        ))}
                       </select>
                       <IoIosArrowDown className="category-dropw-down-toogle" />
                     </div>
@@ -419,6 +426,8 @@ const EditAdvertProducts = ({
                 </div>
               </div>
             </div>
+
+            {/* crasule to show product images  */}
             <div className="col-md-6 col-lg-6 col-xs-12 col-sm-12">
               <Slider {...settings} className="selected-product-img-preview">
                 {newProductImgPreve?.map((imgprev, index) => (
@@ -433,7 +442,7 @@ const EditAdvertProducts = ({
                       alt={`Product ${index + 1} - Image ${index + 1}`}
                     />
                     <MdDelete
-                      className="product-prevImg-del-icon"
+                      className="product-prevImg-del-icon pointer"
                       color="red"
                       size="20"
                       onClick={() => removePrevImg(index)}
@@ -441,7 +450,7 @@ const EditAdvertProducts = ({
                   </div>
                 ))}
 
-                {product?.productImg?.map((img, imgIndex) => (
+                {productEelement?.productImg?.map((img, imgIndex) => (
                   <div key={img._id} className="productForm-img-container">
                     <img
                       src={img?.imgUrl}
@@ -455,7 +464,7 @@ const EditAdvertProducts = ({
                     />
                     <div
                       aria-disabled={true}
-                      className="product-prevImg-del-icon"
+                      className="product-prevImg-del-icon pointer"
                       onClick={(e) => handleDelete(e, img._id)}
                       id="product"
                     >

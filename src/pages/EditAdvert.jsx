@@ -37,7 +37,18 @@ const EditAdvertData = () => {
     // reset,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      advertTitle: "",
+      advertPostalCode: "",
+      advertPrice: "",
+      advertOfferPrice: "",
+      advertLocation: "",
+      advertDescription: "",
+      products: "",
+    },
+    advert,
+  });
 
   const handleImageDrop = (e) => {
     e.preventDefault();
@@ -139,30 +150,47 @@ const EditAdvertData = () => {
 
   // console.log(subcategory);
 
-  useEffect(() => {
+  function loadAdvert() {
     setLoading(true);
     ProctedApi.getSingleAdvert(token, _id)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setAdvert(res.data.advert);
-        let advert = res.data.advert;
-        setValue("advertTitle", advert?.advertTitle);
-        setValue("advertPostalCode", advert.advertPostalCode);
-        setValue("advertPrice", advert?.advertPrice);
-        setValue("advertOfferPrice", advert?.advertOfferPrice);
-        setValue("advertLocation", advert?.advertLocation);
-        setValue("advertDescription", advert?.advertDescription);
-        setValue("products", advert?.products);
+        console.log(res.data.advert);
+
+        const {
+          advertTitle,
+          advertPostalCode,
+          advertPrice,
+          advertOfferPrice,
+          advertLocation,
+          advertDescription,
+          products,
+        } = res.data.advert;
+
+        // Set form values asynchronously
+        setValue("advertTitle", advertTitle);
+        setValue("advertPostalCode", advertPostalCode);
+        setValue("advertPrice", advertPrice);
+        setValue("advertOfferPrice", advertOfferPrice);
+        setValue("advertLocation", advertLocation);
+        setValue("advertDescription", advertDescription);
+        setValue("products", products);
       })
       .catch((e) => {
         console.log(e);
       })
-      .finally(() => {
+      .finally((res) => {
         setLoading(false);
+        // return res;
       });
-  }, [_id, refresh]);
+  }
 
-  // variable to store number of products
+  useEffect(() => {
+    loadAdvert();
+  }, [refresh]);
+
+  // variable to store number of products to be added
   let product = watch("addProduct");
 
   // console.log("default selected sub category", selectedCategory);
@@ -256,74 +284,6 @@ const EditAdvertData = () => {
                       />
                     </div>
                   </div>
-                  {/* <!-- field col end --> */}
-                  {/* <!-- field col 03 start --> */}
-                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div
-                      className={`form-group ${
-                        errors?.advertCategory ? "error_pesudo" : ""
-                      }`}
-                    >
-                      <label className="form-head" htmlFor="category">
-                        Advert Category
-                      </label>
-                      <select
-                        type="text"
-                        className="form-control"
-                        id="advertCategory"
-                        placeholder="Enter your advert Category"
-                        {...register("advertCategory", {
-                          required: true,
-                        })}
-                        onChange={handleCategoryChange}
-                      >
-                        {category?.map((cat) => (
-                          <option key={cat._id} value={`${cat?.categoryName}`}>
-                            {cat?.categoryName}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div> */}
-                  {/* <!-- field col end --> */}
-                  {/* <!-- field col 04 start --> */}
-                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div
-                      className={`form-group ${
-                        errors?.advertSubCategory ? "error_pesudo" : ""
-                      }`}
-                    >
-                      <label className="form-head" htmlFor="sub-ad">
-                        Advert Sub Category
-                      </label>
-                      <select
-                        type="text"
-                        className="form-control"
-                        id="advertSubCategory"
-                        {...register("advertSubCategory", {
-                          required: true,
-                        })}
-                      >
-                        {selectedCategory &&
-                          subcategory
-                            ?.filter(
-                              (item) =>
-                                item.category_id === selectedCategory?._id
-                            )
-                            .map((subcate) => (
-                              <option
-                                key={subcate._id}
-                                value={`${subcate?.subCategoryName}`}
-                              >
-                                {subcate?.subCategoryName}
-                              </option>
-                            ))}
-                        {/* <option value={`Cafe & Treats`}>Cafe & Treats</option>
-                      </select>
-                    </div>
-                  </div> */}
-                  {/* <!-- field col end --> */}
-                  {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
@@ -598,10 +558,14 @@ const EditAdvertData = () => {
 
                   {/* //components for advert product */}
                   {advert?.products?.length > 0 &&
-                    advert?.products?.map((product, i) => (
+                    advert?.products?.map((productEelement, i) => (
                       <EditAdvertProducts
-                        key={product._id}
-                        product={product}
+                        Products={advert?.products}
+                        key={productEelement._id}
+                        productEelement={productEelement}
+                        Localsubcategory={subcategory}
+                        Localsubsubcategory={subsubcategory}
+                        Localcategory={category}
                         i={i}
                         register={register}
                         setValue={setValue}
