@@ -81,7 +81,7 @@ nab .login:hover {
   background-color: var(--parrot-color);
 }
 
-.nav_search > div {
+.nav_search > form {
   display: flex;
   margin: 0 6px;
   border-radius: 5px;
@@ -195,7 +195,7 @@ nab .login:hover {
     border-radius: 5px;
   }
 
-  .nav_search > div {
+  .nav_search > form {
     margin: 0;
   }
   .search_icon,
@@ -212,7 +212,7 @@ nab .login:hover {
 
   .search__input,
   .postal__input {
-    padding: 0 0 0 46px;
+    padding: 0 0 0 42px;
   }
 
   .searchbuttonText {

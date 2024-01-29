@@ -12,6 +12,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { taxonomySlice } from "../features/taxonomy";
+import { wishListSlice } from "../features/wishList";
 
 const persistConfig = {
   key: "root",
@@ -20,7 +22,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authSlice.reducer,
-  //   category: categorySlice.reducer,
+  taxonomy: taxonomySlice.reducer,
+  wishList: wishListSlice.reducer,
+  // : categorySlice.reducer,
   // Add other reducers here
 });
 

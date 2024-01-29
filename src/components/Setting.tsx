@@ -1,63 +1,125 @@
+import { useForm } from "react-hook-form";
 import profileImage from "../assets/development/defaultProfileImage.jpg";
 import "../css/setting.css";
+import { useAuth, useToken } from "../service/auth";
+import { ProfileType } from "../utils/Types";
+import { useEffect, useState } from "react";
+import { ProfileApi } from "../config/AxiosUtils";
+import Spiner from "./Spiner";
+import { castProfileUpdateValue } from "../utils/CastintoFormData";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { loginSignup } from "../features/authSlice";
 const Setting = () => {
-  const hancldeFake = () => {};
+  const [loading, setLoading] = useState<boolean>(false);
+  const [profilPrev, setprofilPrev] = useState(null);
+  const dispatch = useDispatch();
+  const { user } = useAuth();
+  const token = useToken();
+  const { register, handleSubmit, watch } = useForm<ProfileType>({
+    defaultValues: {
+      email: user?.email,
+      userName: user?.userName,
+      userPhone: user?.phoneNumber,
+    },
+  });
+
+  useEffect(() => {
+    const setPrfilePrev = watch("profilePic");
+    if (setPrfilePrev?.length) {
+      // console.log(setPrfilePrev);
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        setprofilPrev(e.target.result);
+      };
+      reader.readAsDataURL(setPrfilePrev[0]);
+    }
+  });
+
+  // console.log(profilPrev, "This is image url");
+
+  const profileUpdate = (formData: ProfileType) => {
+    console.log(formData);
+
+    const data = castProfileUpdateValue(formData, user?.id);
+    // return;
+    setLoading(true);
+    ProfileApi.updateProfile(data, token)
+      .then((res) => {
+        console.log(res);
+        dispatch(
+          loginSignup({
+            user: res?.data?.data,
+            token: token,
+          })
+        );
+        toast.success(res?.data?.message);
+      })
+      .catch((e) => {
+        // console.log(e);
+        if (e?.message === "Network Error") {
+          return toast.error(e?.message);
+        }
+        toast.error(e?.response?.data?.message);
+        console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    console.log(formData);
+  };
+
   return (
     <>
+      <Spiner loading={loading} />
       <div className="profile_details_container">
         <div className="border_bootm">
           <h5 className="quicksand-600-18">Profile Details</h5>
         </div>
-        <form aria-autocomplete="both" style={{ padding: "0px 6px" }}>
+        <form
+          aria-autocomplete="both"
+          onSubmit={handleSubmit(profileUpdate)}
+          style={{ padding: "0px 6px" }}
+        >
           <div className="profile_details">
             <div className="name_group">
               <div className="form_group">
                 <label htmlFor="name">Name:</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value="Angela L. Callahan"
-                  onChange={hancldeFake}
-                />
+                <input type="text" id="name" {...register("userName")} />
               </div>
               <div className="form_group">
                 <label htmlFor="email">Email Address:</label>
                 <input
                   type="email"
                   id="email"
-                  name="email"
+                  {...register("email", {
+                    required: "true",
+                  })}
                   readOnly
-                  value="Angela@gmail.com"
-                  onChange={hancldeFake}
                 />
               </div>
               <div className="form_group">
-                <label htmlFor="phonenumber">Phone No:</label>
-                <input
-                  type="text"
-                  id="phonenumber"
-                  name="phonenumber"
-                  value="939293944"
-                  onChange={hancldeFake}
-                />
+                <label htmlFor="userPhone">Phone No:</label>
+                <input type="text" id="userPhone" {...register("userPhone")} />
               </div>
             </div>
             <div className="profilePicdv">
               <input
                 type="file"
-                name="profilePic"
-                id="fileInput"
+                id="profilePic"
                 className="hidden-input"
+                {...register("profilePic")}
+                multiple={false}
               />
               <label
-                htmlFor="fileInput"
+                htmlFor="profilePic"
                 className="edit_icon"
                 style={{ cursor: "pointer" }}
               >
                 <div style={{ position: "relative", width: "fit-content" }}>
                   <img
-                    src={profileImage}
+                    src={profilPrev ? profilPrev : user?.userProfilePic?.imgUrl}
+                    // src={profilPrev ? profilPrev : profileImage}
                     alt="profile"
                     className="profilepic"
                     style={{ width: "200px" }}
@@ -88,20 +150,16 @@ const Setting = () => {
               <label htmlFor="oldPassword">Enter Old Password:</label>
               <input
                 type="password"
-                name="oldPassword"
-                value="oldPassword"
                 id="oldPassword"
-                onChange={hancldeFake}
+                {...register("oldPassword")}
               />
             </div>
             <div className="form_group">
               <label htmlFor="newPassword">Enter New Password:</label>
               <input
                 type="password"
-                name="newPassword"
-                value="newPassword"
                 id="newPassword"
-                onChange={hancldeFake}
+                {...register("newPassword")}
               />
             </div>
           </div>

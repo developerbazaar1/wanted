@@ -1,23 +1,99 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import FirstModal from "./FirstModal";
+import { FilterIcon, PostalIcon, SerachIcon } from "../../utils/SvgElements";
+import { useForm } from "react-hook-form";
+import { useServices } from "../../service/auth";
+// import { redirect } from "react-router-dom";
+
+import { toast } from "react-toastify";
+import { SearchContext } from "../../features/searchContext";
+import { useSearchParams } from "react-router-dom";
 
 const MiddleNav = () => {
+  const { updateSearchQuery } = useContext(SearchContext);
+  const [, setSearchParams] = useSearchParams();
+
   const [showModal1, setShowModal1] = useState<boolean>(false);
   const [selectedCateogries, setselectedCateogries] = useState<string>("");
+  // const navigate = useNavigate();
+  const { category, subCategory, SubSubCategory } = useServices();
+  const { register, handleSubmit, reset } = useForm();
 
-  // function to start search
+  // const startSearchFunction = () => {
+  //   setShowModal1(true);
+  // };
 
-  const startSearchFunction = () => {
-    setShowModal1(true);
-  };
+  function handelFormDubmit(formData: {
+    searchQuery: string;
+    postalCode: string;
+    taxonomy: string | null;
+  }) {
+    if (!formData.searchQuery || !formData.postalCode) {
+      formData["taxonomy"] = selectedCateogries;
+    }
+
+    if (formData.searchQuery || formData.postalCode) {
+      setselectedCateogries("");
+      formData["taxonomy"] = "";
+    }
+
+    if (!formData.taxonomy && !formData.searchQuery && !formData.postalCode) {
+      toast.error("Please Enter a Serach Query");
+      return;
+    }
+
+    const { taxonomy, searchQuery, postalCode } = formData;
+
+    const SearchQuery = taxonomy || searchQuery || postalCode || "";
+    setSearchParams({ serach: SearchQuery });
+    reset();
+  }
+
+  function handleSelectedDropDown(service: string) {
+    setselectedCateogries(service);
+    // setDropdownOpen(true);
+    const dropDown = document.getElementById("mainDorpwDoen");
+    dropDown?.classList.remove("show");
+  }
+
+  // function to list the filter category
+
+  function ListFilter(condition: string, service: any[]): JSX.Element | null {
+    const filteredData = service.filter(
+      (element) => element.subcategory_id === condition
+    );
+
+    let jsxElement = null;
+    if (filteredData.length > 0) {
+      jsxElement = (
+        <ul className="dropdown-menu dropdown-submenu dropw_down_menu">
+          {filteredData.map((subsubCatElement) => (
+            <li
+              key={subsubCatElement._id}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSelectedDropDown(subsubCatElement?.subSubCategoryName);
+              }}
+            >
+              <span className="dropdown-item">
+                {subsubCatElement?.subSubCategoryName}
+              </span>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return jsxElement;
+  }
 
   return (
     <>
       <FirstModal showModal1={showModal1} setShowModal1={setShowModal1} />
       <div className="">
         <div className="nav_search">
-          <div className="">
+          <form className="" onSubmit={handleSubmit(handelFormDubmit)}>
             <div className="search__input__conatiner">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -36,55 +112,12 @@ const MiddleNav = () => {
                 type="text"
                 placeholder="Search by keywords"
                 className="search__input"
+                {...register("searchQuery")}
               />
             </div>
             {/* filter categroy div */}
             <div className="filter__conatiner d-none d-lg-block">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="21"
-                height="21"
-                viewBox="0 0 20 20"
-                fill="none"
-                className="filter_icon"
-              >
-                <g clipPath="url(#clip0_1998_221)">
-                  <path
-                    d="M13.4978 9.23122C13.4978 9.23028 13.498 9.22937 13.498 9.22846V7.47066C13.498 7.22797 13.3012 7.03121 13.0585 7.03121H10.8613V2.6367H12.1796C12.4223 2.6367 12.6191 2.43995 12.6191 2.19725V1.31835C12.6191 0.591413 12.0277 0 11.3007 0H6.02734C5.3004 0 4.70898 0.591413 4.70898 1.31835V7.03121H2.51173C2.26904 7.03121 2.07228 7.22797 2.07228 7.47066C2.07231 7.78197 2.07216 9.19817 2.07243 9.23122C2.07354 9.41186 2.1856 9.57158 2.34852 9.63648L6.46679 11.2838V13.6816C6.46679 13.8507 6.56736 14.0037 6.70971 14.0746C8.50604 14.9546 8.47941 15 8.66369 15C8.90647 15 9.10349 14.8019 9.10349 14.5605V11.2838C9.47403 11.1356 13.1878 9.65016 13.2243 9.6353C13.3883 9.56845 13.4968 9.40864 13.4978 9.23122ZM11.7402 1.7578H10.8613V1.31835C10.8613 1.07604 11.0584 0.878901 11.3007 0.878901C11.5431 0.878901 11.7402 1.07604 11.7402 1.31835V1.7578ZM5.58788 1.31835C5.58788 1.07604 5.78502 0.878901 6.02734 0.878901H10.058C10.0092 1.01645 9.98239 1.16431 9.98239 1.31835V7.03121H5.58788V1.31835ZM12.6191 7.91011V8.93092C12.2485 9.07917 8.53481 10.5646 8.49828 10.5794C8.33117 10.6476 8.22459 10.8104 8.22459 10.9863V13.8494L7.34569 13.41C7.34566 12.8677 7.3458 11.0164 7.34554 10.9835C7.3444 10.8008 7.23026 10.6423 7.06945 10.5782L2.95118 8.93092V7.91011H12.6191Z"
-                    fill="#353535"
-                  />
-                  <path
-                    d="M6.90625 2.63672H8.66406C8.90676 2.63672 9.10352 2.43996 9.10352 2.19727C9.10352 1.95457 8.90676 1.75781 8.66406 1.75781H6.90625C6.66355 1.75781 6.4668 1.95457 6.4668 2.19727C6.4668 2.43996 6.66355 2.63672 6.90625 2.63672Z"
-                    fill="#353535"
-                  />
-                  <path
-                    d="M8.66406 3.51562H6.90625C6.66355 3.51562 6.4668 3.71238 6.4668 3.95508C6.4668 4.19777 6.66355 4.39453 6.90625 4.39453H8.66406C8.90676 4.39453 9.10352 4.19777 9.10352 3.95508C9.10352 3.71238 8.90676 3.51562 8.66406 3.51562Z"
-                    fill="#353535"
-                  />
-                  <path
-                    d="M8.66406 5.27344H6.90625C6.66355 5.27344 6.4668 5.4702 6.4668 5.71289C6.4668 5.95559 6.66355 6.15234 6.90625 6.15234H8.66406C8.90676 6.15234 9.10352 5.95559 9.10352 5.71289C9.10352 5.4702 8.90676 5.27344 8.66406 5.27344Z"
-                    fill="#353535"
-                  />
-                  <path
-                    d="M3.39062 6.15234C3.63332 6.15234 3.83008 5.95559 3.83008 5.71289V3.95508C3.83008 3.71238 3.63332 3.51562 3.39062 3.51562C3.14793 3.51562 2.95117 3.71238 2.95117 3.95508V5.71289C2.95117 5.95559 3.14793 6.15234 3.39062 6.15234Z"
-                    fill="#353535"
-                  />
-                  <path
-                    d="M12.1797 3.51562C11.937 3.51562 11.7402 3.71238 11.7402 3.95508V5.71289C11.7402 5.95559 11.937 6.15234 12.1797 6.15234C12.4224 6.15234 12.6191 5.95559 12.6191 5.71289V3.95508C12.6191 3.71238 12.4224 3.51562 12.1797 3.51562Z"
-                    fill="#353535"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_1998_221">
-                    <rect
-                      width="21"
-                      height="21"
-                      fill="white"
-                      transform="translate(0.285156)"
-                    />
-                  </clipPath>
-                </defs>
-              </svg>
+              {FilterIcon}
               {/* <span className="search__input">All Categories</span> */}
               <div className="search__input">
                 <div className="dropdown">
@@ -103,186 +136,74 @@ const MiddleNav = () => {
                     </span>
                   </a>
                   <ul
-                    className="dropdown-menu dropw_down_menu"
+                    className={`dropdown-menu dropw_down_menu`}
+                    id="mainDorpwDoen"
                     aria-labelledby="dropdownMenuLink"
                   >
-                    <li className="border_bottom">
-                      <a className="dropdown-item" href="#">
-                        <span>Beauty & Spa</span>
-                        <AiOutlineRight />
-                      </a>
+                    {category?.map((element) => (
+                      <li
+                        className="border_bottom"
+                        key={element._id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectedDropDown(element.categoryName);
+                        }}
+                      >
+                        <a className="dropdown-item">
+                          <span>{element.categoryName}</span>
+                          <AiOutlineRight />
+                        </a>
 
-                      <ul className="dropdown-menu dropdown-submenu dropw_down_menu">
-                        <li>
-                          <a
-                            className="dropdown-item custom_drop_down_item"
-                            href="#"
-                          >
-                            Face & Skin
-                            <AiOutlineRight />
-                          </a>
+                        <ul className="dropdown-menu dropdown-submenu dropw_down_menu">
+                          {subCategory
+                            .filter(
+                              (subCatFilter) =>
+                                subCatFilter.category_id === element._id
+                            )
+                            .map((subCateElement) => (
+                              <li
+                                key={subCateElement._id}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectedDropDown(
+                                    subCateElement.subCategoryName
+                                  );
+                                }}
+                              >
+                                <a className="dropdown-item custom_drop_down_item">
+                                  {subCateElement.subCategoryName}
+                                  <AiOutlineRight />
+                                </a>
 
-                          {/* multilever drop down */}
-                          <ul className="dropdown-menu dropdown-submenu dropw_down_menu">
-                            <li
-                              onClick={() =>
-                                setselectedCateogries("Laser Treatment")
-                              }
-                            >
-                              <span className="dropdown-item">
-                                Laser Treatment
-                              </span>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Massage
-                            <AiOutlineRight />
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Salons <AiOutlineRight />
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Brows & Lashes
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Hair & Styling
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Hair Removal
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Makeup
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Spas
-                          </a>
-                        </li>
-                        <li>
-                          <a className="dropdown-item" href="#">
-                            Tanning
-                          </a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li className="border_bottom">
-                      <a className="dropdown-item" href="#">
-                        Food & Beverages <AiOutlineRight />
-                      </a>
-                    </li>
-                    <li className="border_bottom">
-                      <a className="dropdown-item" href="#">
-                        Health & Fitness <AiOutlineRight />
-                      </a>
-                    </li>
-                    <li className="border_bottom">
-                      <a className="dropdown-item" href="#">
-                        Women’s Fashion <AiOutlineRight />
-                      </a>
-                    </li>
-                    <li className="border_bottom">
-                      <a className="dropdown-item" href="#">
-                        Man’s fashion
-                        <AiOutlineRight />
-                      </a>
-                    </li>
-                    <li className="border_bottom">
-                      <a className="dropdown-item" href="#">
-                        Fun Activities
-                        <AiOutlineRight />
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Tours & Travels <AiOutlineRight />
-                      </a>
-                    </li>
+                                {/* multilevel drop down */}
+                                {ListFilter(subCateElement._id, SubSubCategory)}
+                              </li>
+                            ))}
+                        </ul>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
             </div>
             <div className="postal__input__container">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="21"
-                height="21"
-                viewBox="0 0 20 20"
-                fill="none"
-                className="postal_icon"
-              >
-                <g clipPath="url(#clip0_1661_1098)">
-                  <path
-                    d="M7.5 2.84375C5.48071 2.84375 3.83789 4.48657 3.83789 6.50586C3.83789 8.52515 5.48071 10.168 7.5 10.168C7.84104 10.168 8.17896 10.121 8.50436 10.0284C8.81561 9.9398 8.99607 9.61566 8.90751 9.30441C8.81889 8.99319 8.4948 8.81267 8.18353 8.90129C7.96251 8.96419 7.73253 8.99609 7.5 8.99609C6.12688 8.99609 5.00977 7.87897 5.00977 6.50586C5.00977 5.13274 6.12688 4.01562 7.5 4.01562C8.87312 4.01562 9.99023 5.13274 9.99023 6.50586C9.99023 6.75017 9.95508 6.99131 9.88573 7.22255C9.79277 7.53251 9.9687 7.85914 10.2787 7.9521C10.5887 8.045 10.9152 7.86916 11.0082 7.55917C11.1103 7.21865 11.1621 6.86428 11.1621 6.50586C11.1621 4.48657 9.51929 2.84375 7.5 2.84375Z"
-                    fill="#353535"
-                  />
-                  <path
-                    d="M11.7444 2.25676C10.6103 1.12391 9.10289 0.5 7.49991 0.5C5.8969 0.5 4.38955 1.12391 3.25547 2.25679C2.1215 3.38958 1.49599 4.89608 1.49414 6.50009C1.49528 7.66771 1.8196 8.76318 2.48558 9.84916C3.06229 10.7895 3.81149 11.61 4.60468 12.4786C5.38242 13.3303 6.18659 14.2111 6.82884 15.2271C6.93621 15.397 7.12318 15.5 7.32413 15.5H7.67569C7.87664 15.5 8.06361 15.397 8.17099 15.2271C8.81323 14.211 9.6174 13.3303 10.3951 12.4786C11.1883 11.61 11.9375 10.7895 12.5142 9.84913C13.1803 8.76315 13.5045 7.66766 13.5057 6.4988C13.5039 4.89605 12.8783 3.38955 11.7444 2.25676ZM9.52978 11.6884C8.83825 12.4457 8.12672 13.225 7.49991 14.1212C6.87314 13.225 6.16157 12.4457 5.47005 11.6884C3.96656 10.0419 2.66807 8.61992 2.66602 6.50018C2.66906 3.83785 4.83756 1.67188 7.49991 1.67188C10.1623 1.67188 12.3308 3.83785 12.3338 6.49892C12.3318 8.61992 11.0333 10.0419 9.52978 11.6884Z"
-                    fill="#353535"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_1661_1098">
-                    <rect
-                      width="15"
-                      height="15"
-                      fill="white"
-                      transform="translate(0 0.5)"
-                    />
-                  </clipPath>
-                </defs>
-              </svg>
+              {PostalIcon}
               <input
                 type="text"
                 className="postal__input"
                 placeholder="Your postal code"
+                {...register("postalCode")}
               />
             </div>
-            <div className="searButoon_container" onClick={startSearchFunction}>
+            <div className="searButoon_container">
               <button>
                 <span className="searchbuttonText d-none d-lg-inline">
                   Search
                 </span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="30"
-                  viewBox="0 0 21 21"
-                  fill="none"
-                  className="d-lg-none"
-                >
-                  <g clipPath="url(#clip0_1661_1165)">
-                    <path
-                      d="M0.5 7.92239C0.5 12.0151 3.8296 15.3447 7.92228 15.3447C9.33419 15.3447 10.6552 14.9483 11.7801 14.2611C14.8418 18.1565 15.272 18.5869 15.4171 18.732L16.4998 19.8147C17.4137 20.7286 18.9007 20.7286 19.8146 19.8147C20.2715 19.3578 20.5 18.7575 20.5 18.1574C20.5 17.5572 20.2715 16.9569 19.8146 16.5L18.7319 15.4173C18.5876 15.273 18.156 14.8416 14.2499 11.798C14.9438 10.6692 15.3446 9.3418 15.3446 7.92239C15.3446 6.80717 15.1031 5.73469 14.6269 4.73475C14.4414 4.34516 13.9752 4.17976 13.5856 4.36528C13.196 4.55083 13.0305 5.01707 13.2162 5.40658C13.5916 6.19503 13.782 7.04144 13.782 7.92239C13.782 11.1534 11.1533 13.7821 7.92228 13.7821C4.69125 13.7821 2.06259 11.1534 2.06259 7.92239C2.06259 4.69135 4.69125 2.06269 7.92228 2.06269C8.98058 2.06269 10.0174 2.34759 10.9205 2.88664C11.291 3.10779 11.7707 2.98668 11.9918 2.61616C12.2129 2.24559 12.0918 1.76599 11.7213 1.54485C10.5761 0.861334 9.26247 0.500065 7.92228 0.500065C3.8296 0.500105 0.5 3.82974 0.5 7.92239ZM17.627 16.5222L18.7097 17.6049C19.0143 17.9095 19.0143 18.4051 18.7097 18.7098C18.405 19.0144 17.9094 19.0144 17.6048 18.7098L16.5221 17.6271C16.3285 17.4335 15.6139 16.6098 13.0209 13.3112C13.1152 13.2219 13.2073 13.1303 13.2969 13.0363C16.6135 15.6207 17.4351 16.3303 17.627 16.5222ZM6.21305 3.97885C6.60889 3.80708 7.06899 3.98873 7.2408 4.38457C7.28475 4.48583 7.30553 4.59138 7.30553 4.69518C7.30553 4.99707 7.12958 5.28447 6.83503 5.41229C5.83435 5.84653 5.18776 6.83178 5.18776 7.92239C5.18776 8.35389 4.83797 8.70368 4.40646 8.70368C3.97496 8.70368 3.62517 8.35389 3.62517 7.92239C3.62517 6.20893 4.64097 4.661 6.21305 3.97885Z"
-                      fill="white"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_1661_1165">
-                      <rect
-                        width="20"
-                        height="20"
-                        fill="white"
-                        transform="matrix(0 -1 1 0 0.5 20.5)"
-                      />
-                    </clipPath>
-                  </defs>
-                </svg>
+                {SerachIcon}
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>

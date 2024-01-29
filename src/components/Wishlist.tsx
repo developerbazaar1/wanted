@@ -1,79 +1,109 @@
-import food from "../assets/development/foodImg.jpg";
+import { useEffect, useState } from "react";
 import "../css/ComponentsCSS/favoruite.css";
-const Wishlist = () => {
+import { WishListAPi } from "../config/AxiosUtils";
+import { useToken, useWishList } from "../service/auth";
+import { toast } from "react-toastify";
+import Spiner from "./Spiner";
+import { FilledFavouriteIcon } from "../utils/SvgElements";
+import { useDispatch } from "react-redux";
+import { wishList as SetstoreWishList } from "../features/wishList";
+const Wishlist: React.FC = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [WishList, setWishList] = useState({
+    fav: [],
+    status: "",
+    message: "",
+  });
+
+  const token = useToken();
+  function RemoveWishList(Advert_id: string): void {
+    setLoading(true);
+    WishListAPi.UpdateWishList(token, Advert_id)
+      .then((res) => {
+        dispatch(
+          SetstoreWishList({
+            wishList: res.data.wishlist,
+          })
+        );
+        // console.log(res);
+        toast.success(res?.data?.message);
+      })
+      .catch((e) => {
+        console.log(e.response);
+        toast.error(e.response?.data?.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  // console.log(WishList);
+
+  const wishlist = useWishList();
+
+  useEffect(() => {
+    if (wishlist.length > 0) {
+      setWishList({
+        fav: wishlist,
+        status: "success",
+        message: "success",
+      });
+    } else {
+      setWishList({
+        fav: [],
+        status: "error",
+        message: "Not Wishlist",
+      });
+    }
+  }, [wishlist]);
+
+  // console.log(WishList);
+
+  if (WishList?.fav?.length === 0) {
+    return <div>No WishList Found Please add One!</div>;
+  }
+
   return (
     <div className="favoruite_container">
-      <div className="row border_5">
-        <div className="col-5 p-0 col-md-3">
-          <div className="image-container">
-            <img src={food} alt="food" className="img-responsive" />
-            <div className="favoruite_icons">
-              {/* <svg
-                viewBox="0 0 24 24"
-                className="filled"
-                xmlns="https://www.w3.org/2000/svg"
+      {WishList?.fav?.map((favourite) => (
+        <div className="row border_5" key={favourite._id}>
+          <div className="col-5 p-0 col-md-3">
+            <div className="image-container">
+              <img
+                src={favourite?.advert[0]?.advertImage?.imgUrl}
+                alt="food"
+                className="img-responsive"
+              />
+              <div
+                className="favoruite_icons pointer"
+                onClick={() => RemoveWishList(favourite?.advert_id)}
               >
-                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
-              </svg> */}
-              <svg
-                viewBox="0 0 24 24"
-                className="unfilled"
-                xmlns="https://www.w3.org/2000/svg"
-              >
-                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
-              </svg>
+                {FilledFavouriteIcon}
+              </div>
+            </div>
+          </div>
+          <div className="col-7 col-md-9">
+            <div className="favoruite__details">
+              <div className="Desacription">
+                <p className="">
+                  {favourite?.advert[0]?.advertDescription
+                    .split(" ")
+                    .slice(0, 10)
+                    .join(" ")}
+                </p>
+              </div>
+              <div className="">{favourite?.provider[0].storeName}</div>
             </div>
           </div>
         </div>
-        <div className="col-7 col-md-9">
-          <div className="favoruite__details">
-            <div className="Desacription">
-              <p className="">
-                $110 Off 5 Meal Kit Deliveries + Free Shipping on 1st Meal on
-                1st Meal Meal Kit Deliveries + Free Shipping on 1st Meal on
-              </p>
-            </div>
-            <div className="">Blue Apron</div>
-          </div>
-        </div>
-      </div>
-      <div className="row border_5">
-        <div className="col-5 p-0 col-md-3">
-          <div className="image-container">
-            <img src={food} alt="food" className="img-responsive" />
-            <div className="favoruite_icons">
-              {/* <svg
-                viewBox="0 0 24 24"
-                className="filled"
-                xmlns="https://www.w3.org/2000/svg"
-              >
-                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path>
-              </svg> */}
-              <svg
-                viewBox="0 0 24 24"
-                className="unfilled"
-                xmlns="https://www.w3.org/2000/svg"
-              >
-                <path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div className="col-7 col-md-9">
-          <div className="favoruite__details">
-            <div className="Desacription">
-              <p className="">
-                $110 Off 5 Meal Kit Deliveries + Free Shipping on 1st Meal on
-                1st Meal Meal Kit Deliveries + Free Shipping on 1st Meal on
-              </p>
-            </div>
-            <div className="">Blue Apron</div>
-          </div>
-        </div>
-      </div>
+      ))}
+
       <div>
         <button className="wishlist_view_all_btn">View all</button>
       </div>
+
+      <Spiner loading={loading} />
     </div>
   );
 };

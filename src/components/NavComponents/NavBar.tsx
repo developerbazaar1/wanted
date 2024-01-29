@@ -6,7 +6,7 @@ import MiddleNav from "./MiddleNav";
 import { Link } from "react-router-dom";
 import LoginSingupButton from "./LoginSingupButton";
 const NavBar = () => {
-  const token = localStorage.getItem("wantedToken");
+  const token = localStorage.getItem("userwantedToken");
   return (
     <div className="white__background">
       <div className="nav_container">

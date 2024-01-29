@@ -1,6 +1,10 @@
 // import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../service/auth";
 const UserProfile = () => {
+  const { user } = useAuth();
+  // console.log(user);
+
   return (
     <>
       <div>
@@ -29,7 +33,7 @@ const UserProfile = () => {
               </clipPath>
             </defs>
           </svg>
-          <div>Angela L. Callahan</div>
+          <div>{user?.userName}</div>
         </Link>
       </div>
     </>

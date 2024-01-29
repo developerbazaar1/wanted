@@ -5,9 +5,17 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Reward from "../assets/gift-card.png";
 import Wishlist from "../assets/wishlist.png";
 import Seeting_log from "../assets/settings.png";
-import QrCode from "../assets/qr-code.png";
+// import QrCode from "../assets/qr-code.png";
+import { useDispatch } from "react-redux";
+import { logout } from "../features/authSlice";
+import { QRCodeCanvas } from "qrcode.react";
+import { useAuth } from "../service/auth";
 const Profile = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useAuth();
+  console.log(user);
+
   const activeStyles = {
     backgroundColor: "#C9FFD3",
     boxShadow:
@@ -17,9 +25,8 @@ const Profile = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleLogout = (e: any) => {
     e.preventDefault();
-    localStorage.removeItem("wantedToken");
-    console.log("logout button is pressed");
-
+    localStorage.removeItem("userwantedToken");
+    dispatch(logout());
     navigate("/login");
   };
   return (
@@ -95,10 +102,10 @@ const Profile = () => {
             <div className="qr__container">
               <div>
                 <h3 className="qr_code_heading">Your QR Code</h3>
-                <img src={QrCode} alt="" className="qr_image" />
+                <QRCodeCanvas value={user.userQRcode} size={300} />,
                 <h6>Your 10 Digit Code:</h6>
                 <div>
-                  <strong>9845654567</strong>
+                  <strong>{user.userQRcode}</strong>
                 </div>
               </div>
             </div>

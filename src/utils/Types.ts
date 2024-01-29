@@ -10,3 +10,12 @@ export type signupInputTypes = {
   password: number | string;
   termsAndCondition?: boolean | undefined;
 };
+
+export type ProfileType = {
+  userName: string;
+  email: string;
+  oldPassword: string;
+  newPassword: string;
+  profilePic: File;
+  userPhone: string;
+};

@@ -71,3 +71,7 @@ ul > li {
     text-align: left;
   }
 }
+
+.active-nav-bg {
+  background-color: #c9ffd3 !important;
+}

@@ -1,16 +1,21 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
-import { toast } from "react-toastify";
-
-import Loader from "../components/Loader";
 import NextButton from "../components/NextButton";
-import { AdsApi, WishListAPi } from "../config/AxiosUtils";
+import { Link, useParams } from "react-router-dom";
 import { useToken, useWishList } from "../service/auth";
+import { useEffect, useState } from "react";
+import { AdsApi, WishListAPi } from "../config/AxiosUtils";
+import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
 import { wishList as SetstoreWishList } from "../features/wishList";
-const All = () => {
+import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+
+const SubSubCategory = () => {
+  const { services } = useParams();
   const [searchParams] = useSearchParams();
+  console.log("seach parmas", searchParams.get("serach"));
+
+  // console.log(services);
 
   const dispatch = useDispatch();
   const [adverts, setAdvert] = useState({
@@ -22,11 +27,6 @@ const All = () => {
   const [loading, setLoading] = useState(false);
   const [AdsPage, setAdsLoading] = useState(1);
   const token = useToken();
-
-  /**
-   * function to update wishlist
-   * @param Advert_id
-   */
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
@@ -44,32 +44,43 @@ const All = () => {
       });
   }
 
-  function FetchData() {
-    setLoading(true);
-    AdsApi.getAdsBaedOnType(``, AdsPage, 6, searchParams.get("serach") || "")
+  // console.log("sub sub services", services);
 
+  useEffect(() => {
+    setLoading(true);
+    AdsApi.getAdsBasedOnService(
+      decodeURIComponent(services.replace(/\+/g, " ")),
+      AdsPage,
+      searchParams.get("serach") || ""
+    )
       .then((res) => {
         console.log(res);
+
         if (res.status === 204) {
-          // toast.warning("No More data found");
+          toast.warning("No More Data Found");
           return;
         }
 
-        if (res.status === 200 && res?.data?.data?.length === 0) {
-          return toast.warning("No Data Found");
+        if (res.status === 200 && res?.data?.services?.length === 0) {
+          setAdvert({
+            data: [],
+            status: "error",
+            message: "No advert Found",
+          });
+          return;
         }
 
         if (searchParams.get("serach")) {
           if (AdsPage > 1) {
             setAdvert({
-              data: [...adverts.data, ...JSON.parse(res.data.data)],
+              data: [...adverts.data, ...res.data.services],
               status: "success",
               message: res.data.message,
             });
             return;
           }
           setAdvert({
-            data: [...JSON.parse(res.data.data)],
+            data: [...res.data.services],
             status: "success",
             message: res.data.message,
           });
@@ -77,11 +88,12 @@ const All = () => {
         }
 
         setAdvert({
-          data: [...adverts.data, ...JSON.parse(res.data.data)],
+          data: [...adverts.data, ...res.data.services],
           status: "success",
           message: res.data.message,
         });
       })
+
       .catch((e) => {
         console.log(e);
         setAdvert({
@@ -93,19 +105,12 @@ const All = () => {
       .finally(() => {
         setLoading(false);
       });
-  }
-
-  // useEffect(() => {
-  //   updateSearchQuery("");
-  // }, []);
-
-  useEffect(() => {
-    setAdsLoading(1);
-  }, [searchParams.get("serach")]);
-
-  useEffect(() => {
-    FetchData();
   }, [AdsPage, searchParams.get("serach")]);
+
+  // console.log(adverts.data);
+
+  // advertOfferPrice;
+  // advertPrice;
 
   if (loading) {
     return (
@@ -119,7 +124,6 @@ const All = () => {
       </div>
     );
   }
-
   if (adverts.data.length <= 0 && !loading) {
     return (
       <h2
@@ -168,11 +172,12 @@ const All = () => {
               state={{ advertid: advert._id }}
             >
               {/* <div className="ads_cat">Beauty & Spa / Face &Skin</div> */}
-              <button className="whereTo-btn-all">{advert?.whereToShow}</button>
+              {/* <button className="whereTo-btn-all">{advert?.whereToShow}</button> */}
               <p>
-                {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}
+                {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}{" "}
+                {`...`}
               </p>
-              <div className="provider">{advert?.provider?.storeName}</div>
+              <div className="provider">{advert?.provider[0]?.storeName}</div>
               <div>
                 <span className="price">£{advert.advertOfferPrice}</span>
                 <span className="off_price">£{advert.advertPrice}</span>
@@ -186,4 +191,4 @@ const All = () => {
   );
 };
 
-export default All;
+export default SubSubCategory;

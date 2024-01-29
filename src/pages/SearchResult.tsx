@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
-import { toast } from "react-toastify";
-
-import Loader from "../components/Loader";
-import NextButton from "../components/NextButton";
-import { AdsApi, WishListAPi } from "../config/AxiosUtils";
-import { useToken, useWishList } from "../service/auth";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
+import Loader from "../components/Loader";
+import { AdsApi, WishListAPi } from "../config/AxiosUtils";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useToken, useWishList } from "../service/auth";
 import { wishList as SetstoreWishList } from "../features/wishList";
-const All = () => {
-  const [searchParams] = useSearchParams();
+import NextButton from "../components/NextButton";
+
+const SearchResult: React.FC = () => {
+  const { postalCode, searchQuery, taxonomy } =
+    useLocation().state.serachValue || "";
+  console.log(postalCode, searchQuery, taxonomy);
 
   const dispatch = useDispatch();
   const [adverts, setAdvert] = useState({
@@ -18,19 +20,18 @@ const All = () => {
     status: "",
     message: "",
   });
+
   const GetWishList = useWishList();
+  // console.log("wihstik", GetWishList);
+
   const [loading, setLoading] = useState(false);
   const [AdsPage, setAdsLoading] = useState(1);
   const token = useToken();
-
-  /**
-   * function to update wishlist
-   * @param Advert_id
-   */
   function RemoveAndAddWishList(Advert_id: string): void {
+    setLoading(true);
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(
           SetstoreWishList({
             wishList: res?.data?.wishlist,
@@ -41,46 +42,35 @@ const All = () => {
       .catch((e) => {
         console.log(e.response);
         toast.error(e.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
-  function FetchData() {
+  useEffect(() => {
     setLoading(true);
-    AdsApi.getAdsBaedOnType(``, AdsPage, 6, searchParams.get("serach") || "")
-
+    AdsApi.getAdsBasedOnSearch(postalCode, taxonomy, searchQuery, AdsPage)
       .then((res) => {
         console.log(res);
-        if (res.status === 204) {
-          // toast.warning("No More data found");
+
+        if (adverts.data.length !== 0 && res.data.data.length == 0) {
+          toast.warning("No More data found");
           return;
         }
-
-        if (res.status === 200 && res?.data?.data?.length === 0) {
-          return toast.warning("No Data Found");
-        }
-
-        if (searchParams.get("serach")) {
-          if (AdsPage > 1) {
-            setAdvert({
-              data: [...adverts.data, ...JSON.parse(res.data.data)],
-              status: "success",
-              message: res.data.message,
-            });
-            return;
-          }
+        if (res.status === 202) {
           setAdvert({
             data: [...JSON.parse(res.data.data)],
             status: "success",
             message: res.data.message,
           });
-          return;
+        } else {
+          setAdvert({
+            data: [...res.data.data],
+            status: "success",
+            message: res.data.message,
+          });
         }
-
-        setAdvert({
-          data: [...adverts.data, ...JSON.parse(res.data.data)],
-          status: "success",
-          message: res.data.message,
-        });
       })
       .catch((e) => {
         console.log(e);
@@ -93,19 +83,7 @@ const All = () => {
       .finally(() => {
         setLoading(false);
       });
-  }
-
-  // useEffect(() => {
-  //   updateSearchQuery("");
-  // }, []);
-
-  useEffect(() => {
-    setAdsLoading(1);
-  }, [searchParams.get("serach")]);
-
-  useEffect(() => {
-    FetchData();
-  }, [AdsPage, searchParams.get("serach")]);
+  }, [postalCode, searchQuery, taxonomy, AdsPage]);
 
   if (loading) {
     return (
@@ -119,7 +97,6 @@ const All = () => {
       </div>
     );
   }
-
   if (adverts.data.length <= 0 && !loading) {
     return (
       <h2
@@ -160,6 +137,7 @@ const All = () => {
                 {GetWishList.some((fav) => fav.advert_id === advert._id)
                   ? FilledFavouriteIconLarge
                   : Favourite}
+                {/* {Favourite} */}
               </div>
             </div>
             <Link
@@ -186,4 +164,4 @@ const All = () => {
   );
 };
 
-export default All;
+export default SearchResult;

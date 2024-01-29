@@ -22,6 +22,8 @@
 
   .profilepic {
     width: 161px !important;
+    height: 161px !important;
+    object-fit: cover;
   }
 
   .border_bootm {

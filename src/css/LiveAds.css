@@ -4,7 +4,7 @@
   display: flex;
   gap: 35px;
   flex-wrap: wrap;
-  justify-content: center;
+  /* justify-content: center; */
   margin-bottom: 25px;
 }
 
@@ -120,4 +120,19 @@
   .single_Ads {
     width: 31%;
   }
+}
+
+.whereTo-btn-all {
+  font-family: Lato;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+  width: fit-content;
+  border: none;
+  border-radius: 30px;
+  border-style: 49px;
+  padding: 4px 8px;
+  color: red;
+  background-color: #c9ffd3;
 }
