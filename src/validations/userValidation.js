@@ -100,6 +100,7 @@ const userLoginValidation = async (req, res, next) => {
 
 const updateProfileValidator = async (req, res, next) => {
   let { oldPassword, newPassword, id } = req.body;
+  // console.log(oldPassword, newPassword);
   let user = req.user;
   // console.log(user);
 
@@ -107,7 +108,7 @@ const updateProfileValidator = async (req, res, next) => {
     if (!id) {
       return res.status(BAD_REQUEST).json({
         status: "error",
-        message: "Please Provide User Id!",
+        message: "Please Provide User Id !",
       });
     }
 
@@ -115,17 +116,17 @@ const updateProfileValidator = async (req, res, next) => {
       if (!newPassword) {
         return res.status(BAD_REQUEST).json({
           status: "error",
-          message: "Please Provide New Password!",
-        });
-      } else if (newPassword.length < 6) {
-        return res.status(BAD_REQUEST).json({
-          status: "error",
-          message: "New Password must contain at least 6 digit!",
+          message: "Please Provide New Password !",
         });
       } else if (!oldPassword) {
         return res.status(BAD_REQUEST).json({
           status: "error",
-          message: "Please Provide Old Password!",
+          message: "Please Provide Old Password !",
+        });
+      } else if (newPassword.length < 6) {
+        return res.status(BAD_REQUEST).json({
+          status: "error",
+          message: "New Password must contain at least 6 digit !",
         });
       }
 
@@ -160,7 +161,7 @@ const updateProfileValidator = async (req, res, next) => {
     console.error(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
-      message: "Internal Server Error!",
+      message: "Internal Server Error !",
     });
   }
 };

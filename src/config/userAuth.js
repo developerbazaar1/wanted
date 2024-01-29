@@ -18,7 +18,7 @@ async function userAuth(req, res, next) {
     // console.log("user", user);
     if (!user) {
       return res.status(401).json({
-        message: "Unauthorized Token This is illegal!",
+        message: "Unauthorized Token This is illegal !",
       });
     }
     req.user = user;
@@ -26,7 +26,7 @@ async function userAuth(req, res, next) {
     next();
   } catch (e) {
     res.status(401).json({
-      message: "Unauthorized frist create a account and login!",
+      message: "Unauthorized frist create a account and login !",
     });
   }
 }
