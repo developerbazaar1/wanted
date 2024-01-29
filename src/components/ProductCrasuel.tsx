@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import { RxCross2 } from "react-icons/rx";
 import Slider from "react-slick";
 
-const ProductCrasuel = ({ product, unique }) => {
+const ProductCrasuel = ({ product }: any) => {
   const [settings] = useState({
     dots: false,
     infinite: true,
@@ -16,7 +16,6 @@ const ProductCrasuel = ({ product, unique }) => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-  // console.log(unique);
   return (
     <>
       <div className="col-sm-12 col-xs-12 col-md-6 col-lg-4 col-xl-4 col-lg-4">
@@ -28,7 +27,7 @@ const ProductCrasuel = ({ product, unique }) => {
           </span>
         </div>
         <Slider {...settings} className="single-advert-product-prevew">
-          {product?.productImg?.map((img, index) => (
+          {product?.productImg?.map((img: any, index: any) => (
             <div
               className="carousel-item active"
               key={img?._id}
@@ -55,7 +54,7 @@ const ProductCrasuel = ({ product, unique }) => {
             <RxCross2 size={25} color="black" />
           </div>
           <Slider {...settings} className="zoom-slider">
-            {product?.productImg?.map((img, index) => (
+            {product?.productImg?.map((img: any, index: any) => (
               <div
                 key={img?._id}
                 style={{

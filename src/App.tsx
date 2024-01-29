@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Reward from "./components/Reward.tsx";
 import Setting from "./components/Setting.tsx";
 import Wishlist from "./components/Wishlist.tsx";
@@ -23,7 +24,6 @@ import All from "./pages/All.tsx";
 import Test from "./Test.tsx";
 import AuthChecked from "./components/layout/AuthChecked.tsx";
 import ProctedRoute from "./components/layout/ProctedRoute.tsx";
-import { ReactElement, useContext, useEffect } from "react";
 import { ServicesAPi, WishListAPi } from "./config/AxiosUtils.ts";
 import { useDispatch } from "react-redux";
 import {
@@ -33,9 +33,8 @@ import {
 } from "./features/taxonomy.ts";
 import { useToken } from "./service/auth.ts";
 import { wishList } from "./features/wishList.ts";
-import SearchResult from "./pages/SearchResult.tsx";
 import SubSubCategory from "./pages/SubSubCategory.tsx";
-import { SearchContext, SearchProvider } from "./features/searchContext.tsx";
+import { SearchProvider } from "./features/searchContext.tsx";
 
 // interface ClearSerachPropsProps {
 //   components: ReactElement;

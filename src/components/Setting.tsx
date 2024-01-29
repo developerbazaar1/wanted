@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import profileImage from "../assets/development/defaultProfileImage.jpg";
 import "../css/setting.css";
 import { useAuth, useToken } from "../service/auth";
 import { ProfileType } from "../utils/Types";
@@ -25,12 +24,15 @@ const Setting = () => {
   });
 
   useEffect(() => {
-    const setPrfilePrev = watch("profilePic");
+    const setPrfilePrev: any = watch("profilePic");
+
     if (setPrfilePrev?.length) {
       // console.log(setPrfilePrev);
       const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        setprofilPrev(e.target.result);
+      reader.onload = (e: any) => {
+        // console.log(e?.target?.result);
+
+        setprofilPrev(e?.target?.result);
       };
       reader.readAsDataURL(setPrfilePrev[0]);
     }

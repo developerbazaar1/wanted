@@ -16,6 +16,6 @@ export type ProfileType = {
   email: string;
   oldPassword: string;
   newPassword: string;
-  profilePic: File;
+  profilePic: File | FileList;
   userPhone: string;
 };

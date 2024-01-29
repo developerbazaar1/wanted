@@ -11,11 +11,13 @@ export const castProfileUpdateValue = (
   if (formData.newPassword) {
     data.append("newPassword", formData.newPassword);
   }
-  if (formData.oldPassword) {
-    data.append("oldPassword", formData.oldPassword);
-  }
-  if (formData.profilePic?.length > 0) {
-    data.append("img", formData.profilePic[0]);
+  // Check if profilePic is a File or a FileList
+  if (formData.profilePic instanceof FileList) {
+    if (formData.profilePic.length > 0) {
+      data.append("img", formData.profilePic[0]);
+    }
+  } else if (formData.profilePic instanceof File) {
+    data.append("img", formData.profilePic);
   }
   return data;
 };

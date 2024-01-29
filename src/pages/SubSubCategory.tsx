@@ -18,7 +18,11 @@ const SubSubCategory = () => {
   // console.log(services);
 
   const dispatch = useDispatch();
-  const [adverts, setAdvert] = useState({
+  const [adverts, setAdvert] = useState<{
+    data: any;
+    status: string;
+    message: string;
+  }>({
     data: [],
     status: "",
     message: "",
@@ -49,7 +53,7 @@ const SubSubCategory = () => {
   useEffect(() => {
     setLoading(true);
     AdsApi.getAdsBasedOnService(
-      decodeURIComponent(services.replace(/\+/g, " ")),
+      decodeURIComponent(services?.replace(/\+/g, " ") || ""),
       AdsPage,
       searchParams.get("serach") || ""
     )
@@ -153,15 +157,15 @@ const SubSubCategory = () => {
   return (
     <>
       <div className="container_live">
-        {adverts.data.map((advert) => (
-          <div className="single_Ads p-0" key={advert._id}>
+        {adverts.data.map((advert: any) => (
+          <div className="single_Ads p-0" key={advert?._id}>
             <div className="ads_img_div">
               <img src={advert?.advertImage?.imgUrl} alt="bannerImg" />
               <div
                 className="favoruite"
                 onClick={() => RemoveAndAddWishList(advert._id)}
               >
-                {GetWishList.some((fav) => fav.advert_id === advert._id)
+                {GetWishList.some((fav: any) => fav?.advert_id === advert?._id)
                   ? FilledFavouriteIconLarge
                   : Favourite}
               </div>
@@ -169,7 +173,7 @@ const SubSubCategory = () => {
             <Link
               to="details"
               className="ads_details"
-              state={{ advertid: advert._id }}
+              state={{ advertid: advert?._id }}
             >
               {/* <div className="ads_cat">Beauty & Spa / Face &Skin</div> */}
               {/* <button className="whereTo-btn-all">{advert?.whereToShow}</button> */}
@@ -179,8 +183,8 @@ const SubSubCategory = () => {
               </p>
               <div className="provider">{advert?.provider[0]?.storeName}</div>
               <div>
-                <span className="price">£{advert.advertOfferPrice}</span>
-                <span className="off_price">£{advert.advertPrice}</span>
+                <span className="price">£{advert?.advertOfferPrice}</span>
+                <span className="off_price">£{advert?.advertPrice}</span>
               </div>
             </Link>
           </div>

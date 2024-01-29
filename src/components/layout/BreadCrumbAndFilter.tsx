@@ -8,7 +8,7 @@ const breadNav = {
 
 interface Breadcrumb {
   label: string;
-  link: string;
+  link: string | null;
 }
 
 const BreadCrumbAndFilter: React.FC = () => {

@@ -76,7 +76,7 @@ const Home = () => {
   return (
     <>
       <div className="container_home">
-        {services?.category?.map((cate) => (
+        {services?.category?.map((cate: any) => (
           <div className="single_cat p-0" key={cate._id}>
             <Link
               to={`/service/${cate.categoryName}`}

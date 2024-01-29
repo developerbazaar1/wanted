@@ -1,5 +1,5 @@
 import { FadeLoader } from "react-spinners";
-const override = {
+const override: any = {
   display: "inherit",
   position: "relative",
   fontSize: "0px",

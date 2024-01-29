@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../css/subCategory.css";
 import Loader from "../components/Loader";
 import { useEffect, useState } from "react";
@@ -11,7 +11,9 @@ const SubCategory = () => {
 
   const { subcategory } = useParams();
 
-  const categoryObj = category.find((e) => e?.categoryName === subcategory);
+  const categoryObj: any = category.find(
+    (e: any) => e?.categoryName === subcategory
+  );
 
   const [loading, setLoading] = useState(false);
   const [services, setServices] = useState({
@@ -112,7 +114,7 @@ const SubCategory = () => {
       </div> */}
 
       <div className="container_home">
-        {services?.SubCategory?.map((subcat) => (
+        {services?.SubCategory?.map((subcat: any) => (
           <div className="single_cat p-0" key={subcat._id}>
             <Link key={subcat._id} to={subcat.subCategoryName}>
               <div className="post_cat_img_div">

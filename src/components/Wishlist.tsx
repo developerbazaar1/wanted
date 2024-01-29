@@ -66,7 +66,7 @@ const Wishlist: React.FC = () => {
 
   return (
     <div className="favoruite_container">
-      {WishList?.fav?.map((favourite) => (
+      {WishList?.fav?.map((favourite: any) => (
         <div className="row border_5" key={favourite._id}>
           <div className="col-5 p-0 col-md-3">
             <div className="image-container">

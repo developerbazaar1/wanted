@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import FirstModal from "./FirstModal";
 import { FilterIcon, PostalIcon, SerachIcon } from "../../utils/SvgElements";
@@ -7,18 +7,22 @@ import { useServices } from "../../service/auth";
 // import { redirect } from "react-router-dom";
 
 import { toast } from "react-toastify";
-import { SearchContext } from "../../features/searchContext";
 import { useSearchParams } from "react-router-dom";
 
+interface serachVlue {
+  searchQuery: string;
+  postalCode: string;
+  taxonomy: string | null;
+}
+
 const MiddleNav = () => {
-  const { updateSearchQuery } = useContext(SearchContext);
   const [, setSearchParams] = useSearchParams();
 
   const [showModal1, setShowModal1] = useState<boolean>(false);
   const [selectedCateogries, setselectedCateogries] = useState<string>("");
   // const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<serachVlue>();
 
   // const startSearchFunction = () => {
   //   setShowModal1(true);
@@ -140,7 +144,7 @@ const MiddleNav = () => {
                     id="mainDorpwDoen"
                     aria-labelledby="dropdownMenuLink"
                   >
-                    {category?.map((element) => (
+                    {category?.map((element: any) => (
                       <li
                         className="border_bottom"
                         key={element._id}
@@ -157,10 +161,10 @@ const MiddleNav = () => {
                         <ul className="dropdown-menu dropdown-submenu dropw_down_menu">
                           {subCategory
                             .filter(
-                              (subCatFilter) =>
+                              (subCatFilter:any) =>
                                 subCatFilter.category_id === element._id
                             )
-                            .map((subCateElement) => (
+                            .map((subCateElement:any) => (
                               <li
                                 key={subCateElement._id}
                                 onClick={(e) => {

@@ -13,7 +13,11 @@ const All = () => {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
-  const [adverts, setAdvert] = useState({
+  const [adverts, setAdvert] = useState<{
+    data: any;
+    status: string;
+    message: string;
+  }>({
     data: [],
     status: "",
     message: "",
@@ -149,7 +153,7 @@ const All = () => {
   return (
     <>
       <div className="container_live">
-        {adverts.data.map((advert) => (
+        {adverts.data.map((advert: any) => (
           <div className="single_Ads p-0" key={advert._id}>
             <div className="ads_img_div">
               <img src={advert?.advertImage?.imgUrl} alt="bannerImg" />
@@ -157,7 +161,7 @@ const All = () => {
                 className="favoruite"
                 onClick={() => RemoveAndAddWishList(advert._id)}
               >
-                {GetWishList.some((fav) => fav.advert_id === advert._id)
+                {GetWishList.some((fav: any) => fav.advert_id === advert._id)
                   ? FilledFavouriteIconLarge
                   : Favourite}
               </div>

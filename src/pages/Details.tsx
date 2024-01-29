@@ -5,7 +5,6 @@ import Spiner from "../components/Spiner";
 import { useEffect, useState } from "react";
 import { AdsApi, WishListAPi } from "../config/AxiosUtils";
 import {
-  Favourite,
   FilledFavouriteIconLarge,
   contactIcon,
   facebookIcon,
@@ -19,13 +18,18 @@ import { useToken, useWishList } from "../service/auth";
 import { toast } from "react-toastify";
 import { wishList as SetstoreWishList } from "../features/wishList";
 import { useDispatch } from "react-redux";
+import ProviderDetailsModal from "../components/ProviderDetailsModal";
 const Details = () => {
   const GetWishList = useWishList();
   const dispatch = useDispatch();
   const [showProviderDetialsModal, setShowProviderDetialsModal] =
     useState(false);
 
-  const [previewData, setpreviewData] = useState({
+  const [previewData, setpreviewData] = useState<{
+    data: any;
+    status: string;
+    error: string;
+  }>({
     data: {},
     status: "",
     error: "",
@@ -67,7 +71,7 @@ const Details = () => {
           error: "",
         });
       })
-      .catch((e) => {
+      .catch(() => {
         // console.log(e);
 
         setpreviewData({
@@ -155,7 +159,7 @@ const Details = () => {
                 }
               >
                 {GetWishList.some(
-                  (fav) => fav.advert_id === previewData?.data?.advert?._id
+                  (fav: any) => fav.advert_id === previewData?.data?.advert?._id
                 ) ? (
                   FilledFavouriteIconLarge
                 ) : (
@@ -249,10 +253,12 @@ const Details = () => {
               </div>
               <div
                 className="details_provider_favoruite"
-                onClick={() => RemoveAndAddWishList(advert._id)}
+                onClick={() =>
+                  RemoveAndAddWishList(previewData?.data?.advert._id)
+                }
               >
                 {GetWishList.some(
-                  (fav) => fav.advert_id === previewData?.data?.advert?._id
+                  (fav: any) => fav.advert_id === previewData?.data?.advert?._id
                 ) ? (
                   FilledFavouriteIconLarge
                 ) : (
@@ -371,16 +377,12 @@ const Details = () => {
           </div>
         </div>
 
-        {previewData?.data?.products?.map((element) => (
+        {previewData?.data?.products?.map((element: any) => (
           <div key={element.title}>
             <h3 className="mt-4 text-capitalize">{element.title}</h3>
             <div className="row prduct-preview-main-container">
-              {element?.items?.map((product, index: number) => (
-                <ProductCrasuel
-                  key={product?._id}
-                  product={product}
-                  unique={index + 1}
-                />
+              {element?.items?.map((product: any) => (
+                <ProductCrasuel key={product?._id} product={product} />
               ))}
             </div>
           </div>
@@ -390,7 +392,7 @@ const Details = () => {
           <>
             <h5 className="my-3">More Ads From This Provider</h5>
             <div className="details_ads">
-              {previewData?.data?.adverts?.map((ads) => (
+              {previewData?.data?.adverts?.map((ads: any) => (
                 <Link
                   to={`.`}
                   state={{ advertid: ads._id }}
@@ -429,12 +431,12 @@ const Details = () => {
           </>
         )}
       </div>
-      {/* 
+
       <ProviderDetailsModal
         showProviderDetialsModal={showProviderDetialsModal}
         setShowProviderDetialsModal={setShowProviderDetialsModal}
         portfolio={previewData?.data?.Portfolio}
-      /> */}
+      />
     </>
   );
 };
