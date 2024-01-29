@@ -8,6 +8,9 @@ const advertModal = require("../../models/providerModel/advertModal");
 
 const SerachAdvertAndProductController = async (req, res, next) => {
   let { postalCode, taxonomy, searchQuery, page = 1, pageSize = 6 } = req.query;
+
+  console.log(postalCode, taxonomy, searchQuery);
+
   try {
     if (postalCode) {
       advertModal

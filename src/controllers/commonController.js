@@ -6,6 +6,12 @@ const SubSubCategoryModal = require("../models/adminModel/subSubCategoryModal");
 const getCategoryController = async (req, res, async) => {
   try {
     let category = await CategroyModal.find({})
+      .select({
+        _id: 1,
+        categoryName: 1,
+        categoryImage: 1,
+        categoryIcon: 1,
+      })
       .then((category) => {
         res.status(OK).json({
           status: "success",
@@ -29,6 +35,12 @@ const getCategoryController = async (req, res, async) => {
 const getsubCategoryController = async (req, res, async) => {
   try {
     let subCategory = await SubcategoryModal.find({})
+      .select({
+        _id: 1,
+        category_id: 1,
+        subCategoryName: 1,
+        subCatImg: 1,
+      })
       .then((subcategory) => {
         res.status(OK).json({
           status: "success",

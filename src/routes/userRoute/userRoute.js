@@ -1,6 +1,5 @@
 const express = require("express");
 const UserRoutes = express.Router();
-const auth = require("../../config/auth");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const allowedFormats = ["png", "jpg", "jpeg", "jfif", "webp", "avif"];
@@ -32,6 +31,7 @@ const {
 const { profileImageHelper } = require("../../helpers/userHelper");
 const {
   liveAndLatestOfferController,
+  GetAdvertDetails,
 } = require("../../controllers/userController/liveAdsLatesController");
 const {
   SerachAdvertAndProductController,
@@ -41,6 +41,18 @@ const {
 } = require("../../controllers/userController/udateProfileController");
 const userAuth = require("../../config/userAuth");
 const { handleUpload } = require("../../Utils/UploadMiddleWare");
+const {
+  deleteuserProfileController,
+} = require("../../controllers/userController/deleteUserProfile");
+const {
+  GetUserWishList,
+  updateWishList,
+} = require("../../controllers/userController/wishlistController");
+const {
+  servicesController,
+  servicesSubController,
+  getSingleSubservice,
+} = require("../../controllers/userController/ServicesController");
 
 /**
  * user auth route for signup
@@ -57,9 +69,15 @@ UserRoutes.put(
   profileImageHelper("profilePic"),
   udateProfileController
 );
-// UserRoutes.delete("/deleteprofile", userAuth);
+UserRoutes.delete("/deleteprofile", userAuth, deleteuserProfileController);
 
 UserRoutes.get("/getads", liveAndLatestOfferController);
+UserRoutes.get("/getservice", servicesController);
+UserRoutes.get("/getSubSservice", servicesSubController);
+UserRoutes.get("/getsingsubservideadvert/:_id", getSingleSubservice);
+UserRoutes.get("/getads/details", GetAdvertDetails);
 UserRoutes.get("/serach", SerachAdvertAndProductController);
+UserRoutes.get("/wishlist", userAuth, GetUserWishList);
+UserRoutes.put("/wishlist/:advertId", userAuth, updateWishList);
 
 module.exports = UserRoutes;

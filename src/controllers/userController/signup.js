@@ -1,4 +1,5 @@
 const { encryptPassword } = require("../../config/utlis");
+const { v4: uuidv4 } = require("uuid");
 const {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
@@ -19,7 +20,8 @@ const userSignupController = async (req, res) => {
         message: "User already exits with this email address!",
       });
     }
-
+    const userQRcode = generateUniqueCode();
+    console.log("user qr code", userQRcode);
     const hashPassword = await encryptPassword(password);
 
     const user = await UserModal.create({
@@ -28,7 +30,7 @@ const userSignupController = async (req, res) => {
       password: hashPassword,
       phoneNumber: "",
       userProfilePic: "",
-      userQRcode: "",
+      userQRcode: userQRcode,
       role: "user",
     });
 
@@ -62,5 +64,13 @@ const userSignupController = async (req, res) => {
     });
   }
 };
+
+function generateUniqueCode() {
+  const uuid = uuidv4();
+
+  const numericCode = uuid.replace(/\D/g, "").slice(0, 10);
+
+  return numericCode.padStart(10, "0");
+}
 
 module.exports = { userSignupController };

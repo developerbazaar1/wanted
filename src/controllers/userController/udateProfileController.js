@@ -34,7 +34,15 @@ const udateProfileController = async (req, res, next) => {
     } else {
       return res.status(OK).json({
         message: "successfully Update the Profile!",
-        data: UpdateUser,
+        data: {
+          userProfilePic: UpdateUser.userProfilePic,
+          _id: UpdateUser._id,
+          userName: UpdateUser.userName,
+          email: UpdateUser.email,
+          phoneNumber: UpdateUser.phoneNumber,
+          role: UpdateUser.role,
+          userQRcode: UpdateUser.userQRcode,
+        },
         status: "sucess",
       });
     }
