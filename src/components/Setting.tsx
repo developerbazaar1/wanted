@@ -9,6 +9,7 @@ import { castProfileUpdateValue } from "../utils/CastintoFormData";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { loginSignup } from "../features/authSlice";
+import DefaultProfileImg from "../assets/development/defaultProfileImage.jpg";
 const Setting = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [profilPrev, setprofilPrev] = useState(null);
@@ -48,7 +49,7 @@ const Setting = () => {
     setLoading(true);
     ProfileApi.updateProfile(data, token)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(
           loginSignup({
             user: res?.data?.data,
@@ -120,8 +121,13 @@ const Setting = () => {
               >
                 <div style={{ position: "relative", width: "fit-content" }}>
                   <img
-                    src={profilPrev ? profilPrev : user?.userProfilePic?.imgUrl}
-                    // src={profilPrev ? profilPrev : profileImage}
+                    src={
+                      profilPrev
+                        ? profilPrev
+                        : user?.userProfilePic?.imgUrl
+                        ? user?.userProfilePic?.imgUrl
+                        : DefaultProfileImg
+                    }
                     alt="profile"
                     className="profilepic"
                     style={{ width: "200px" }}

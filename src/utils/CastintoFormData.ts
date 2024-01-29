@@ -11,6 +11,9 @@ export const castProfileUpdateValue = (
   if (formData.newPassword) {
     data.append("newPassword", formData.newPassword);
   }
+  if (formData.oldPassword) {
+    data.append("oldPassword", formData.oldPassword);
+  }
   // Check if profilePic is a File or a FileList
   if (formData.profilePic instanceof FileList) {
     if (formData.profilePic.length > 0) {

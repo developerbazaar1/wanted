@@ -14,8 +14,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useAuth();
-  console.log(user);
-
   const activeStyles = {
     backgroundColor: "#C9FFD3",
     boxShadow:

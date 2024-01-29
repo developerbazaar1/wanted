@@ -37,10 +37,9 @@ const Details = () => {
 
   const [loading, setLoading] = useState(false);
   const token = useToken();
-  // let { advertid } = useParams();
-  // const advertid = localStorage.getItem("advertId");
   const { advertid } = useLocation().state;
-  // console.log(advertid);
+
+  console.log("This is advert id", advertid);
 
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
@@ -425,9 +424,9 @@ const Details = () => {
                 </Link>
               ))}
             </div>
-            <button className="show_more_ads_btn">
+            {/* <button className="show_more_ads_btn">
               Show All Ads From This Provider
-            </button>
+            </button> */}
           </>
         )}
       </div>
