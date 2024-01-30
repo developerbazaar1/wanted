@@ -66,7 +66,6 @@ const router = createBrowserRouter(
 
       <Route element={<Layout />}>
         <Route element={<BreadCrumbAndFilter />}>
-          {/* <Route path="serach" element={<SearchResult />} /> */}
           <Route index element={<Home />} />
           <Route path="service/:subcategory" element={<SubCategory />} />
           <Route
@@ -79,11 +78,8 @@ const router = createBrowserRouter(
             errorElement={<div> this is for error element</div>}
           />
           <Route path="latestOppers" element={<LatestOffers />} />
-          {/* <Route path="Foodbeverage" element={<All />} /> */}
           <Route path="all" element={<All />} />
-          {/* <Route path=":page/details" element={<Details />} /> */}
           <Route path=":page/:page?/:page?/details" element={<Details />} />
-          {/* <Route path=":details" element={<Details />} /> */}
         </Route>
         <Route
           path="/profile"

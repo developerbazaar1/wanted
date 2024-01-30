@@ -1,13 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import FirstModal from "./FirstModal";
 import { FilterIcon, PostalIcon, SerachIcon } from "../../utils/SvgElements";
 import { useForm } from "react-hook-form";
 import { useServices } from "../../service/auth";
-// import { redirect } from "react-router-dom";
-
 import { toast } from "react-toastify";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 interface serachVlue {
   searchQuery: string;
@@ -17,16 +16,22 @@ interface serachVlue {
 
 const MiddleNav = () => {
   const [, setSearchParams] = useSearchParams();
+  const location = useLocation().pathname;
+
+  // console.log("location", location);
 
   const [showModal1, setShowModal1] = useState<boolean>(false);
   const [selectedCateogries, setselectedCateogries] = useState<string>("");
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
   const { register, handleSubmit, reset } = useForm<serachVlue>();
 
   // const startSearchFunction = () => {
   //   setShowModal1(true);
   // };
+
+  const pathnames = location.split("/").filter((x) => x);
+  console.log(pathnames);
 
   function handelFormDubmit(formData: {
     searchQuery: string;
@@ -46,10 +51,16 @@ const MiddleNav = () => {
       toast.error("Please Enter a Serach Query");
       return;
     }
-
     const { taxonomy, searchQuery, postalCode } = formData;
 
     const SearchQuery = taxonomy || searchQuery || postalCode || "";
+
+    if (pathnames.includes("details")) {
+      reset();
+      navigate(`${pathnames[0]}?serach=${SearchQuery}`);
+      return;
+    }
+
     setSearchParams({ serach: SearchQuery });
     reset();
   }
@@ -60,6 +71,11 @@ const MiddleNav = () => {
     const dropDown = document.getElementById("mainDorpwDoen");
     dropDown?.classList.remove("show");
   }
+
+  // whenever location change rest the selectedDropDown
+  useEffect(() => {
+    setselectedCateogries("");
+  }, [location]);
 
   // function to list the filter category
 
@@ -161,10 +177,10 @@ const MiddleNav = () => {
                         <ul className="dropdown-menu dropdown-submenu dropw_down_menu">
                           {subCategory
                             .filter(
-                              (subCatFilter:any) =>
+                              (subCatFilter: any) =>
                                 subCatFilter.category_id === element._id
                             )
-                            .map((subCateElement:any) => (
+                            .map((subCateElement: any) => (
                               <li
                                 key={subCateElement._id}
                                 onClick={(e) => {

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import Loader from "../components/Loader";
 import NextButton from "../components/NextButton";
 import { AdsApi, WishListAPi } from "../config/AxiosUtils";
@@ -60,7 +59,7 @@ const All = () => {
         }
 
         if (res.status === 200 && res?.data?.data?.length === 0) {
-          return toast.warning("No Data Found");
+          return toast.warning("No Advert Found");
         }
 
         if (searchParams.get("serach")) {
