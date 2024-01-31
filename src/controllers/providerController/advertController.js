@@ -133,7 +133,11 @@ const getAdvert = async (req, res, next) => {
   const { _id } = req.query;
 
   try {
-    const adverts = await AdvertModal.find({ advertProvider_id: _id });
+    const adverts = await AdvertModal.find({ advertProvider_id: _id })
+      .sort({
+        createdAt: -1,
+      })
+      .exec();
 
     if (adverts.length === 0) {
       return res.status(NOT_FOUND).json({

@@ -1,3 +1,4 @@
+const { query } = require("express");
 const {
   OK,
   INTERNAL_SERVER_ERROR,
@@ -40,9 +41,20 @@ const servicesController = async (req, res, next) => {
 
 //controller to fetch sub category of particular category
 const servicesSubController = async (req, res, next) => {
-  let { _id } = req.query;
+  let { _id, search } = req.query;
   try {
-    const services = await subCategory.find({ category_id: _id }).select({
+    let query = {
+      category_id: _id,
+    };
+
+    if (search) {
+      query = {
+        category_id: _id,
+        subCategoryName: { $regex: new RegExp(search, "i") },
+      };
+    }
+
+    const services = await subCategory.find(query).select({
       _id: 1,
       category_id: 1,
       subCategoryName: 1,

@@ -5,7 +5,14 @@ const SubSubCategoryModal = require("../models/adminModel/subSubCategoryModal");
 
 const getCategoryController = async (req, res, async) => {
   try {
-    let category = await CategroyModal.find({})
+    let { search } = req.query;
+    let query = {};
+    if (search) {
+      query = { categoryName: { $regex: new RegExp(search, "i") } };
+    }
+
+    console.log(search);
+    await CategroyModal.find(query)
       .select({
         _id: 1,
         categoryName: 1,
