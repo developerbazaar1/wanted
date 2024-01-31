@@ -56,7 +56,7 @@ const Home = () => {
         }}
         className="d-flex justify-content-center align-items-center"
       >
-        No Services is Found !
+        No Advert is Found !
       </h2>
     );
   }
