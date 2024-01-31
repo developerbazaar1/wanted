@@ -100,7 +100,7 @@ const App: React.FC = () => {
   const token = useToken();
 
   useEffect(() => {
-    ServicesAPi.GetCategoryServices()
+    ServicesAPi.GetCategoryServices("")
       .then((res) => {
         // console.log(res.data.category);
         dispatch(

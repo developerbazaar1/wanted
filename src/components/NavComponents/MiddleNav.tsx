@@ -56,6 +56,14 @@ const MiddleNav = () => {
     const SearchQuery = taxonomy || searchQuery || postalCode || "";
 
     if (pathnames.includes("details")) {
+      if (pathnames.includes("service")) {
+        reset();
+        navigate(
+          `/${pathnames[0]}/${pathnames[1]}/${pathnames[2]}?serach=${SearchQuery}`
+        );
+        return;
+      }
+
       reset();
       navigate(`${pathnames[0]}?serach=${SearchQuery}`);
       return;
@@ -77,7 +85,20 @@ const MiddleNav = () => {
     setselectedCateogries("");
   }, [location]);
 
-  // function to list the filter category
+  useEffect(() => {
+    // function to set the filtre category and sub-category based on selected category
+    if (pathnames.includes("service")) {
+      if (pathnames.length > 2) {
+        setselectedCateogries(
+          decodeURIComponent(pathnames[2].replace(/\+/g, " "))
+        );
+      } else {
+        setselectedCateogries(
+          decodeURIComponent(pathnames[1].replace(/\+/g, " "))
+        );
+      }
+    }
+  }, [location]);
 
   function ListFilter(condition: string, service: any[]): JSX.Element | null {
     const filteredData = service.filter(

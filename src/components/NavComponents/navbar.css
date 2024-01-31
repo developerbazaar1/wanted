@@ -112,7 +112,13 @@ nab .login:hover {
   padding: 13px 0px;
 }
 
-.search_icon,
+.search__input__conatiner .search_icon {
+  position: absolute;
+  left: 9px;
+  top: 17px;
+}
+
+.search__input__conatiner .search_icon,
 .postal_icon,
 .filter_icon {
   position: absolute;
@@ -178,6 +184,17 @@ nab .login:hover {
   width: 59%;
 }
 
+@media screen and (max-width: 1275px) {
+  .large_middle_nav {
+    width: 65%;
+  }
+}
+@media screen and (max-width: 1117px) {
+  .large_middle_nav {
+    width: 72%;
+  }
+}
+
 @media screen and (min-width: 992px) {
   #modal_one {
     min-width: 40vw;
@@ -198,7 +215,6 @@ nab .login:hover {
   .nav_search > form {
     margin: 0;
   }
-  .search_icon,
   .postal_icon,
   .filter_icon {
     position: absolute;
@@ -207,12 +223,12 @@ nab .login:hover {
   }
 
   .mobile_top {
-    margin: 0 4rem;
+    margin: 0 2.5rem;
   }
 
   .search__input,
   .postal__input {
-    padding: 0 0 0 42px;
+    padding: 0 0 0 39px;
   }
 
   .searchbuttonText {
@@ -565,5 +581,17 @@ input[type="radio"] {
   .user__profile {
     height: 45px;
     padding: 10px 20px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .search__input__conatiner {
+    width: 42%;
+  }
+
+  .search__input__conatiner .search_icon {
+    position: absolute;
+    left: 14px;
+    top: 19px;
   }
 }

@@ -118,9 +118,9 @@ export const WishListAPi = {
 };
 
 export const ServicesAPi = {
-  GetCategoryServices: async () => {
+  GetCategoryServices: async (search: string | null) => {
     const response = await openapi.request({
-      url: `/getcategory`,
+      url: `/getcategory?search=${search}`,
       method: "GET",
     });
     return response;
@@ -141,9 +141,9 @@ export const ServicesAPi = {
   },
 
   //fetched all sub category for particular category
-  GetServiceOfCategory: async (_id: string) => {
+  GetServiceOfCategory: async (_id: string, search: string | null) => {
     const response = await api.request({
-      url: `/getSubSservice?_id=${_id}`,
+      url: `/getSubSservice?_id=${_id}&search=${search}`,
       method: "GET",
     });
     return response;

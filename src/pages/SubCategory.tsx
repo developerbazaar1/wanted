@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import "../css/subCategory.css";
 import Loader from "../components/Loader";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import { useServices } from "../service/auth";
 
 const SubCategory = () => {
   // const {  name, iconurl } = useLocation().state;
+  const [searchParams] = useSearchParams();
   const { category } = useServices();
 
   const { subcategory } = useParams();
@@ -22,11 +23,16 @@ const SubCategory = () => {
     message: "",
   });
 
+  console.log(searchParams.get("serach"));
+
   useEffect(() => {
     setLoading(true);
-    ServicesAPi.GetServiceOfCategory(categoryObj?._id)
+    ServicesAPi.GetServiceOfCategory(
+      categoryObj?._id,
+      searchParams.get("serach") || ""
+    )
       .then((res) => {
-        // console.log(res?.data?.services);
+        console.log(res?.data?.services);
         setServices({
           SubCategory: JSON.parse(res?.data?.services),
           status: "success",
@@ -44,7 +50,7 @@ const SubCategory = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [subcategory]);
+  }, [subcategory, searchParams.get("serach")]);
 
   if (loading) {
     return (
@@ -66,7 +72,7 @@ const SubCategory = () => {
         }}
         className="d-flex justify-content-center align-items-center"
       >
-        No Advert is Found
+        No servicess is Found !
       </h2>
     );
   }

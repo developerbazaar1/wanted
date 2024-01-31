@@ -1,10 +1,11 @@
 import "../css/Home.css";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ServicesAPi } from "../config/AxiosUtils";
 import Loader from "../components/Loader";
 const Home = () => {
   const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
   const [services, setServices] = useState({
     category: [],
     status: "",
@@ -13,7 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-    ServicesAPi.GetCategoryServices()
+    ServicesAPi.GetCategoryServices(searchParams.get("serach") || "")
       .then((res) => {
         console.log(res?.data?.category);
         setServices({
@@ -33,7 +34,7 @@ const Home = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [searchParams.get("serach")]);
 
   if (loading) {
     return (
@@ -55,7 +56,7 @@ const Home = () => {
         }}
         className="d-flex justify-content-center align-items-center"
       >
-        No Advert is Found
+        No Services is Found !
       </h2>
     );
   }

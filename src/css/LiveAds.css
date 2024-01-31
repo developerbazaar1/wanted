@@ -2,7 +2,7 @@
   width: 92%;
   margin: auto;
   display: flex;
-  gap: 35px;
+  gap: 3.4%;
   flex-wrap: wrap;
   /* justify-content: center; */
   margin-bottom: 25px;
@@ -10,6 +10,10 @@
 
 .single_Ads {
   width: 100%;
+}
+
+.single_Ads.p-0 {
+  margin-bottom: 33px;
 }
 
 .ads_img_div {
@@ -112,7 +116,7 @@
 
 @media screen and (min-width: 630px) {
   .single_Ads {
-    width: 47%; /* Add !important to this line */
+    width: 48%; /* Add !important to this line */
   }
 }
 
