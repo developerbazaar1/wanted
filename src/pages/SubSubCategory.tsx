@@ -13,7 +13,7 @@ import { useSearchParams } from "react-router-dom";
 const SubSubCategory = () => {
   const { services } = useParams();
   const [searchParams] = useSearchParams();
-  console.log("seach parmas", searchParams.get("serach"));
+  // console.log("seach parmas", searchParams.get("search"));
 
   // console.log(services);
 
@@ -34,7 +34,7 @@ const SubSubCategory = () => {
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(
           SetstoreWishList({
             wishList: res?.data?.wishlist,
@@ -43,7 +43,7 @@ const SubSubCategory = () => {
         toast.success(res.data.message);
       })
       .catch((e) => {
-        console.log(e.response);
+        // console.log(e.response);
         toast.error(e.response.data.message);
       });
   }
@@ -55,10 +55,12 @@ const SubSubCategory = () => {
     AdsApi.getAdsBasedOnService(
       decodeURIComponent(services?.replace(/\+/g, " ") || ""),
       AdsPage,
-      searchParams.get("serach") || ""
+      searchParams.get("search") || "",
+      searchParams.get("taxonomy") || "",
+      searchParams.get("location") || ""
     )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
         if (res.status === 204) {
           toast.warning("No More Data Found");
@@ -74,7 +76,11 @@ const SubSubCategory = () => {
           return;
         }
 
-        if (searchParams.get("serach")) {
+        if (
+          searchParams.get("search") ||
+          searchParams.get("taxonomy") ||
+          searchParams.get("location")
+        ) {
           if (AdsPage > 1) {
             setAdvert({
               data: [...adverts.data, ...res.data.services],
@@ -91,6 +97,15 @@ const SubSubCategory = () => {
           return;
         }
 
+        if (AdsPage === 1) {
+          setAdvert({
+            data: [...res.data.services],
+            status: "success",
+            message: res.data.message,
+          });
+          return;
+        }
+
         setAdvert({
           data: [...adverts.data, ...res.data.services],
           status: "success",
@@ -99,7 +114,7 @@ const SubSubCategory = () => {
       })
 
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         setAdvert({
           data: [],
           status: "error",
@@ -109,7 +124,12 @@ const SubSubCategory = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [AdsPage, searchParams.get("serach")]);
+  }, [
+    AdsPage,
+    searchParams.get("search"),
+    searchParams.get("taxonomy"),
+    searchParams.get("location"),
+  ]);
 
   // console.log(adverts.data);
 

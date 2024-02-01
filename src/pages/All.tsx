@@ -26,10 +26,6 @@ const All = () => {
   const [AdsPage, setAdsLoading] = useState(1);
   const token = useToken();
 
-  /**
-   * function to update wishlist
-   * @param Advert_id
-   */
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
@@ -49,20 +45,37 @@ const All = () => {
 
   function FetchData() {
     setLoading(true);
-    AdsApi.getAdsBaedOnType(``, AdsPage, 6, searchParams.get("serach") || "")
+    AdsApi.getAdsBaedOnType(
+      ``,
+      AdsPage,
+      6,
+      searchParams.get("search") || "",
+      searchParams.get("taxonomy") || "",
+      searchParams.get("location") || ""
+    )
 
       .then((res) => {
         console.log(res);
         if (res.status === 204) {
-          // toast.warning("No More data found");
+          toast.warning("No More advert found");
           return;
         }
 
         if (res.status === 200 && res?.data?.data?.length === 0) {
-          return toast.warning("No Advert Found");
+          toast.warning("No Advert Found");
+          setAdvert({
+            data: [],
+            status: "success",
+            message: "No Advert Found",
+          });
+          return;
         }
 
-        if (searchParams.get("serach")) {
+        if (
+          searchParams.get("search") ||
+          searchParams.get("taxonomy") ||
+          searchParams.get("location")
+        ) {
           if (AdsPage > 1) {
             setAdvert({
               data: [...adverts.data, ...JSON.parse(res.data.data)],
@@ -71,6 +84,16 @@ const All = () => {
             });
             return;
           }
+          setAdvert({
+            data: [...JSON.parse(res.data.data)],
+            status: "success",
+            message: res.data.message,
+          });
+          return;
+        }
+
+        // Case to eliminate advert duplication when user hit browser back btn
+        if (AdsPage === 1) {
           setAdvert({
             data: [...JSON.parse(res.data.data)],
             status: "success",
@@ -98,17 +121,22 @@ const All = () => {
       });
   }
 
-  // useEffect(() => {
-  //   updateSearchQuery("");
-  // }, []);
-
   useEffect(() => {
     setAdsLoading(1);
-  }, [searchParams.get("serach")]);
+  }, [
+    searchParams.get("search"),
+    searchParams.get("taxonomy"),
+    searchParams.get("location"),
+  ]);
 
   useEffect(() => {
     FetchData();
-  }, [AdsPage, searchParams.get("serach")]);
+  }, [
+    AdsPage,
+    searchParams.get("search"),
+    searchParams.get("taxonomy"),
+    searchParams.get("location"),
+  ]);
 
   if (loading) {
     return (
@@ -149,6 +177,8 @@ const All = () => {
     );
   }
 
+  // console.log("This is wishlist", GetWishList);
+
   return (
     <>
       <div className="container_live">
@@ -171,7 +201,6 @@ const All = () => {
               state={{ advertid: advert._id }}
             >
               {/* <div className="ads_cat">Beauty & Spa / Face &Skin</div> */}
-              <button className="whereTo-btn-all">{advert?.whereToShow}</button>
               <p>
                 {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}
               </p>

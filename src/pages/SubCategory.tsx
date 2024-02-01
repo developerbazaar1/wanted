@@ -23,16 +23,13 @@ const SubCategory = () => {
     message: "",
   });
 
-  console.log(searchParams.get("serach"));
+  // console.log(searchParams.get("serach"));
 
   useEffect(() => {
     setLoading(true);
-    ServicesAPi.GetServiceOfCategory(
-      categoryObj?._id,
-      searchParams.get("serach") || ""
-    )
+    ServicesAPi.GetServiceOfCategory(categoryObj?._id)
       .then((res) => {
-        console.log(res?.data?.services);
+        // console.log(res?.data?.services);
         setServices({
           SubCategory: JSON.parse(res?.data?.services),
           status: "success",
@@ -45,12 +42,12 @@ const SubCategory = () => {
           status: "error",
           message: e.response?.data.message,
         });
-        console.log("inside the service", e);
+        // console.log("inside the service", e);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [subcategory, searchParams.get("serach")]);
+  }, [subcategory]);
 
   if (loading) {
     return (

@@ -72,6 +72,9 @@ const router = createBrowserRouter(
             path="service/:subcategory/:services"
             element={<SubSubCategory />}
           />
+
+          {/* route to show services search */}
+          <Route path="service/search" element={<SubSubCategory />} />
           <Route
             path="liveads"
             element={<LiveAds />}
@@ -100,7 +103,7 @@ const App: React.FC = () => {
   const token = useToken();
 
   useEffect(() => {
-    ServicesAPi.GetCategoryServices("")
+    ServicesAPi.GetCategoryServices()
       .then((res) => {
         // console.log(res.data.category);
         dispatch(

@@ -48,10 +48,12 @@ export const AdsApi = {
     adstypes: string,
     page = 1,
     pageSize = 6,
-    searchQuery = ""
+    searchQuery = "",
+    taxonomy = "",
+    location = ""
   ) => {
     const response = await api.request({
-      url: `/getads?adstypes=${adstypes}&page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}`,
+      url: `/getads?adstypes=${adstypes}&page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}&taxonomy=${taxonomy}&location=${location}`,
       method: "get",
     });
     // console.log(response);
@@ -84,9 +86,15 @@ export const AdsApi = {
 
     return response;
   },
-  getAdsBasedOnService: async (_id: string, page = 1, searchQuery = "") => {
+  getAdsBasedOnService: async (
+    _id: string,
+    page = 1,
+    searchQuery = "",
+    taxonomy = "",
+    location = ""
+  ) => {
     return await api.request({
-      url: `/getsingsubservideadvert/${_id}?page=${page}&pageSize=6&searchQuery=${searchQuery}`,
+      url: `/getsingsubservideadvert?_id=${_id}&page=${page}&pageSize=6&searchQuery=${searchQuery}&taxonomy=${taxonomy}&location=${location}`,
       method: "GET",
     });
   },
@@ -118,9 +126,9 @@ export const WishListAPi = {
 };
 
 export const ServicesAPi = {
-  GetCategoryServices: async (search: string | null) => {
+  GetCategoryServices: async () => {
     const response = await openapi.request({
-      url: `/getcategory?search=${search}`,
+      url: `/getcategory`,
       method: "GET",
     });
     return response;
@@ -141,9 +149,9 @@ export const ServicesAPi = {
   },
 
   //fetched all sub category for particular category
-  GetServiceOfCategory: async (_id: string, search: string | null) => {
+  GetServiceOfCategory: async (_id: string) => {
     const response = await api.request({
-      url: `/getSubSservice?_id=${_id}&search=${search}`,
+      url: `/getSubSservice?_id=${_id}`,
       method: "GET",
     });
     return response;

@@ -1,11 +1,10 @@
 import "../css/Home.css";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ServicesAPi } from "../config/AxiosUtils";
 import Loader from "../components/Loader";
 const Home = () => {
   const [loading, setLoading] = useState(false);
-  const [searchParams] = useSearchParams();
   const [services, setServices] = useState({
     category: [],
     status: "",
@@ -14,9 +13,9 @@ const Home = () => {
 
   useEffect(() => {
     setLoading(true);
-    ServicesAPi.GetCategoryServices(searchParams.get("serach") || "")
+    ServicesAPi.GetCategoryServices()
       .then((res) => {
-        console.log(res?.data?.category);
+        // console.log(res?.data?.category);
         setServices({
           category: res?.data?.category,
           status: "success",
@@ -29,12 +28,11 @@ const Home = () => {
           status: "error",
           message: e.response?.data.message,
         });
-        console.log("inside the service", e);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [searchParams.get("serach")]);
+  }, []);
 
   if (loading) {
     return (

@@ -24,3 +24,23 @@ export const castProfileUpdateValue = (
   }
   return data;
 };
+
+export const showArrowCheck = (
+  condition: string,
+  service: any[],
+  type: string
+): boolean => {
+  // subcategory_id;
+  let result;
+  if (type === "Cat") {
+    result = service.find((element: any) => condition === element.category_id);
+  } else {
+    result = service.find(
+      (element: any) => condition === element.subcategory_id
+    );
+  }
+
+  console.log("result for drop down", result);
+
+  return result ? true : false;
+};

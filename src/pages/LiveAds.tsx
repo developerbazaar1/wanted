@@ -30,7 +30,7 @@ const LiveAds = () => {
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(
           SetstoreWishList({
             wishList: res?.data?.wishlist,
@@ -39,10 +39,15 @@ const LiveAds = () => {
         toast.success(res.data.message);
       })
       .catch((e) => {
-        console.log(e.response);
+        // console.log(e.response);
         toast.error(e.response.data.message);
       });
   }
+
+  // console.log(
+  //   "serach query",
+  //   searchParams.forEach((val) => console.log(val))
+  // );
 
   function FetchData() {
     setLoading(true);
@@ -50,21 +55,33 @@ const LiveAds = () => {
       `Live Ads`,
       AdsPage,
       6,
-      searchParams.get("serach") || ""
+      searchParams.get("search") || "",
+      searchParams.get("taxonomy") || "",
+      searchParams.get("location") || ""
     )
 
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 204) {
-          // toast.warning("No More data found");
+          toast.warning("No More advert found");
           return;
         }
 
         if (res.status === 200 && res?.data?.data?.length === 0) {
-          return toast.warning("No Data Found");
+          toast.warning("No Advert Found");
+          setAdvert({
+            data: [],
+            status: "success",
+            message: "No Advert Found",
+          });
+          return;
         }
 
-        if (searchParams.get("serach") || "") {
+        if (
+          searchParams.get("search") ||
+          searchParams.get("taxonomy") ||
+          searchParams.get("location")
+        ) {
           if (AdsPage > 1) {
             setAdvert({
               data: [...adverts.data, ...JSON.parse(res.data.data)],
@@ -80,7 +97,15 @@ const LiveAds = () => {
           });
           return;
         }
-
+        // Case to eliminate advert duplication when user hit browser back btn
+        if (AdsPage === 1) {
+          setAdvert({
+            data: [...JSON.parse(res.data.data)],
+            status: "success",
+            message: res.data.message,
+          });
+          return;
+        }
         setAdvert({
           data: [...adverts.data, ...JSON.parse(res.data.data)],
           status: "success",
@@ -88,7 +113,7 @@ const LiveAds = () => {
         });
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         setAdvert({
           data: [],
           status: "error",
@@ -102,11 +127,20 @@ const LiveAds = () => {
 
   useEffect(() => {
     setAdsLoading(1);
-  }, [searchParams.get("serach")]);
+  }, [
+    searchParams.get("search"),
+    searchParams.get("taxonomy"),
+    searchParams.get("location"),
+  ]);
 
   useEffect(() => {
     FetchData();
-  }, [AdsPage, searchParams.get("serach")]);
+  }, [
+    AdsPage,
+    searchParams.get("search"),
+    searchParams.get("taxonomy"),
+    searchParams.get("location"),
+  ]);
 
   if (loading) {
     return (

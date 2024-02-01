@@ -7,21 +7,22 @@ import { useServices } from "../../service/auth";
 import { toast } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { showArrowCheck } from "../../utils/CastintoFormData";
 
 interface serachVlue {
   searchQuery: string;
   postalCode: string;
-  taxonomy: string | null;
+  taxonomy: string;
 }
 
 const MiddleNav = () => {
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation().pathname;
 
   // console.log("location", location);
 
   const [showModal1, setShowModal1] = useState<boolean>(false);
-  const [selectedCateogries, setselectedCateogries] = useState<string>("");
+  const [selectedCateogries, setselectedCateogries] = useState<string>();
   const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
   const { register, handleSubmit, reset } = useForm<serachVlue>();
@@ -31,20 +32,15 @@ const MiddleNav = () => {
   // };
 
   const pathnames = location.split("/").filter((x) => x);
-  console.log(pathnames);
+  // console.log(pathnames);
 
   function handelFormDubmit(formData: {
     searchQuery: string;
     postalCode: string;
-    taxonomy: string | null;
+    taxonomy: string | undefined;
   }) {
-    if (!formData.searchQuery || !formData.postalCode) {
+    if (selectedCateogries) {
       formData["taxonomy"] = selectedCateogries;
-    }
-
-    if (formData.searchQuery || formData.postalCode) {
-      setselectedCateogries("");
-      formData["taxonomy"] = "";
     }
 
     if (!formData.taxonomy && !formData.searchQuery && !formData.postalCode) {
@@ -53,23 +49,40 @@ const MiddleNav = () => {
     }
     const { taxonomy, searchQuery, postalCode } = formData;
 
-    const SearchQuery = taxonomy || searchQuery || postalCode || "";
-
+    // redirect user to there home page when serach is submit from details Page.
     if (pathnames.includes("details")) {
-      if (pathnames.includes("service")) {
-        reset();
-        navigate(
-          `/${pathnames[0]}/${pathnames[1]}/${pathnames[2]}?serach=${SearchQuery}`
-        );
-        return;
-      }
-
       reset();
-      navigate(`${pathnames[0]}?serach=${SearchQuery}`);
+      navigate(
+        `${pathnames[0]}?search=${searchQuery || ""}&taxonomy=${
+          taxonomy || ""
+        }&location=${postalCode || ""}`
+      );
       return;
     }
 
-    setSearchParams({ serach: SearchQuery });
+    if (pathnames.length === 0 || pathnames.includes("service")) {
+      navigate(
+        `/service/search?search=${searchQuery || ""}&taxonomy=${
+          taxonomy || ""
+        }&location=${postalCode || ""}`
+      );
+      reset();
+      return;
+    }
+
+    const SearchObject: any = {};
+
+    if (taxonomy) {
+      SearchObject["taxonomy"] = taxonomy;
+    }
+    if (searchQuery) {
+      SearchObject["search"] = searchQuery;
+    }
+    if (taxonomy) {
+      SearchObject["location"] = postalCode;
+    }
+
+    setSearchParams(SearchObject);
     reset();
   }
 
@@ -83,11 +96,18 @@ const MiddleNav = () => {
   // whenever location change rest the selectedDropDown
   useEffect(() => {
     setselectedCateogries("");
+    if (searchParams.get("taxonomy"))
+      setselectedCateogries(searchParams.get("taxonomy") || undefined);
   }, [location]);
 
   useEffect(() => {
     // function to set the filtre category and sub-category based on selected category
     if (pathnames.includes("service")) {
+      // when path name include seach do not reset the category
+      if (pathnames.includes("search")) {
+        return;
+      }
+
       if (pathnames.length > 2) {
         setselectedCateogries(
           decodeURIComponent(pathnames[2].replace(/\+/g, " "))
@@ -192,7 +212,12 @@ const MiddleNav = () => {
                       >
                         <a className="dropdown-item">
                           <span>{element.categoryName}</span>
-                          <AiOutlineRight />
+                          {/* show the arrow only if the child exist */}
+                          {showArrowCheck(element._id, subCategory, "Cat") ? (
+                            <AiOutlineRight />
+                          ) : (
+                            ""
+                          )}
                         </a>
 
                         <ul className="dropdown-menu dropdown-submenu dropw_down_menu">
@@ -213,7 +238,16 @@ const MiddleNav = () => {
                               >
                                 <a className="dropdown-item custom_drop_down_item">
                                   {subCateElement.subCategoryName}
-                                  <AiOutlineRight />
+
+                                  {showArrowCheck(
+                                    subCateElement._id,
+                                    SubSubCategory,
+                                    "subCat"
+                                  ) ? (
+                                    <AiOutlineRight />
+                                  ) : (
+                                    ""
+                                  )}
                                 </a>
 
                                 {/* multilevel drop down */}
