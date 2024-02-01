@@ -1,4 +1,4 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../css/subCategory.css";
 import Loader from "../components/Loader";
 import { useEffect, useState } from "react";
@@ -7,7 +7,6 @@ import { useServices } from "../service/auth";
 
 const SubCategory = () => {
   // const {  name, iconurl } = useLocation().state;
-  const [searchParams] = useSearchParams();
   const { category } = useServices();
 
   const { subcategory } = useParams();
