@@ -595,3 +595,9 @@ input[type="radio"] {
     top: 19px;
   }
 }
+
+.custom_drop_down_item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: balance !important;
+}
