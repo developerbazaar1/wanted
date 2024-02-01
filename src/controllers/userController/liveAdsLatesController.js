@@ -13,9 +13,23 @@ const providerPortfolio = require("../../models/providerModel/providerPortfolio"
 const { transformProducts } = require("../../helpers/advertProductsDataFormat");
 
 const liveAndLatestOfferController = async (req, res, next) => {
-  const { page = 1, pageSize = 6, adstypes, searchQuery } = req.query;
+  const {
+    page = 1,
+    pageSize = 6,
+    adstypes,
+    searchQuery,
+    taxonomy,
+    location,
+  } = req.query;
   try {
     const pipeline = [
+      {
+        $match: {
+          advertStatus: "active",
+          advertVisibility: true,
+          ...(adstypes && { whereToShow: adstypes }),
+        },
+      },
       {
         $lookup: {
           from: "providerportfolios",
@@ -29,77 +43,87 @@ const liveAndLatestOfferController = async (req, res, next) => {
       },
       {
         $match: {
-          advertStatus: "active",
-          advertVisibility: true,
-          ...(adstypes && { whereToShow: adstypes }),
-          $or: [
-            {
-              "products.category": {
-                $in: [new RegExp(`.*${searchQuery}.*`, "i")],
-              },
-            },
-            {
-              "products.subcategory": {
-                $in: [new RegExp(`.*${searchQuery}.*`, "i")],
-              },
-            },
-            {
-              "products.subsubcategory": {
-                $in: [new RegExp(`.*${searchQuery}.*`, "i")],
-              },
-            },
-            {
-              advertPostalCode: {
-                $regex: new RegExp(`^${searchQuery}`), // Use ^ for matching the start of the postal code
-                $options: "i", // Case-insensitive matching
-              },
-            },
-            {
-              advertLocation: {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-            {
-              advertTitle: {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-            {
-              "products.productTitle": {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-            {
-              "products.productName": {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-            {
-              "products.category": {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-            {
-              "products.subcategory": {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-            {
-              "products.subsubcategory": {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-
-            {
-              "provider.storeName": {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
-            {
-              "provider.storeAddress": {
-                $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-              },
-            },
+          $and: [
+            ...(searchQuery
+              ? [
+                  {
+                    $or: [
+                      {
+                        "products.productTitle": {
+                          $regex: new RegExp(`.*${searchQuery}.*`, "i"),
+                        },
+                      },
+                      {
+                        "products.productName": {
+                          $regex: new RegExp(`.*${searchQuery}.*`, "i"),
+                        },
+                      },
+                      {
+                        "provider.storeName": {
+                          $regex: new RegExp(`.*${searchQuery}.*`, "i"),
+                        },
+                      },
+                      {
+                        advertTitle: {
+                          $regex: new RegExp(`.*${searchQuery}.*`, "i"),
+                        },
+                      },
+                      {
+                        advertDescription: {
+                          $regex: new RegExp(`.*${searchQuery}.*`, "i"),
+                        },
+                      },
+                    ],
+                  },
+                ]
+              : [{}]),
+            ...(taxonomy
+              ? [
+                  {
+                    $or: [
+                      {
+                        "products.category": {
+                          $in: [new RegExp(`.*${taxonomy}.*`, "i")],
+                        },
+                      },
+                      {
+                        "products.subcategory": {
+                          $in: [new RegExp(`.*${taxonomy}.*`, "i")],
+                        },
+                      },
+                      {
+                        "products.subsubcategory": {
+                          $in: [new RegExp(`.*${taxonomy}.*`, "i")],
+                        },
+                      },
+                    ],
+                  },
+                ]
+              : [{}]),
+            ...(location
+              ? [
+                  {
+                    $or: [
+                      {
+                        advertPostalCode: {
+                          $regex: new RegExp(`^${location}`),
+                          $options: "i",
+                        },
+                      },
+                      {
+                        advertLocation: {
+                          $regex: new RegExp(`.*${location}.*`, "i"),
+                        },
+                      },
+                      {
+                        "provider.storeAddress": {
+                          $regex: new RegExp(`.*${location}.*`, "i"),
+                        },
+                      },
+                    ],
+                  },
+                ]
+              : [{}]),
           ],
         },
       },

@@ -74,7 +74,9 @@ UserRoutes.delete("/deleteprofile", userAuth, deleteuserProfileController);
 UserRoutes.get("/getads", liveAndLatestOfferController);
 UserRoutes.get("/getservice", servicesController);
 UserRoutes.get("/getSubSservice", servicesSubController);
-UserRoutes.get("/getsingsubservideadvert/:_id", getSingleSubservice);
+
+// route to getch single sub service advert or based on search
+UserRoutes.get("/getsingsubservideadvert", getSingleSubservice);
 UserRoutes.get("/getads/details", GetAdvertDetails);
 UserRoutes.get("/serach", SerachAdvertAndProductController);
 UserRoutes.get("/wishlist", userAuth, GetUserWishList);
