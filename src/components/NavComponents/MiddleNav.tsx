@@ -197,7 +197,7 @@ const MiddleNav = () => {
                     </span>
                   </a>
                   <ul
-                    className={`dropdown-menu dropw_down_menu`}
+                    className={`dropdown-menu dropw_down_menu dropw_down_menu_border`}
                     id="mainDorpwDoen"
                     aria-labelledby="dropdownMenuLink"
                   >

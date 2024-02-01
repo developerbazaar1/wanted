@@ -298,9 +298,9 @@ nab .login:hover {
   color: green !important;
 }
 
-.border_bottom {
+/* .border_bottom {
   border-bottom: 1px solid #353535 !important;
-}
+} */
 
 li > a {
   background-color: unset;
@@ -396,7 +396,11 @@ input[type="radio"] {
   align-items: center;
 }
 
-.assist-serach-label {
+.dropw_down_menu_border > li {
+  border-bottom: 1px solid #353535;
+  &:last-child {
+    border-bottom: 0px;
+  }
 }
 .assist-serach-label::before {
   content: "";
