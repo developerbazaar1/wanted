@@ -13,6 +13,7 @@ const AdvertAndProductDataCast = async (req, res, next) => {
     products,
     product,
     advertImage,
+    advertStoreName,
   } = req.body;
 
   try {
@@ -64,6 +65,7 @@ const AdvertAndProductDataCast = async (req, res, next) => {
       advertDescription,
       products,
       advertImage,
+      advertStoreName,
     };
 
     // console.log("files url", req.fileUrls);

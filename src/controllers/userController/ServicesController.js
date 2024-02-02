@@ -391,6 +391,7 @@ const getSingleSubservice = async (req, res, next) => {
       {
         $project: {
           _id: 1,
+          advertStoreName: 1,
           advertProvider_id: 1,
           advertProviderPortfolio_id: 1,
           advertTitle: 1,
@@ -405,6 +406,8 @@ const getSingleSubservice = async (req, res, next) => {
       },
     ]);
 
+    // console.log(services);
+
     if (page > 1 && services.length === 0) {
       return res.status(NO_CONTENT).json({
         status: true,
@@ -416,7 +419,7 @@ const getSingleSubservice = async (req, res, next) => {
     if (services.length === 0) {
       return res.status(OK).json({
         status: true,
-        message: "No Advert Found!",
+        message: "No Advert Found !",
         services,
       });
     }

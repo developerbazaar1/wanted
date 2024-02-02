@@ -23,6 +23,7 @@ const providerPortfolio = require("../../models/providerModel/providerPortfolio"
 const AddAdvert = async (req, res, next) => {
   try {
     let {
+      advertStoreName,
       advertPrice,
       offerPrice,
       advertProviderPortfolio_id,
@@ -77,6 +78,7 @@ const AddAdvert = async (req, res, next) => {
     // console.log(product);
 
     const UpdateValue = {
+      advertStoreName,
       advertPrice,
       advertProviderPortfolio_id,
       advertProvider_id,
@@ -98,6 +100,7 @@ const AddAdvert = async (req, res, next) => {
 
     AdvertModal.create(UpdateValue)
       .then(async (result) => {
+        console.log(advertStoreName);
         subscription.remainingAds -= 1;
         await subscription.save();
         return res.status(CREATED).json({
@@ -306,6 +309,7 @@ const postAgainAdvert = async (req, res, next) => {
       });
     }
     let {
+      advertStoreName,
       advertTitle,
       advertCategory,
       advertSubCategory,
@@ -319,6 +323,7 @@ const postAgainAdvert = async (req, res, next) => {
     } = req.body["updateFields"];
 
     const postAgainValue = {
+      advertStoreName,
       advertTitle,
       whereToShow,
       advertCategory,

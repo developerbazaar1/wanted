@@ -139,12 +139,11 @@ const liveAndLatestOfferController = async (req, res, next) => {
     ];
 
     const ads = await advertModal.aggregate(pipeline);
-    // console.log(ads);
 
     if (ads.length === 0 && page > 1) {
       return res.status(NO_CONTENT).json({
         status: "false",
-        message: "No more Data Found!",
+        message: "No more Advert Found !",
         data: [],
       });
     }
@@ -152,7 +151,7 @@ const liveAndLatestOfferController = async (req, res, next) => {
     if (ads.length === 0) {
       return res.status(OK).json({
         status: "success",
-        message: "No Data found!",
+        message: "No Adverts Found",
         data: [],
       });
     }

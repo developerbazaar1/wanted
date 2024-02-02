@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const advertModal = new mongoose.Schema({
+  advertStoreName: {
+    type: String,
+    // required: false,
+    index: true,
+  },
   advertProvider_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "ProviderUser",

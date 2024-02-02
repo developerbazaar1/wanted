@@ -137,6 +137,7 @@ const portfolioValidator = async (req, res, next) => {
 
 const advertValidator = async (req, res, next) => {
   const {
+    advertStoreName,
     advertPrice,
     offerPrice,
     advertProviderPortfolio_id,
@@ -165,7 +166,8 @@ const advertValidator = async (req, res, next) => {
       !advertLocation ||
       !advertPrice ||
       !advertDescription ||
-      !advertPostalCode
+      !advertPostalCode ||
+      !advertStoreName
     ) {
       return res.status(BAD_REQUEST).json({
         status: "Error",
@@ -223,6 +225,7 @@ const postAdvertAgainValidator = async (req, res, next) => {
     advertPostalCode,
     provider_id,
     subscription_plan_id,
+    advertStoreName,
   } = req.body;
 
   try {
@@ -234,7 +237,8 @@ const postAdvertAgainValidator = async (req, res, next) => {
       !advertPrice ||
       !advertDescription ||
       !advertPostalCode ||
-      !provider_id
+      !provider_id ||
+      !advertStoreName
     ) {
       return res.status(BAD_REQUEST).json({
         status: "Error",
