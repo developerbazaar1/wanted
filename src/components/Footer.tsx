@@ -71,11 +71,10 @@ function Footer() {
             padding: " 0.76rem 0 1.25rem 0",
           }}
         >
-          &#xa9; 2023 - All Rights Reserved | Designed & Developed By{" "}
+          © 2023 - All Rights Reserved | Designed & Developed By
           <span className="parrot">
-            Developer <span className="red">Bazzar</span>
+            &nbsp; 1TD <span className="red">LTD</span>
           </span>{" "}
-          Technologies
         </div>
       </div>
 

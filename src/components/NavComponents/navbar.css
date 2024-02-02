@@ -249,6 +249,10 @@ nab .login:hover {
 .app-menu__item {
   text-decoration: none;
   color: var(----light-gray-color);
+
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
 }
 .dropdown-menu li {
   position: relative;

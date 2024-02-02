@@ -60,7 +60,7 @@ const SubSubCategory = () => {
       searchParams.get("location") || ""
     )
       .then((res) => {
-        // console.log(res);
+        console.log(res);
 
         if (res.status === 204) {
           toast.warning("No More Data Found");
@@ -156,7 +156,7 @@ const SubSubCategory = () => {
         }}
         className="d-flex justify-content-center align-items-center"
       >
-        No Advert is Found
+        No Adverts Found
       </h2>
     );
   }
@@ -205,7 +205,9 @@ const SubSubCategory = () => {
                 {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}{" "}
                 {`...`}
               </p>
-              <div className="provider">{advert?.provider[0]?.storeName}</div>
+              <div className="provider">
+                {advert?.advertStoreName || advert?.provider[0]?.storeName}
+              </div>
               <div>
                 <span className="price">£{advert?.advertOfferPrice}</span>
                 <span className="off_price">£{advert?.advertPrice}</span>

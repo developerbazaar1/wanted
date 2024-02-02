@@ -109,7 +109,7 @@ const SearchResult: React.FC = () => {
         }}
         className="d-flex justify-content-center align-items-center"
       >
-        No Advert is Found
+        No Adverts Found
       </h2>
     );
   }
@@ -154,7 +154,7 @@ const SearchResult: React.FC = () => {
               <p>
                 {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}
               </p>
-              <div className="provider">{advert?.provider?.storeName}</div>
+              <div className="provider">{advert?.advertStorename}</div>
               <div>
                 <span className="price">£{advert.advertOfferPrice}</span>
                 <span className="off_price">£{advert.advertPrice}</span>

@@ -68,7 +68,7 @@ const SubCategory = () => {
         }}
         className="d-flex justify-content-center align-items-center"
       >
-        No Advert is Found !
+        No Adverts Found
       </h2>
     );
   }

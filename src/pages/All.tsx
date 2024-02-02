@@ -62,7 +62,7 @@ const All = () => {
         }
 
         if (res.status === 200 && res?.data?.data?.length === 0) {
-          toast.warning("No Advert Found");
+          // toast.warning("No Advert Found");
           setAdvert({
             data: [],
             status: "success",
@@ -159,7 +159,7 @@ const All = () => {
         }}
         className="d-flex justify-content-center align-items-center"
       >
-        No Advert is Found
+        No Adverts Found
       </h2>
     );
   }
@@ -205,12 +205,14 @@ const All = () => {
             </div>
             <div className="ads_details">
               {/* <div className="ads_cat">Beauty & Spa / Face &Skin</div> */}
-              {/* <button className="whereTo-btn-all">{advert?.whereToShow}</button> */}
+              <button className="whereTo-btn-all">{advert?.whereToShow}</button>
               <p>
                 {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}{" "}
                 {`...`}
               </p>
-              <div className="provider">{advert?.provider[0]?.storeName}</div>
+              <div className="provider">
+                {advert?.advertStoreName || advert?.provider?.storeName}
+              </div>
               <div>
                 <span className="price">£{advert?.advertOfferPrice}</span>
                 <span className="off_price">£{advert?.advertPrice}</span>
