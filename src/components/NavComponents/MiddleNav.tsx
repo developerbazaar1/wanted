@@ -61,9 +61,10 @@ const MiddleNav = () => {
     }
 
     if (pathnames.length === 0 || pathnames.includes("service")) {
+      const encodedtaxnomy = encodeURIComponent(taxonomy || "");
       navigate(
         `/service/search?search=${searchQuery || ""}&taxonomy=${
-          taxonomy || ""
+          encodedtaxnomy || ""
         }&location=${postalCode || ""}`
       );
       reset();
@@ -96,14 +97,17 @@ const MiddleNav = () => {
   // whenever location change rest the selectedDropDown
   useEffect(() => {
     setselectedCateogries("");
-    if (searchParams.get("taxonomy"))
-      setselectedCateogries(searchParams.get("taxonomy") || undefined);
+    if (searchParams.get("taxonomy")) {
+      setselectedCateogries(
+        decodeURIComponent(searchParams.get("taxonomy") || "") || undefined
+      );
+    }
   }, [location]);
 
   useEffect(() => {
     // function to set the filtre category and sub-category based on selected category
     if (pathnames.includes("service")) {
-      // when path name include seach do not reset the category
+      // when path name include search do not reset the category
       if (pathnames.includes("search")) {
         return;
       }

@@ -72,7 +72,6 @@ const router = createBrowserRouter(
             path="service/:subcategory/:services"
             element={<SubSubCategory />}
           />
-
           {/* route to show services search */}
           <Route path="service/search" element={<SubSubCategory />} />
           <Route

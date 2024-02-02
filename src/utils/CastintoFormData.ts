@@ -30,7 +30,6 @@ export const showArrowCheck = (
   service: any[],
   type: string
 ): boolean => {
-  // subcategory_id;
   let result;
   if (type === "Cat") {
     result = service.find((element: any) => condition === element.category_id);
@@ -39,8 +38,5 @@ export const showArrowCheck = (
       (element: any) => condition === element.subcategory_id
     );
   }
-
-  console.log("result for drop down", result);
-
   return result ? true : false;
 };

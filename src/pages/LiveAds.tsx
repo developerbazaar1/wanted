@@ -30,7 +30,6 @@ const LiveAds = () => {
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
-        // console.log(res);
         dispatch(
           SetstoreWishList({
             wishList: res?.data?.wishlist,
@@ -187,23 +186,27 @@ const LiveAds = () => {
     <>
       <div className="container_live">
         {adverts.data.map((advert: any) => (
-          <div className="single_Ads p-0" key={advert._id}>
+          <Link
+            to="details"
+            state={{ advertid: advert._id }}
+            className="single_Ads p-0"
+            key={advert._id}
+          >
             <div className="ads_img_div">
               <img src={advert?.advertImage?.imgUrl} alt="bannerImg" />
               <div
                 className="favoruite"
-                onClick={() => RemoveAndAddWishList(advert._id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  RemoveAndAddWishList(advert._id);
+                }}
               >
                 {GetWishList.some((fav: any) => fav.advert_id === advert._id)
                   ? FilledFavouriteIconLarge
                   : Favourite}
               </div>
             </div>
-            <Link
-              to="details"
-              className="ads_details"
-              state={{ advertid: advert._id }}
-            >
+            <div className="ads_details">
               {/* <div className="ads_cat">Beauty & Spa / Face &Skin</div> */}
               <p>
                 {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}
@@ -213,8 +216,8 @@ const LiveAds = () => {
                 <span className="price">£{advert.advertOfferPrice}</span>
                 <span className="off_price">£{advert.advertPrice}</span>
               </div>
-            </Link>
-          </div>
+            </div>
+          </Link>
         ))}
         <NextButton setAdsLoading={setAdsLoading} />
       </div>
