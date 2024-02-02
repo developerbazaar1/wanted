@@ -68,6 +68,7 @@ const router = createBrowserRouter(
         <Route element={<BreadCrumbAndFilter />}>
           <Route index element={<Home />} />
           <Route path="service/:subcategory" element={<SubCategory />} />
+          <Route path=":page/:page?/:page?/details" element={<Details />} />
           <Route
             path="service/:subcategory/:services"
             element={<SubSubCategory />}
@@ -81,7 +82,6 @@ const router = createBrowserRouter(
           />
           <Route path="latestOppers" element={<LatestOffers />} />
           <Route path="all" element={<All />} />
-          <Route path=":page/:page?/:page?/details" element={<Details />} />
         </Route>
         <Route
           path="/profile"

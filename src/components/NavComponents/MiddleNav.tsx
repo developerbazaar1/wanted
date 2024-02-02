@@ -51,6 +51,16 @@ const MiddleNav = () => {
 
     // redirect user to there home page when serach is submit from details Page.
     if (pathnames.includes("details")) {
+      if (pathnames.includes("service")) {
+        const encodedtaxnomy = encodeURIComponent(taxonomy || "");
+        navigate(
+          `/service/search?search=${searchQuery || ""}&taxonomy=${
+            encodedtaxnomy || ""
+          }&location=${postalCode || ""}`
+        );
+        reset();
+        return;
+      }
       reset();
       navigate(
         `${pathnames[0]}?search=${searchQuery || ""}&taxonomy=${

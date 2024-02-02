@@ -186,34 +186,40 @@ const LatestOffers = () => {
     <>
       <div className="container_live">
         {adverts.data.map((advert: any) => (
-          <div className="single_Ads p-0" key={advert._id}>
+          <Link
+            to="details"
+            state={{ advertid: advert?._id }}
+            className="single_Ads p-0"
+            key={advert?._id}
+          >
             <div className="ads_img_div">
               <img src={advert?.advertImage?.imgUrl} alt="bannerImg" />
               <div
                 className="favoruite"
-                onClick={() => RemoveAndAddWishList(advert._id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  RemoveAndAddWishList(advert._id);
+                }}
               >
-                {GetWishList.some((fav: any) => fav.advert_id === advert._id)
+                {GetWishList.some((fav: any) => fav?.advert_id === advert?._id)
                   ? FilledFavouriteIconLarge
                   : Favourite}
               </div>
             </div>
-            <Link
-              to="details"
-              className="ads_details"
-              state={{ advertid: advert._id }}
-            >
+            <div className="ads_details">
               {/* <div className="ads_cat">Beauty & Spa / Face &Skin</div> */}
+              {/* <button className="whereTo-btn-all">{advert?.whereToShow}</button> */}
               <p>
-                {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}
+                {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}{" "}
+                {`...`}
               </p>
-              <div className="provider">{advert?.provider?.storeName}</div>
+              <div className="provider">{advert?.provider[0]?.storeName}</div>
               <div>
-                <span className="price">£{advert.advertOfferPrice}</span>
-                <span className="off_price">£{advert.advertPrice}</span>
+                <span className="price">£{advert?.advertOfferPrice}</span>
+                <span className="off_price">£{advert?.advertPrice}</span>
               </div>
-            </Link>
-          </div>
+            </div>
+          </Link>
         ))}
         <NextButton setAdsLoading={setAdsLoading} />
       </div>
