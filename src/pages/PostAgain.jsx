@@ -334,72 +334,26 @@ const PostAgain = () => {
                     </div>
                   </div>
                   {/* <!-- field col end --> */}
-                  {/* <!-- field col 03 start --> */}
-                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.advertCategory ? "error_pesudo" : ""
+                        errors?.advertStoreName ? "error_pesudo" : ""
                       }`}
                     >
-                      <label className="form-head" htmlFor="category">
-                        Advert Category
+                      <label className="form-head" htmlFor="advertStoreName">
+                        Store Name
                       </label>
-                      <select
+                      <input
                         type="text"
                         className="form-control"
-                        id="advertCategory"
-                        placeholder="Enter your advert Category"
-                        {...register("advertCategory", {
+                        id="advertStoreName"
+                        placeholder="Enter your store address"
+                        {...register("advertStoreName", {
                           required: true,
                         })}
-                        onChange={handleCategoryChange}
-                      >
-                        {category?.map((cat) => (
-                          <option key={cat._id} value={`${cat?.categoryName}`}>
-                            {cat?.categoryName}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
-                  </div> */}
-                  {/* <!-- field col end --> */}
-                  {/* <!-- field col 04 start --> */}
-                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div
-                      className={`form-group ${
-                        errors?.advertSubCategory ? "error_pesudo" : ""
-                      }`}
-                    >
-                      <label className="form-head" htmlFor="sub-ad">
-                        Advert Sub Category
-                      </label>
-                      <select
-                        type="text"
-                        className="form-control"
-                        id="advertSubCategory"
-                        {...register("advertSubCategory", {
-                          required: true,
-                        })}
-                      >
-                        {selectedCategory &&
-                          subcategory
-                            ?.filter(
-                              (item) =>
-                                item.category_id === selectedCategory?._id
-                            )
-                            .map((subcate) => (
-                              <option
-                                key={subcate._id}
-                                value={`${subcate?.subCategoryName}`}
-                              >
-                                {subcate?.subCategoryName}
-                              </option>
-                            ))}
-                        {/* <option value={`Cafe & Treats`}>Cafe & Treats</option> 
-                      </select>
-                    </div>
-                  </div> */}
-                  {/* <!-- field col end --> */}
+                  </div>
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
@@ -484,7 +438,7 @@ const PostAgain = () => {
 
                   {/* post code feild section */}
 
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                  <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                     <div
                       className={`form-group ${
                         errors?.advertLocation ? "error_pesudo" : ""

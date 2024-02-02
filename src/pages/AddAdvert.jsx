@@ -303,78 +303,28 @@ const AddAdvert = () => {
                       </div>
                     </div>
                   </div>
-                  {/* <!-- field col end --> */}
-                  {/* <!-- field col 03 start --> */}
-                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                  {/* <!-- field col 0e start --> */}
+                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
-                        errors?.adcategory ? "error_pesudo" : ""
+                        errors?.advertStoreName ? "error_pesudo" : ""
                       }`}
                     >
-                      <label className="form-head" htmlFor="category">
-                        Advert Category
+                      <label className="form-head" htmlFor="advertStoreName">
+                        Store Name
                       </label>
-                      <select
+                      <input
+                        type="text"
                         className="form-control"
-                        id="adcategory"
-                        {...register("adcategory", {
+                        id="advertStoreName"
+                        placeholder="Enter your store address"
+                        {...register("advertStoreName", {
                           required: true,
                         })}
-                        onChange={handleCategoryChange}
-                      >
-                        <option value="" key="defaultcat">
-                          Select Advert Category
-                        </option>
-                        {category?.map((cat) => (
-                          <option key={cat._id} value={`${cat?.categoryName}`}>
-                            {cat?.categoryName}
-                          </option>
-                        ))}
-                      </select>
-                      <IoIosArrowDown className="category-dropw-down-toogle" />
+                      />
                     </div>
-                  </div> */}
-                  {/* <!-- field col end --> */}
-                  {/* <!-- field col 04 start --> */}
-                  {/* <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div
-                      className={`form-group ${
-                        errors?.subCategory ? "error_pesudo" : ""
-                      }`}
-                    >
-                      <label className="form-head" htmlFor="sub-ad">
-                        Advert Sub Category
-                      </label>
-                      <select
-                        className="form-control"
-                        id="subCategory"
-                        placeholder="Enter your advert Sub Category"
-                        {...register("subCategory", {
-                          required: true,
-                        })}
-                      >
-                        <option value="" key="defaultsubcat">
-                          Select Advert Sub Category
-                        </option>
-                        {selectedCategory &&
-                          subcategory
-                            ?.filter(
-                              (item) =>
-                                item.category_id === selectedCategory?._id
-                            )
-                            .map((subcate) => (
-                              <option
-                                key={subcate._id}
-                                value={`${subcate?.subCategoryName}`}
-                              >
-                                {subcate?.subCategoryName}
-                              </option>
-                            ))}
-                      </select>
-                      <IoIosArrowDown className="category-dropw-down-toogle" />
-                    </div>
-                  </div> */}
-                  {/* <!-- field col end --> */}
+                  </div>
+                  {/* <!-- field col 0e end --> */}
                   {/* <!-- field col 05 start --> */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
@@ -432,27 +382,7 @@ const AddAdvert = () => {
                       />
                     </div>
                   </div>
-                  {/* post code feild section */}
-                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <div
-                      className={`form-group ${
-                        errors?.ad_location ? "error_pesudo" : ""
-                      }`}
-                    >
-                      <label className="form-head" htmlFor="location">
-                        Location
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="ad_location"
-                        placeholder="Enter location"
-                        {...register("ad_location", {
-                          required: true,
-                        })}
-                      />
-                    </div>
-                  </div>
+
                   {/* offer price div start */}
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
@@ -478,6 +408,28 @@ const AddAdvert = () => {
                     </div>
                   </div>
                   {/* offer price div end */}
+                  {/* post code feild section */}
+                  <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.ad_location ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="location">
+                        Location
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="ad_location"
+                        placeholder="Enter location"
+                        {...register("ad_location", {
+                          required: true,
+                        })}
+                      />
+                    </div>
+                  </div>
+
                   {/* <!-- field col end --> */}
                   {/* <!-- field col 07 start --> */}
                   <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">

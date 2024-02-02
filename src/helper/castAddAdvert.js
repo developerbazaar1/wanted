@@ -10,6 +10,7 @@ export function castAddAdvert(formData, user, portfolio_id) {
   data.append("advertProvider_id", user.id);
   data.append("portfolioImageCheckbox", formData.portfolioImageCheckbox);
   data.append("advertOfferPrice", formData.advertOfferPrice);
+  data.append("advertStoreName", formData.advertStoreName);
 
   if (formData?.product?.length > 0) {
     if (formData?.addProduct === "YesAddProduct") {
@@ -44,6 +45,7 @@ export function castEditadvertData(formData, _id, provider_id) {
   let data = new FormData();
   data.append("advertId", _id);
   data.append("provider_id", provider_id);
+  data.append("advertStoreName", formData.advertStoreName);
   // data.append("advertCategory", formData.advertCategory);
   data.append("advertTitle", formData?.advertTitle);
   // data.append("advertSubCategory", formData?.advertSubCategory);
@@ -90,6 +92,7 @@ export function castPostAgainAdvert(formData, _id, provider_id) {
   let data = new FormData();
   data.append("advertId", _id);
   data.append("provider_id", provider_id);
+  data.append("advertStoreName", formData.advertStoreName);
   // data.append("advertCategory", formData.advertCategory);
   data.append("advertTitle", formData?.advertTitle);
   // data.append("advertSubCategory", formData?.advertSubCategory);

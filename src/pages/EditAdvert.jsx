@@ -149,7 +149,7 @@ const EditAdvertData = () => {
       .catch((e) => {
         console.log(e);
       })
-      .finally((res) => {
+      .finally(() => {
         setLoading(false);
         // return res;
       });
@@ -259,6 +259,32 @@ const EditAdvertData = () => {
                       />
                     </div>
                   </div>
+
+                  <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                    <div
+                      className={`form-group ${
+                        errors?.advertStoreName ? "error_pesudo" : ""
+                      }`}
+                    >
+                      <label className="form-head" htmlFor="advertStoreName">
+                        Store Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="advertStoreName"
+                        placeholder="Enter your store address"
+                        {...register("advertStoreName", {
+                          required: true,
+                          pattern: {
+                            value: /^[ A-Za-z0-9._%+-]*$/,
+                            message: "Invalid String",
+                          },
+                        })}
+                      />
+                    </div>
+                  </div>
+
                   <div className="col-lg-6 col-sm-6 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
@@ -342,7 +368,7 @@ const EditAdvertData = () => {
 
                   {/* post code feild section */}
 
-                  <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                  <div className="col-lg-6 col-sm-12 col-md-6 col-xs-12">
                     <div
                       className={`form-group ${
                         errors?.advertLocation ? "error_pesudo" : ""
