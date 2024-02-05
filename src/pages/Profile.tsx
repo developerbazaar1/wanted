@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../features/authSlice";
 import { QRCodeCanvas } from "qrcode.react";
 import { useAuth } from "../service/auth";
+import { wishList } from "../features/wishList";
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,6 +26,11 @@ const Profile = () => {
     e.preventDefault();
     localStorage.removeItem("userwantedToken");
     dispatch(logout());
+    dispatch(
+      wishList({
+        wishList: [],
+      })
+    );
     navigate("/login");
   };
   return (
