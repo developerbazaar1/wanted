@@ -35,14 +35,14 @@ const MiddleNav = () => {
   // };
 
   const pathnames = location.split("/").filter((x) => x);
-  // console.log(pathnames);
+  console.log("Path Name", pathnames);
 
   function handelFormDubmit(formData: {
     searchQuery: string;
     postalCode: string;
   }) {
     if (!formData.searchQuery && !formData.postalCode) {
-      toast.error("Enter a Keyword or Postal Code or Location");
+      // toast.error("Enter a Keyword or Postal Code or Location");
       return;
     }
     const { searchQuery, postalCode } = formData;
@@ -90,11 +90,12 @@ const MiddleNav = () => {
   }
 
   function handleSelectedDropDown(service: string) {
-    // setselectedCateogries(service);
     updatetaxonomyFilterQuery(service);
-    // setDropdownOpen(true);
     const dropDown = document.getElementById("mainDorpwDoen");
     dropDown?.classList.remove("show");
+    if (pathnames.length === 0 || pathnames.includes(`service`)) {
+      navigate(`/service/search`);
+    }
   }
 
   useEffect(() => {

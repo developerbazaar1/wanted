@@ -50,7 +50,7 @@ const All = () => {
     AdsApi.getAdsBaedOnType(
       ``,
       AdsPage,
-      6,
+      15,
       searchParams.get("search") || "",
       taxonomyFilter || "",
       searchParams.get("location") || ""

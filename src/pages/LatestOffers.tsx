@@ -57,7 +57,7 @@ const LatestOffers = () => {
     AdsApi.getAdsBaedOnType(
       `Latest Offers`,
       AdsPage,
-      6,
+      15,
       searchParams.get("search") || "",
       taxonomyFilter || "",
       searchParams.get("location") || ""

@@ -47,13 +47,15 @@ export const AdsApi = {
   getAdsBaedOnType: async (
     adstypes: string,
     page = 1,
-    pageSize = 6,
+    pageSize = 15,
     searchQuery = "",
     taxonomy = "",
     location = ""
   ) => {
     const response = await api.request({
-      url: `/getads?adstypes=${adstypes}&page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}&taxonomy=${taxonomy}&location=${location}`,
+      url: `/getads?adstypes=${adstypes}&page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}&taxonomy=${encodeURIComponent(
+        taxonomy
+      )}&location=${location}`,
       method: "get",
     });
     // console.log(response);
@@ -94,7 +96,9 @@ export const AdsApi = {
     location = ""
   ) => {
     return await api.request({
-      url: `/getsingsubservideadvert?_id=${_id}&page=${page}&pageSize=6&searchQuery=${searchQuery}&taxonomy=${taxonomy}&location=${location}`,
+      url: `/getsingsubservideadvert?_id=${_id}&page=${page}&pageSize=6&searchQuery=${searchQuery}&taxonomy=${encodeURIComponent(
+        taxonomy
+      )}&location=${location}`,
       method: "GET",
     });
   },

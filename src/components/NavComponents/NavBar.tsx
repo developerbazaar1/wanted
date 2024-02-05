@@ -5,7 +5,10 @@ import UserProfile from "./UserProfile";
 import MiddleNav from "./MiddleNav";
 import { Link } from "react-router-dom";
 import LoginSingupButton from "./LoginSingupButton";
+import { useContext } from "react";
+import { SearchContext } from "../../features/searchContext";
 const NavBar = () => {
+  const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   const token = localStorage.getItem("userwantedToken");
   return (
     <div className="white__background">
@@ -13,7 +16,12 @@ const NavBar = () => {
         <div className="mobile_top sm-none ">
           <div className="">
             <div className="logo_div">
-              <Link to="/">
+              <Link
+                to="/"
+                onClick={() => {
+                  updatetaxonomyFilterQuery("");
+                }}
+              >
                 <img src={navLogo} className="nav_logo" alt="" />
               </Link>
             </div>

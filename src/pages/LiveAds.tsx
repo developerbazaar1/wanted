@@ -56,7 +56,7 @@ const LiveAds = () => {
     AdsApi.getAdsBaedOnType(
       `Live Ads`,
       AdsPage,
-      6,
+      15,
       searchParams.get("search") || "",
       taxonomyFilter || "",
       searchParams.get("location") || ""

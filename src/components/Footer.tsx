@@ -51,7 +51,7 @@ function Footer() {
             <h5 className="md-mb-3">Quick Links</h5>
             <ul className="list-group gap-2 Foorer_margin-top footer-font">
               <li className="list__style-none">
-                <Link to="/signup">Sing Up</Link>
+                <Link to="/signup">sign Up</Link>
               </li>
               <li className="list__style-none">
                 <Link to="#"> Become A Vendor</Link>
