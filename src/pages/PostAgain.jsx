@@ -327,7 +327,7 @@ const PostAgain = () => {
                             type="radio"
                             name="whereToShow"
                             id="service"
-                            value="Service"
+                            value="Services"
                           />
                         </div>
                       </div>

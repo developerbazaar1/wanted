@@ -297,7 +297,7 @@ const AddAdvert = () => {
                             type="radio"
                             name="userSearch"
                             id="service"
-                            value="Service"
+                            value="Services"
                           />
                         </div>
                       </div>
