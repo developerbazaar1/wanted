@@ -59,7 +59,7 @@ const liveAndLatestOfferController = async (req, res, next) => {
                         },
                       },
                       {
-                        "provider.storeName": {
+                        advertStoreName: {
                           $regex: new RegExp(`.*${searchQuery}.*`, "i"),
                         },
                       },
