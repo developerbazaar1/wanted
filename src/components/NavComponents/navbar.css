@@ -178,6 +178,10 @@ nab .login:hover {
   border-right: 2px solid black;
   width: 46%;
   padding: 13px 0px;
+
+  .search__input > div {
+    display: flex !important;
+  }
 }
 
 .large_middle_nav {

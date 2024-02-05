@@ -44,7 +44,7 @@ const MiddleNav = () => {
     }
 
     if (!formData.taxonomy && !formData.searchQuery && !formData.postalCode) {
-      toast.error("Please Enter a Serach Query");
+      toast.error("Enter a keyword or select a category");
       return;
     }
     const { taxonomy, searchQuery, postalCode } = formData;
@@ -89,7 +89,7 @@ const MiddleNav = () => {
     if (searchQuery) {
       SearchObject["search"] = searchQuery;
     }
-    if (taxonomy) {
+    if (postalCode) {
       SearchObject["location"] = postalCode;
     }
 

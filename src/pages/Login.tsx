@@ -164,7 +164,7 @@ const Login: React.FC = () => {
                     color: "#17c737",
                   }}
                 >
-                  Sing up
+                  Sign up
                 </Link>{" "}
                 now!
               </div>

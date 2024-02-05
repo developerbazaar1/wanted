@@ -36,7 +36,6 @@ const ProductCrasuel = ({ product }: any) => {
               <img
                 src={img?.imgUrl}
                 style={{
-                  width: "300px",
                   height: "300px",
                   objectFit: "cover",
                 }}
@@ -53,19 +52,20 @@ const ProductCrasuel = ({ product }: any) => {
           <div className="zoomModalClose" onClick={handleCloseModal}>
             <RxCross2 size={25} color="black" />
           </div>
-          <Slider {...settings} className="zoom-slider">
+          <Slider {...settings} className="product-modal-view">
             {product?.productImg?.map((img: any, index: any) => (
               <div
                 key={img?._id}
+                className="rahul"
                 style={{
-                  width: "480px",
-                  height: "480px",
+                  width: "100%",
+                  height: "78vh !important",
                   objectFit: "cover",
                 }}
               >
                 <img
                   src={img?.imgUrl}
-                  className="d-block zoom-image"
+                  className="d-block zoom-product_img"
                   alt={index}
                 />
               </div>

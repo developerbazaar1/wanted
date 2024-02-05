@@ -440,33 +440,35 @@
   opacity: 1;
 }
 
-/* #zoomimage {
-  width: 500px;
-  height: 500px;
-} */
-
-#zoomimage .modal-body {
-  padding-left: 26px;
-  padding-right: 26px;
+#zoomimage {
+  max-width: 98%;
+  margin: auto;
+  height: 100%;
 }
 
+@media only screen and (min-width: 737px) {
+  #zoomimage {
+    max-width: 70%;
+    margin: auto;
+    height: 100%;
+  }
+}
+
+.product-modal-view {
+  width: 98%;
+  margin: auto;
+}
+
+.zoom-product_img {
+  width: 100%;
+  height: 78vh;
+  object-fit: cover;
+}
 .preview_product_price {
   color: #17c737;
   font-weight: 700;
   font-size: 1.2rem;
   font-family: quicksand;
-}
-
-.zoom-image {
-  width: 100%;
-  height: 300px;
-  /*object-fit: cover;
-  */
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
 }
 
 .zoomModalClose {
