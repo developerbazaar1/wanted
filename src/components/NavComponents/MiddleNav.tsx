@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import FirstModal from "./FirstModal";
 import { FilterIcon, PostalIcon, SerachIcon } from "../../utils/SvgElements";
@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { showArrowCheck } from "../../utils/CastintoFormData";
+import { SearchContext } from "../../features/searchContext";
 
 interface serachVlue {
   searchQuery: string;
@@ -16,13 +17,15 @@ interface serachVlue {
 }
 
 const MiddleNav = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const location = useLocation().pathname;
+  const { taxonomyFilter, updatetaxonomyFilterQuery } =
+    useContext(SearchContext);
 
   // console.log("location", location);
 
   const [showModal1, setShowModal1] = useState<boolean>(false);
-  const [selectedCateogries, setselectedCateogries] = useState<string>();
+  // const [selectedCateogries, setselectedCateogries] = useState<string>();
   const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
   const { register, handleSubmit, reset } = useForm<serachVlue>();
@@ -37,55 +40,44 @@ const MiddleNav = () => {
   function handelFormDubmit(formData: {
     searchQuery: string;
     postalCode: string;
-    taxonomy: string | undefined;
   }) {
-    if (selectedCateogries) {
-      formData["taxonomy"] = selectedCateogries;
-    }
-
-    if (!formData.taxonomy && !formData.searchQuery && !formData.postalCode) {
-      toast.error("Enter a keyword or select a category");
+    if (!formData.searchQuery && !formData.postalCode) {
+      toast.error("Enter a Keyword or Postal Code or Location");
       return;
     }
-    const { taxonomy, searchQuery, postalCode } = formData;
+    const { searchQuery, postalCode } = formData;
 
     // redirect user to there home page when serach is submit from details Page.
     if (pathnames.includes("details")) {
       if (pathnames.includes("service")) {
-        const encodedtaxnomy = encodeURIComponent(taxonomy || "");
         navigate(
-          `/service/search?search=${searchQuery || ""}&taxonomy=${
-            encodedtaxnomy || ""
-          }&location=${postalCode || ""}`
+          `/service/search?search=${searchQuery || ""}&location=${
+            postalCode || ""
+          }`
         );
         reset();
         return;
       }
       reset();
       navigate(
-        `${pathnames[0]}?search=${searchQuery || ""}&taxonomy=${
-          taxonomy || ""
-        }&location=${postalCode || ""}`
+        `${pathnames[0]}?search=${searchQuery || ""}&location=${
+          postalCode || ""
+        }`
       );
       return;
     }
 
     if (pathnames.length === 0 || pathnames.includes("service")) {
-      const encodedtaxnomy = encodeURIComponent(taxonomy || "");
       navigate(
-        `/service/search?search=${searchQuery || ""}&taxonomy=${
-          encodedtaxnomy || ""
-        }&location=${postalCode || ""}`
+        `/service/search?search=${searchQuery || ""}&location=${
+          postalCode || ""
+        }`
       );
       reset();
       return;
     }
 
     const SearchObject: any = {};
-
-    if (taxonomy) {
-      SearchObject["taxonomy"] = taxonomy;
-    }
     if (searchQuery) {
       SearchObject["search"] = searchQuery;
     }
@@ -98,21 +90,12 @@ const MiddleNav = () => {
   }
 
   function handleSelectedDropDown(service: string) {
-    setselectedCateogries(service);
+    // setselectedCateogries(service);
+    updatetaxonomyFilterQuery(service);
     // setDropdownOpen(true);
     const dropDown = document.getElementById("mainDorpwDoen");
     dropDown?.classList.remove("show");
   }
-
-  // whenever location change rest the selectedDropDown
-  useEffect(() => {
-    setselectedCateogries("");
-    if (searchParams.get("taxonomy")) {
-      setselectedCateogries(
-        decodeURIComponent(searchParams.get("taxonomy") || "") || undefined
-      );
-    }
-  }, [location]);
 
   useEffect(() => {
     // function to set the filtre category and sub-category based on selected category
@@ -123,11 +106,11 @@ const MiddleNav = () => {
       }
 
       if (pathnames.length > 2) {
-        setselectedCateogries(
+        updatetaxonomyFilterQuery(
           decodeURIComponent(pathnames[2].replace(/\+/g, " "))
         );
       } else {
-        setselectedCateogries(
+        updatetaxonomyFilterQuery(
           decodeURIComponent(pathnames[1].replace(/\+/g, " "))
         );
       }
@@ -205,9 +188,7 @@ const MiddleNav = () => {
                     type="button"
                   >
                     <span className="app-menu__label__2">
-                      {selectedCateogries
-                        ? selectedCateogries
-                        : "All Categories"}
+                      {taxonomyFilter ? taxonomyFilter : "All Categories"}
                     </span>
                   </a>
                   <ul
@@ -215,6 +196,14 @@ const MiddleNav = () => {
                     id="mainDorpwDoen"
                     aria-labelledby="dropdownMenuLink"
                   >
+                    <li
+                      className="border_bottom"
+                      onClick={() => handleSelectedDropDown("")}
+                    >
+                      <a className="dropdown-item">
+                        <span>{"All Categories"}</span>
+                      </a>
+                    </li>
                     {category?.map((element: any) => (
                       <li
                         className="border_bottom"

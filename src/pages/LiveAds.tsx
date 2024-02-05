@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../css/LiveAds.css";
 import NextButton from "../components/NextButton";
 import { Link, useSearchParams } from "react-router-dom";
@@ -9,10 +9,13 @@ import { useToken, useWishList } from "../service/auth";
 import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
 import { useDispatch } from "react-redux";
 import { wishList as SetstoreWishList } from "../features/wishList";
+import { SearchContext } from "../features/searchContext";
 const LiveAds = () => {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
+
+  const { taxonomyFilter } = useContext(SearchContext);
   const [adverts, setAdvert] = useState<{
     data: any;
     status: string;
@@ -55,12 +58,12 @@ const LiveAds = () => {
       AdsPage,
       6,
       searchParams.get("search") || "",
-      searchParams.get("taxonomy") || "",
+      taxonomyFilter || "",
       searchParams.get("location") || ""
     )
 
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         if (res.status === 204) {
           toast.warning("No More advert found");
           return;
@@ -78,7 +81,7 @@ const LiveAds = () => {
 
         if (
           searchParams.get("search") ||
-          searchParams.get("taxonomy") ||
+          taxonomyFilter ||
           searchParams.get("location")
         ) {
           if (AdsPage > 1) {
@@ -128,7 +131,7 @@ const LiveAds = () => {
     setAdsLoading(1);
   }, [
     searchParams.get("search"),
-    searchParams.get("taxonomy"),
+    taxonomyFilter,
     searchParams.get("location"),
   ]);
 
@@ -137,7 +140,7 @@ const LiveAds = () => {
   }, [
     AdsPage,
     searchParams.get("search"),
-    searchParams.get("taxonomy"),
+    taxonomyFilter,
     searchParams.get("location"),
   ]);
 

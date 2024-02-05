@@ -1,14 +1,14 @@
 // SearchContext.tsx
 import React, { createContext, ReactNode, useState } from "react";
 
-interface SearchContextProps {
-  searchQuery: string;
-  updateSearchQuery: (query: string) => void;
+interface taxonomy {
+  taxonomyFilter: string;
+  updatetaxonomyFilterQuery: (query: string) => void;
 }
 
-const SearchContext = createContext<SearchContextProps>({
-  searchQuery: "",
-  updateSearchQuery: () => {},
+const SearchContext = createContext<taxonomy>({
+  taxonomyFilter: "",
+  updatetaxonomyFilterQuery: () => {},
 });
 
 interface SearchProviderProps {
@@ -16,15 +16,15 @@ interface SearchProviderProps {
 }
 
 const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [taxonomyFilter, setSearchQuery] = useState("");
 
-  const updateSearchQuery = (query: string) => {
+  const updatetaxonomyFilterQuery = (query: string) => {
     setSearchQuery(query);
   };
 
-  const contextValue: SearchContextProps = {
-    searchQuery,
-    updateSearchQuery,
+  const contextValue: taxonomy = {
+    taxonomyFilter,
+    updatetaxonomyFilterQuery,
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../css/LiveAds.css";
 import NextButton from "../components/NextButton";
 import { Link, useSearchParams } from "react-router-dom";
@@ -9,11 +9,14 @@ import { useToken, useWishList } from "../service/auth";
 import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
 import { useDispatch } from "react-redux";
 import { wishList as SetstoreWishList } from "../features/wishList";
+import { SearchContext } from "../features/searchContext";
 
 const LatestOffers = () => {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
+
+  const { taxonomyFilter } = useContext(SearchContext);
   const [adverts, setAdvert] = useState<{
     data: any;
     status: string;
@@ -31,7 +34,6 @@ const LatestOffers = () => {
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
-        console.log(res);
         dispatch(
           SetstoreWishList({
             wishList: res?.data?.wishlist,
@@ -40,10 +42,15 @@ const LatestOffers = () => {
         toast.success(res.data.message);
       })
       .catch((e) => {
-        console.log(e.response);
+        // console.log(e.response);
         toast.error(e.response.data.message);
       });
   }
+
+  // console.log(
+  //   "serach query",
+  //   searchParams.forEach((val) => console.log(val))
+  // );
 
   function FetchData() {
     setLoading(true);
@@ -52,7 +59,7 @@ const LatestOffers = () => {
       AdsPage,
       6,
       searchParams.get("search") || "",
-      searchParams.get("taxonomy") || "",
+      taxonomyFilter || "",
       searchParams.get("location") || ""
     )
 
@@ -75,7 +82,7 @@ const LatestOffers = () => {
 
         if (
           searchParams.get("search") ||
-          searchParams.get("taxonomy") ||
+          taxonomyFilter ||
           searchParams.get("location")
         ) {
           if (AdsPage > 1) {
@@ -86,8 +93,6 @@ const LatestOffers = () => {
             });
             return;
           }
-          // Case to eliminate advert duplication when user hit browser back btn
-
           setAdvert({
             data: [...JSON.parse(res.data.data)],
             status: "success",
@@ -95,7 +100,7 @@ const LatestOffers = () => {
           });
           return;
         }
-
+        // Case to eliminate advert duplication when user hit browser back btn
         if (AdsPage === 1) {
           setAdvert({
             data: [...JSON.parse(res.data.data)],
@@ -104,7 +109,6 @@ const LatestOffers = () => {
           });
           return;
         }
-
         setAdvert({
           data: [...adverts.data, ...JSON.parse(res.data.data)],
           status: "success",
@@ -112,7 +116,7 @@ const LatestOffers = () => {
         });
       })
       .catch((e) => {
-        console.log(e);
+        // console.log(e);
         setAdvert({
           data: [],
           status: "error",
@@ -128,7 +132,7 @@ const LatestOffers = () => {
     setAdsLoading(1);
   }, [
     searchParams.get("search"),
-    searchParams.get("taxonomy"),
+    taxonomyFilter,
     searchParams.get("location"),
   ]);
 
@@ -137,7 +141,7 @@ const LatestOffers = () => {
   }, [
     AdsPage,
     searchParams.get("search"),
-    searchParams.get("taxonomy"),
+    taxonomyFilter,
     searchParams.get("location"),
   ]);
 
@@ -188,9 +192,9 @@ const LatestOffers = () => {
         {adverts.data.map((advert: any) => (
           <Link
             to="details"
-            state={{ advertid: advert?._id }}
+            state={{ advertid: advert._id }}
             className="single_Ads p-0"
-            key={advert?._id}
+            key={advert._id}
           >
             <div className="ads_img_div">
               <img src={advert?.advertImage?.imgUrl} alt="bannerImg" />
@@ -201,24 +205,22 @@ const LatestOffers = () => {
                   RemoveAndAddWishList(advert._id);
                 }}
               >
-                {GetWishList.some((fav: any) => fav?.advert_id === advert?._id)
+                {GetWishList.some((fav: any) => fav.advert_id === advert._id)
                   ? FilledFavouriteIconLarge
                   : Favourite}
               </div>
             </div>
             <div className="ads_details">
               {/* <div className="ads_cat">Beauty & Spa / Face &Skin</div> */}
-              {/* <button className="whereTo-btn-all">{advert?.whereToShow}</button> */}
               <p>
-                {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}{" "}
-                {`...`}
+                {advert?.advertDescription?.split(" ")?.slice(0, 10).join(" ")}
               </p>
               <div className="provider">
                 {advert?.advertStoreName || advert?.provider?.storeName}
               </div>
               <div>
-                <span className="price">£{advert?.advertOfferPrice}</span>
-                <span className="off_price">£{advert?.advertPrice}</span>
+                <span className="price">£{advert.advertOfferPrice}</span>
+                <span className="off_price">£{advert.advertPrice}</span>
               </div>
             </div>
           </Link>

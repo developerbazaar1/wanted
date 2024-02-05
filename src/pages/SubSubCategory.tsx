@@ -1,7 +1,7 @@
 import NextButton from "../components/NextButton";
 import { Link, useParams } from "react-router-dom";
 import { useToken, useWishList } from "../service/auth";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AdsApi, WishListAPi } from "../config/AxiosUtils";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
@@ -9,10 +9,12 @@ import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
 import { wishList as SetstoreWishList } from "../features/wishList";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { SearchContext } from "../features/searchContext";
 
 const SubSubCategory = () => {
   const { services } = useParams();
   const [searchParams] = useSearchParams();
+  const { taxonomyFilter } = useContext(SearchContext);
   // console.log("seach parmas", searchParams.get("search"));
 
   // console.log(services);
@@ -56,7 +58,7 @@ const SubSubCategory = () => {
       decodeURIComponent(services?.replace(/\+/g, " ") || ""),
       AdsPage,
       searchParams.get("search") || "",
-      searchParams.get("taxonomy") || "",
+      taxonomyFilter || "",
       searchParams.get("location") || ""
     )
       .then((res) => {
@@ -78,7 +80,7 @@ const SubSubCategory = () => {
 
         if (
           searchParams.get("search") ||
-          searchParams.get("taxonomy") ||
+          taxonomyFilter ||
           searchParams.get("location")
         ) {
           if (AdsPage > 1) {
@@ -127,7 +129,7 @@ const SubSubCategory = () => {
   }, [
     AdsPage,
     searchParams.get("search"),
-    searchParams.get("taxonomy"),
+    taxonomyFilter,
     searchParams.get("location"),
   ]);
 

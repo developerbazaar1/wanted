@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ServicesAPi } from "../config/AxiosUtils";
 import Loader from "../components/Loader";
+
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [services, setServices] = useState({

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,10 +8,13 @@ import { AdsApi, WishListAPi } from "../config/AxiosUtils";
 import { useToken, useWishList } from "../service/auth";
 import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
 import { wishList as SetstoreWishList } from "../features/wishList";
+import { SearchContext } from "../features/searchContext";
 const All = () => {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
+
+  const { taxonomyFilter } = useContext(SearchContext);
   const [adverts, setAdvert] = useState<{
     data: any;
     status: string;
@@ -29,7 +32,6 @@ const All = () => {
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)
       .then((res) => {
-        console.log(res);
         dispatch(
           SetstoreWishList({
             wishList: res?.data?.wishlist,
@@ -38,7 +40,7 @@ const All = () => {
         toast.success(res.data.message);
       })
       .catch((e) => {
-        console.log(e.response);
+        // console.log(e.response);
         toast.error(e.response.data.message);
       });
   }
@@ -50,7 +52,7 @@ const All = () => {
       AdsPage,
       6,
       searchParams.get("search") || "",
-      searchParams.get("taxonomy") || "",
+      taxonomyFilter || "",
       searchParams.get("location") || ""
     )
 
@@ -73,7 +75,7 @@ const All = () => {
 
         if (
           searchParams.get("search") ||
-          searchParams.get("taxonomy") ||
+          taxonomyFilter ||
           searchParams.get("location")
         ) {
           if (AdsPage > 1) {
@@ -91,7 +93,6 @@ const All = () => {
           });
           return;
         }
-
         // Case to eliminate advert duplication when user hit browser back btn
         if (AdsPage === 1) {
           setAdvert({
@@ -101,7 +102,6 @@ const All = () => {
           });
           return;
         }
-
         setAdvert({
           data: [...adverts.data, ...JSON.parse(res.data.data)],
           status: "success",
@@ -109,7 +109,6 @@ const All = () => {
         });
       })
       .catch((e) => {
-        console.log(e);
         setAdvert({
           data: [],
           status: "error",
@@ -121,20 +120,17 @@ const All = () => {
       });
   }
 
-  useEffect(() => {
-    setAdsLoading(1);
-  }, [
-    searchParams.get("search"),
-    searchParams.get("taxonomy"),
-    searchParams.get("location"),
-  ]);
+  useEffect(
+    () => setAdsLoading(1),
+    [searchParams.get("search"), taxonomyFilter, searchParams.get("location")]
+  );
 
   useEffect(() => {
     FetchData();
   }, [
     AdsPage,
     searchParams.get("search"),
-    searchParams.get("taxonomy"),
+    taxonomyFilter,
     searchParams.get("location"),
   ]);
 
