@@ -80,7 +80,7 @@ const router = createBrowserRouter(
             element={<LiveAds />}
             errorElement={<div> this is for error element</div>}
           />
-          <Route path="latestOffaers" element={<LatestOffers />} />
+          <Route path="latestOffers" element={<LatestOffers />} />
           <Route path="all" element={<All />} />
         </Route>
         <Route

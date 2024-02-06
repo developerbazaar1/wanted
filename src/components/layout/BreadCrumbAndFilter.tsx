@@ -78,7 +78,7 @@ const BreadCrumbAndFilter: React.FC = () => {
             Live Ads
           </NavLink>
           <NavLink
-            to="latestOffaers"
+            to="latestOffers"
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Latest Offers
