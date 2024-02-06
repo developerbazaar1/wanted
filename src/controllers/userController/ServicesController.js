@@ -256,13 +256,12 @@ const getSingleSubservice = async (req, res, next) => {
     const {
       _id,
       page = 1,
-      pageSize = 6,
+      pageSize = 15,
       searchQuery,
-      taxonomy,
+      taxonomy = decodeURIComponent(taxonomy),
       location,
     } = req.query;
 
-    // console.log(_id);
     let services = await advertModal.aggregate([
       {
         $lookup: {
@@ -284,7 +283,7 @@ const getSingleSubservice = async (req, res, next) => {
         $match: {
           advertStatus: "active",
           advertVisibility: true,
-          whereToShow: "Service",
+          whereToShow: "Services",
           $and: [
             ...(_id
               ? [

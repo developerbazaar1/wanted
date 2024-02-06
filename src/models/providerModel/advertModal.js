@@ -51,7 +51,7 @@ const advertModal = new mongoose.Schema({
   },
   whereToShow: {
     type: String,
-    enum: ["Live Ads", "Latest Offers", "Service"],
+    enum: ["Live Ads", "Latest Offers", "Services"],
     required: true,
   },
   advertSubCategory: {

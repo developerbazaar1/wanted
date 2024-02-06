@@ -15,10 +15,10 @@ const { transformProducts } = require("../../helpers/advertProductsDataFormat");
 const liveAndLatestOfferController = async (req, res, next) => {
   const {
     page = 1,
-    pageSize = 6,
+    pageSize = 15,
     adstypes,
     searchQuery,
-    taxonomy,
+    taxonomy = decodeURIComponent(taxonomy),
     location,
   } = req.query;
   try {
