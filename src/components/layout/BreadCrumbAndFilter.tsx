@@ -53,7 +53,7 @@ const BreadCrumbAndFilter: React.FC = () => {
                   {breadcrumb.link !== null ? (
                     <Link
                       to={
-                        breadcrumb?.label === "service" ? "/" : breadcrumb.link
+                        breadcrumb?.label === "services" ? "/" : breadcrumb.link
                       }
                       className="text-black text-capitalize"
                     >
@@ -78,7 +78,7 @@ const BreadCrumbAndFilter: React.FC = () => {
             Live Ads
           </NavLink>
           <NavLink
-            to="latestOppers"
+            to="latestOffaers"
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Latest Offers
@@ -86,7 +86,7 @@ const BreadCrumbAndFilter: React.FC = () => {
           <NavLink
             to="/"
             // end
-            className={pathstate?.includes("service") ? "active-nav-bg" : ""}
+            className={pathstate?.includes("services") ? "active-nav-bg" : ""}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Services

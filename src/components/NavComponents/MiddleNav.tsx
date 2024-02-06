@@ -34,7 +34,6 @@ const MiddleNav = () => {
   // };
 
   const pathnames = location.split("/").filter((x) => x);
-  console.log("Path Name", pathnames);
 
   function handelFormDubmit(formData: {
     searchQuery: string;
@@ -48,9 +47,9 @@ const MiddleNav = () => {
 
     // redirect user to there home page when serach is submit from details Page.
     if (pathnames.includes("details")) {
-      if (pathnames.includes("service")) {
+      if (pathnames.includes("services")) {
         navigate(
-          `/service/search?search=${searchQuery || ""}&location=${
+          `/services/search?search=${searchQuery || ""}&location=${
             postalCode || ""
           }`
         );
@@ -66,9 +65,9 @@ const MiddleNav = () => {
       return;
     }
 
-    if (pathnames.length === 0 || pathnames.includes("service")) {
+    if (pathnames.length === 0 || pathnames.includes("services")) {
       navigate(
-        `/service/search?search=${searchQuery || ""}&location=${
+        `/services/search?search=${searchQuery || ""}&location=${
           postalCode || ""
         }`
       );
@@ -92,14 +91,14 @@ const MiddleNav = () => {
     updatetaxonomyFilterQuery(service);
     const dropDown = document.getElementById("mainDorpwDoen");
     dropDown?.classList.remove("show");
-    if (pathnames.length === 0 || pathnames.includes(`service`)) {
-      navigate(`/service/search`);
+    if (pathnames.length === 0 || pathnames.includes(`services`)) {
+      navigate(`/services/search`);
     }
   }
 
   useEffect(() => {
     // function to set the filtre category and sub-category based on selected category
-    if (pathnames.includes("service")) {
+    if (pathnames.includes("services")) {
       // when path name include search do not reset the category
       if (pathnames.includes("search")) {
         return;

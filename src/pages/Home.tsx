@@ -1,11 +1,16 @@
 import "../css/Home.css";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { ServicesAPi } from "../config/AxiosUtils";
 import Loader from "../components/Loader";
+import { SearchContext } from "../features/searchContext";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { taxonomyFilter } = useContext(SearchContext);
+  console.log(taxonomyFilter);
+
   const [services, setServices] = useState({
     category: [],
     status: "",
@@ -13,6 +18,10 @@ const Home = () => {
   });
 
   useEffect(() => {
+    if (taxonomyFilter) {
+      return navigate(`/services/${taxonomyFilter}`);
+    }
+
     setLoading(true);
     ServicesAPi.GetCategoryServices()
       .then((res) => {
@@ -79,7 +88,7 @@ const Home = () => {
         {services?.category?.map((cate: any) => (
           <div className="single_cat p-0" key={cate._id}>
             <Link
-              to={`/service/${cate.categoryName}`}
+              to={`/services/${cate.categoryName}`}
               state={{
                 cate_id: cate._id,
                 name: cate.categoryName,
