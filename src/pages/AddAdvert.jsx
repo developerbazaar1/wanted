@@ -34,7 +34,7 @@ const AddAdvert = () => {
   const { token, user, portfolio_id } = useAuth();
   const [selectedImage, setSelectedImage] = useState(null);
   const [fileName, setfileName] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [, setSelectedCategory] = useState(null);
 
   const fileInputRef = useRef(null);
   const { subcategory } = useSubCategory();
