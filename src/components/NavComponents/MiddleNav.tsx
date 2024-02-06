@@ -27,7 +27,7 @@ const MiddleNav = () => {
   // const [selectedCateogries, setselectedCateogries] = useState<string>();
   const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
-  const { register, handleSubmit, reset } = useForm<serachVlue>();
+  const { register, handleSubmit, setValue } = useForm<serachVlue>();
 
   // const startSearchFunction = () => {
   //   setShowModal1(true);
@@ -39,10 +39,13 @@ const MiddleNav = () => {
     searchQuery: string;
     postalCode: string;
   }) {
-    if (!formData.searchQuery && !formData.postalCode) {
-      // toast.error("Enter a Keyword or Postal Code or Location");
-      return;
+    if (!formData.searchQuery && !formData.postalCode && !taxonomyFilter) {
+      formData.postalCode = "UK";
+      setValue("postalCode", "UK");
     }
+
+    console.log(formData);
+
     const { searchQuery, postalCode } = formData;
 
     // redirect user to there home page when serach is submit from details Page.
@@ -53,10 +56,8 @@ const MiddleNav = () => {
             postalCode || ""
           }`
         );
-        reset();
         return;
       }
-      reset();
       navigate(
         `${pathnames[0]}?search=${searchQuery || ""}&location=${
           postalCode || ""
@@ -71,7 +72,6 @@ const MiddleNav = () => {
           postalCode || ""
         }`
       );
-      reset();
       return;
     }
 
@@ -84,7 +84,6 @@ const MiddleNav = () => {
     }
 
     setSearchParams(SearchObject);
-    reset();
   }
 
   function handleSelectedDropDown(service: string) {
