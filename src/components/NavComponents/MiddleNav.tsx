@@ -103,6 +103,8 @@ const MiddleNav = () => {
         return;
       }
 
+      console.log(pathnames);
+
       if (pathnames.length > 2) {
         updatetaxonomyFilterQuery(
           decodeURIComponent(pathnames[2].replace(/\+/g, " "))

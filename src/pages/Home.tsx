@@ -19,7 +19,7 @@ const Home = () => {
 
   useEffect(() => {
     if (taxonomyFilter) {
-      return navigate(`/services/${taxonomyFilter}`);
+      return navigate(`/services/search`);
     }
 
     setLoading(true);
