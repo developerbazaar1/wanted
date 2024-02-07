@@ -18,20 +18,14 @@ interface serachVlue {
 const MiddleNav = () => {
   const [, setSearchParams] = useSearchParams();
   const location = useLocation().pathname;
+  const state = useLocation()?.state;
   const { taxonomyFilter, updatetaxonomyFilterQuery } =
     useContext(SearchContext);
 
-  // console.log("location", location);
-
   const [showModal1, setShowModal1] = useState<boolean>(false);
-  // const [selectedCateogries, setselectedCateogries] = useState<string>();
   const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
-  const { register, handleSubmit, setValue } = useForm<serachVlue>();
-
-  // const startSearchFunction = () => {
-  //   setShowModal1(true);
-  // };
+  const { register, handleSubmit, setValue, reset } = useForm<serachVlue>();
 
   const pathnames = location.split("/").filter((x) => x);
 
@@ -49,6 +43,7 @@ const MiddleNav = () => {
     const { searchQuery, postalCode } = formData;
 
     // redirect user to there home page when serach is submit from details Page.
+
     if (pathnames.includes("details")) {
       if (pathnames.includes("services")) {
         navigate(
@@ -82,7 +77,6 @@ const MiddleNav = () => {
     if (postalCode) {
       SearchObject["location"] = postalCode;
     }
-
     setSearchParams(SearchObject);
   }
 
@@ -97,14 +91,18 @@ const MiddleNav = () => {
 
   useEffect(() => {
     // function to set the filtre category and sub-category based on selected category
+    /**
+     * reset the form when user click on the logo
+     */
+    if (state?.reset) {
+      reset();
+    }
+
     if (pathnames.includes("services")) {
       // when path name include search do not reset the category
       if (pathnames.includes("search")) {
         return;
       }
-
-      console.log(pathnames);
-
       if (pathnames.length > 2) {
         updatetaxonomyFilterQuery(
           decodeURIComponent(pathnames[2].replace(/\+/g, " "))

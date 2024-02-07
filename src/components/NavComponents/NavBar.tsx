@@ -21,6 +21,7 @@ const NavBar = () => {
                 onClick={() => {
                   updatetaxonomyFilterQuery("");
                 }}
+                state={{ reset: "resetSearch" }}
               >
                 <img src={navLogo} className="nav_logo" alt="" />
               </Link>

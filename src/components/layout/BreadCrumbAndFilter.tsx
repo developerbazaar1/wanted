@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import "../../css/ComponentsCSS/BreadCrumbAndFilter.css";
+import { SearchContext } from "../../features/searchContext";
 
 const breadNav = {
   backgroundColor: "#C9FFD3",
@@ -11,7 +18,14 @@ interface Breadcrumb {
   link: string | null;
 }
 
+const splitLink = (lable: string): string[] => {
+  const splitedlable = lable.split("-");
+  return splitedlable;
+};
+
 const BreadCrumbAndFilter: React.FC = () => {
+  const { updatetaxonomyFilterQuery } = useContext(SearchContext);
+  const [searchParams] = useSearchParams();
   const location = useLocation();
   const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   const [pathstate, setPathstate] = useState<string[]>();
@@ -55,13 +69,17 @@ const BreadCrumbAndFilter: React.FC = () => {
                       to={
                         breadcrumb?.label === "services" ? "/" : breadcrumb.link
                       }
+                      state={{ reset: "resetSearch" }}
+                      onClick={() => updatetaxonomyFilterQuery("")}
                       className="text-black text-capitalize"
                     >
-                      {breadcrumb.label}
+                      {splitLink(breadcrumb.label)?.map(
+                        (element) => element + " "
+                      )}
                     </Link>
                   ) : (
                     <span className="text-black text-capitalize">
-                      {breadcrumb.label}
+                      {splitLink(breadcrumb.label)?.map((element) => element)}
                     </span>
                   )}
                   {index < breadcrumbs.length - 1 && " / "}
@@ -72,27 +90,67 @@ const BreadCrumbAndFilter: React.FC = () => {
         <div className="d-none d-md-flex">&nbsp;</div>
         <div className="filterNav">
           <NavLink
-            to="liveads"
+            to={`live-ads${
+              searchParams.get("search")
+                ? `?search=${searchParams.get("search")}`
+                : ""
+            }${
+              searchParams.get("location")
+                ? `${
+                    searchParams.get("search") ? "&" : "?"
+                  }location=${searchParams.get("location")}`
+                : ""
+            }`}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Live Ads
           </NavLink>
+
           <NavLink
-            to="latestOffers"
+            to={`latest-offers${
+              searchParams.get("search")
+                ? `?search=${searchParams.get("search")}`
+                : ""
+            }${
+              searchParams.get("location")
+                ? `${
+                    searchParams.get("search") ? "&" : "?"
+                  }location=${searchParams.get("location")}`
+                : ""
+            }`}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Latest Offers
           </NavLink>
           <NavLink
-            to="/"
-            // end
+            to={`/${
+              searchParams.get("search")
+                ? `?search=${searchParams.get("search")}`
+                : ""
+            }${
+              searchParams.get("location")
+                ? `${
+                    searchParams.get("search") ? "&" : "?"
+                  }location=${searchParams.get("location")}`
+                : ""
+            }`}
             className={pathstate?.includes("services") ? "active-nav-bg" : ""}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Services
           </NavLink>
           <NavLink
-            to="all"
+            to={`all${
+              searchParams.get("search")
+                ? `?search=${searchParams.get("search")}`
+                : ""
+            }${
+              searchParams.get("location")
+                ? `${
+                    searchParams.get("search") ? "&" : "?"
+                  }location=${searchParams.get("location")}`
+                : ""
+            }`}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             All

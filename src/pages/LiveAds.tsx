@@ -46,11 +46,6 @@ const LiveAds = () => {
       });
   }
 
-  // console.log(
-  //   "serach query",
-  //   searchParams.forEach((val) => console.log(val))
-  // );
-
   function FetchData() {
     setLoading(true);
     AdsApi.getAdsBaedOnType(

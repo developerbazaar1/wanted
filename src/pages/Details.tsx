@@ -105,7 +105,7 @@ const Details = () => {
           textAlign: "center",
         }}
       >
-        <h1>previewData?.error</h1>
+        <h1>{previewData?.error}</h1>
       </div>
     );
   }

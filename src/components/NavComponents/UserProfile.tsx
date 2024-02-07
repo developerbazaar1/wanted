@@ -1,14 +1,24 @@
 // import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../service/auth";
+import { useContext } from "react";
+import { SearchContext } from "../../features/searchContext";
 const UserProfile = () => {
   const { user } = useAuth();
+  const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   // console.log(user);
 
   return (
     <>
       <div>
-        <Link to="/profile" className="user__profile">
+        <Link
+          to="/profile"
+          onClick={() => {
+            updatetaxonomyFilterQuery("");
+          }}
+          state={{ reset: "resetSearch" }}
+          className="user__profile"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

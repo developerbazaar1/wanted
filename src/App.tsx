@@ -76,11 +76,11 @@ const router = createBrowserRouter(
           {/* route to show services search */}
           <Route path="services/search" element={<SubSubCategory />} />
           <Route
-            path="liveads"
+            path="live-ads"
             element={<LiveAds />}
             errorElement={<div> this is for error element</div>}
           />
-          <Route path="latestOffers" element={<LatestOffers />} />
+          <Route path="latest-offers" element={<LatestOffers />} />
           <Route path="all" element={<All />} />
         </Route>
         <Route
