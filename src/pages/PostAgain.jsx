@@ -370,10 +370,6 @@ const PostAgain = () => {
                         id="advertPostalCode"
                         placeholder="Enter your advert Postal Code"
                         {...register("advertPostalCode", {
-                          pattern: {
-                            value: /^\d+$/,
-                            message: "Enter a Valid Postal Code",
-                          },
                           required: {
                             value: true,
                             message: "Postal Code is Required",

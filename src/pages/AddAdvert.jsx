@@ -341,10 +341,6 @@ const AddAdvert = () => {
                         id="adPostalCode"
                         placeholder="Enter your advert Postal Code"
                         {...register("adPostalCode", {
-                          pattern: {
-                            value: /^\d+$/,
-                            message: "Enter a Valid Postal Code",
-                          },
                           required: {
                             value: true,
                             message: "Postal Code is Required",
