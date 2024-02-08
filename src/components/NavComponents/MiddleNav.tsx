@@ -186,7 +186,11 @@ const MiddleNav = () => {
                     type="button"
                   >
                     <span className="app-menu__label__2">
-                      {taxonomyFilter ? taxonomyFilter : "All Categories"}
+                      {taxonomyFilter ? (
+                        <span className="text-danger">{taxonomyFilter}</span>
+                      ) : (
+                        "All Categories"
+                      )}
                     </span>
                   </a>
                   <ul
