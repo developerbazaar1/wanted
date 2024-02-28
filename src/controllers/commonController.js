@@ -2,6 +2,7 @@ const { OK, BAD_REQUEST } = require("../httpStatusCode");
 const CategroyModal = require("../models/adminModel/category");
 const SubcategoryModal = require("../models/adminModel/subCategory");
 const SubSubCategoryModal = require("../models/adminModel/subSubCategoryModal");
+const axios = require("axios");
 
 const getCategoryController = async (req, res, async) => {
   try {
@@ -93,8 +94,29 @@ const getsubSubCategoryController = async (req, res, async) => {
   }
 };
 
+const getTypeAheadController = async (req, res) => {
+  try {
+    const apiKey = "AIzaSyCx-cGRGxdiU0cYI0q5TdWvATXEsIXUYFY";
+    const input = req.query.input; // Assuming input is passed as a query parameter
+    const location = "40.76999,-122.44696";
+    const radius = "50000";
+    const types = "locality|sublocality";
+    const language = "en-GB";
+    const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&location=${location}&radius=${radius}&types=${types}&key=${apiKey}&language=${language}&components=country:GB`;
+
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching location data:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching location data" });
+  }
+};
+
 module.exports = {
   getCategoryController,
   getsubCategoryController,
   getsubSubCategoryController,
+  getTypeAheadController,
 };
