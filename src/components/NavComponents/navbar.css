@@ -613,3 +613,60 @@ input[type="radio"] {
   text-overflow: ellipsis;
   text-wrap: balance !important;
 }
+
+.type-ahead-options {
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 44px;
+  min-width: 100%;
+  z-index: 500;
+  background-color: #fff;
+  border: 1px solid #d8d6d9;
+  border-radius: 4px;
+  box-shadow: 0 1px 8px rgba(177, 173, 179, 0.3);
+  /* display: none; */
+}
+
+.type-ahead-option {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: auto;
+  white-space: pre-wrap;
+  padding: 12px 16px;
+}
+
+.type-ahead-option.type-ahead-option--focused,
+.type-ahead-option:hover {
+  background-color: #dbdadb;
+}
+
+.icon {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: gumicon, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  speak: none;
+  vertical-align: middle;
+  min-width: 18px;
+}
+
+.icon--medium {
+  font-size: 20px;
+}
+
+.type-ahead-option .text-part-container {
+  margin-left: 12px;
+}
+
+@media screen and (min-width: 48em) {
+  .type-ahead-options {
+    margin-top: 8px;
+  }
+}

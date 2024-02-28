@@ -161,3 +161,12 @@ export const ServicesAPi = {
     return response;
   },
 };
+
+export const GoogleAPI = {
+  locationTypeAhead: async (input: string) => {
+    return await openapi.request({
+      url: `/get-predection?input=${input}`,
+      method: "GET",
+    });
+  },
+};

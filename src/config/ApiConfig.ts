@@ -6,3 +6,6 @@ export const api = axios.create({
 export const openapi = axios.create({
   baseURL: import.meta.env.VITE_Common_Local_url,
 });
+export const googlePlaceApi = axios.create({
+  baseURL: "https://maps.googleapis.com/maps/api",
+});

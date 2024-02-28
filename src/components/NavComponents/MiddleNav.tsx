@@ -1,13 +1,19 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import FirstModal from "./FirstModal";
-import { FilterIcon, PostalIcon, SerachIcon } from "../../utils/SvgElements";
+import {
+  FilterIcon,
+  PostalIcon,
+  PostalIconForTypeahead,
+  SerachIcon,
+} from "../../utils/SvgElements";
 import { useForm } from "react-hook-form";
 import { useServices } from "../../service/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { showArrowCheck } from "../../utils/CastintoFormData";
 import { SearchContext } from "../../features/searchContext";
+import { GoogleAPI } from "../../config/AxiosUtils";
 
 interface serachVlue {
   searchQuery: string;
@@ -17,15 +23,20 @@ interface serachVlue {
 
 const MiddleNav = () => {
   const [, setSearchParams] = useSearchParams();
+
+  const [locTypeAhead, setLocTypeAhead] = useState([]);
   const location = useLocation().pathname;
   const state = useLocation()?.state;
+  const selectRef = useRef<HTMLDivElement | null>(null);
+
   const { taxonomyFilter, updatetaxonomyFilterQuery } =
     useContext(SearchContext);
 
   const [showModal1, setShowModal1] = useState<boolean>(false);
   const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
-  const { register, handleSubmit, setValue, reset } = useForm<serachVlue>();
+  const { register, handleSubmit, setValue, reset, watch } =
+    useForm<serachVlue>();
 
   const pathnames = location.split("/").filter((x) => x);
 
@@ -143,6 +154,60 @@ const MiddleNav = () => {
 
     return jsxElement;
   }
+
+  //  function to set the  location value after selecting
+  const setSelectedLocation = (value: any) => {
+    setValue("postalCode", value);
+    const elements = document.getElementsByClassName(
+      "location-ahead-container"
+    );
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i] as HTMLElement;
+      element.style.display = "none";
+    }
+  };
+
+  //function to fetch the type-ahead-result
+  const FetchLocationTypeAhead = async () => {
+    try {
+      const response = await GoogleAPI.locationTypeAhead(
+        watch("postalCode") || ""
+      );
+      console.log(response.data);
+      setLocTypeAhead(response?.data?.predictions);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    FetchLocationTypeAhead();
+  }, [watch("postalCode")]);
+
+  useEffect(() => {
+    // Function to handle clicks outside the postal__input__container
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
+        const elements = document.getElementsByClassName(
+          "location-ahead-container"
+        );
+        for (let i = 0; i < elements.length; i++) {
+          (elements[i] as HTMLElement).style.display = "none";
+        }
+      }
+    }
+
+    // Add event listener when the component mounts
+    document.addEventListener("click", handleClickOutside);
+
+    // Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -266,15 +331,47 @@ const MiddleNav = () => {
                 </div>
               </div>
             </div>
-            <div className="postal__input__container">
+            <div className="postal__input__container" ref={selectRef}>
               {PostalIcon}
               <input
                 type="text"
+                id="mobilesearch"
                 className="postal__input"
                 placeholder="Your postal code"
+                autoComplete="off"
+                aria-label="Location"
                 {...register("postalCode")}
               />
+
+              {locTypeAhead?.length > 0 && (
+                <div className={`location-ahead-container`}>
+                  <ul className="type-ahead-options">
+                    {locTypeAhead?.map((typeAhead: any) => (
+                      <li
+                        className="type-ahead-option"
+                        key={typeAhead?.place_id}
+                        onClick={() =>
+                          setSelectedLocation(typeAhead?.description)
+                        }
+                      >
+                        <span className="icon icon--medium icon--beacon">
+                          {PostalIconForTypeahead}
+                        </span>
+
+                        <div className="text-part-container">
+                          <div className="keyword-highlight-text-wrapper type-ahead-option-primary-text">
+                            <span className="type-ahead-option-highlight">
+                              {typeAhead?.description}
+                            </span>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
+
             <div className="searButoon_container">
               <button>
                 <span className="searchbuttonText d-none d-lg-inline">
