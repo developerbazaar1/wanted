@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Link,
+  // Link,
   NavLink,
   Outlet,
   useLocation,
   useSearchParams,
 } from "react-router-dom";
 import "../../css/ComponentsCSS/BreadCrumbAndFilter.css";
-import { SearchContext } from "../../features/searchContext";
+// import { SearchContext } from "../../features/searchContext";
 
 const breadNav = {
   backgroundColor: "#C9FFD3",
@@ -18,16 +18,17 @@ interface Breadcrumb {
   link: string | null;
 }
 
-const splitLink = (lable: string): string[] => {
-  const splitedlable = lable.split("-");
-  return splitedlable;
-};
+// const splitLink = (lable: string): string[] => {
+//   const splitedlable = lable.split("-");
+//   return splitedlable;
+// };
 
 const BreadCrumbAndFilter: React.FC = () => {
-  const { updatetaxonomyFilterQuery } = useContext(SearchContext);
+  // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
+  const [, setBreadcrumbs] = useState<Breadcrumb[]>([]);
+  // const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   const [pathstate, setPathstate] = useState<string[]>();
 
   useEffect(() => {
