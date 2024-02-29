@@ -61,7 +61,7 @@ const BreadCrumbAndFilter: React.FC = () => {
             </Link>
           )} */}
 
-          {breadcrumbs?.length !== 1
+          {/* {breadcrumbs?.length !== 1
             ? breadcrumbs.map((breadcrumb, index) => (
                 <span key={index}>
                   {breadcrumb.link !== null ? (
@@ -85,7 +85,28 @@ const BreadCrumbAndFilter: React.FC = () => {
                   {index < breadcrumbs.length - 1 && " / "}
                 </span>
               ))
-            : ""}
+            : ""} */}
+          <div className="price-distance-filter-container">
+            <div className="btn-group">
+              <button
+                type="button"
+                className="dropdown-toggle featured-filter-box"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Price
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <span className="dropdown-item">Price: Low to High</span>
+                </li>
+                <li>
+                  <span className="dropdown-item">Price: High to Low</span>
+                </li>
+              </ul>
+            </div>
+            <button className="featured-filter-box">Distance</button>
+          </div>
         </div>
         <div className="d-none d-md-flex">&nbsp;</div>
         <div className="filterNav">

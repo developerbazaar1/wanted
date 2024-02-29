@@ -54,6 +54,30 @@ ul > li {
   list-style: none;
 }
 
+.featured-filter-box {
+  background: #fff;
+  border: 0.1rem solid #cacacc;
+  border-radius: 0.2rem;
+  padding: 0.6rem 1.6rem;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  white-space: nowrap !important;
+  -webkit-border-radius: 0.2rem;
+  -moz-border-radius: 0.2rem;
+  -ms-border-radius: 0.2rem;
+  -o-border-radius: 0.2rem;
+}
+
+.featured-filter-box:focus,
+.featured-filter-box:hover {
+  border-color: #615c66;
+}
+
+.price-distance-filter-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
 @media screen and (min-width: 530px) {
   .filterNav > a {
     padding: 10px 20px;
