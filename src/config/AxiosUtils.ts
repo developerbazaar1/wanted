@@ -50,12 +50,13 @@ export const AdsApi = {
     pageSize = 15,
     searchQuery = "",
     taxonomy = "",
-    location = ""
+    location = "",
+    priceFilter = ""
   ) => {
     const response = await api.request({
       url: `/getads?adstypes=${adstypes}&page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}&taxonomy=${encodeURIComponent(
         taxonomy
-      )}&location=${location}`,
+      )}&location=${location}&priceFilter=${priceFilter}`,
       method: "get",
     });
     // console.log(response);

@@ -60,7 +60,8 @@ const LatestOffers = () => {
       15,
       searchParams.get("search") || "",
       taxonomyFilter || "",
-      searchParams.get("location") || ""
+      searchParams.get("location") || "",
+      searchParams.get("price") || ""
     )
 
       .then((res) => {
@@ -134,6 +135,7 @@ const LatestOffers = () => {
     searchParams.get("search"),
     taxonomyFilter,
     searchParams.get("location"),
+    searchParams.get("price"),
   ]);
 
   useEffect(() => {
@@ -143,6 +145,7 @@ const LatestOffers = () => {
     searchParams.get("search"),
     taxonomyFilter,
     searchParams.get("location"),
+    searchParams.get("price"),
   ]);
 
   if (loading) {

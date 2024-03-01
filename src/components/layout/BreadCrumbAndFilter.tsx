@@ -25,11 +25,21 @@ interface Breadcrumb {
 
 const BreadCrumbAndFilter: React.FC = () => {
   // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [priceFilter, setPriceFilter] = useState("");
   const location = useLocation();
   const [, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   // const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   const [pathstate, setPathstate] = useState<string[]>();
+
+  //function to set set the filterPrice
+  function handleSetFilter(filter: string) {
+    setPriceFilter(filter);
+    setSearchParams((prev) => {
+      prev.set("price", filter);
+      return prev;
+    });
+  }
 
   useEffect(() => {
     const pathnames = location.pathname.split("/").filter((x) => x);
@@ -91,17 +101,23 @@ const BreadCrumbAndFilter: React.FC = () => {
             <div className="btn-group">
               <button
                 type="button"
-                className="dropdown-toggle featured-filter-box"
+                className={`dropdown-toggle featured-filter-box ${
+                  priceFilter ? "featured-filter-selected" : null
+                }`}
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Price
+                {priceFilter
+                  ? priceFilter === "ascending"
+                    ? "Low to High"
+                    : "High to Low"
+                  : "Price"}
               </button>
               <ul className="dropdown-menu">
-                <li>
-                  <span className="dropdown-item">Price: Low to High</span>
+                <li onClick={() => handleSetFilter("ascending")}>
+                  <span className="dropdown-item"> Price: Low to High</span>
                 </li>
-                <li>
+                <li onClick={() => handleSetFilter("descending")}>
                   <span className="dropdown-item">Price: High to Low</span>
                 </li>
               </ul>

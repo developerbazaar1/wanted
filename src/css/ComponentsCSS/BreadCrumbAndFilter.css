@@ -78,6 +78,10 @@ ul > li {
   gap: 0.5rem;
 }
 
+.featured-filter-selected {
+  background-color: #17c737 !important;
+}
+
 @media screen and (min-width: 530px) {
   .filterNav > a {
     padding: 10px 20px;

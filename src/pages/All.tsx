@@ -53,7 +53,8 @@ const All = () => {
       15,
       searchParams.get("search") || "",
       taxonomyFilter || "",
-      searchParams.get("location") || ""
+      searchParams.get("location") || "",
+      searchParams.get("price") || ""
     )
 
       .then((res) => {
@@ -122,7 +123,12 @@ const All = () => {
 
   useEffect(
     () => setAdsLoading(1),
-    [searchParams.get("search"), taxonomyFilter, searchParams.get("location")]
+    [
+      searchParams.get("search"),
+      taxonomyFilter,
+      searchParams.get("location"),
+      searchParams.get("price"),
+    ]
   );
 
   useEffect(() => {
@@ -132,6 +138,7 @@ const All = () => {
     searchParams.get("search"),
     taxonomyFilter,
     searchParams.get("location"),
+    searchParams.get("price"),
   ]);
 
   if (loading) {
