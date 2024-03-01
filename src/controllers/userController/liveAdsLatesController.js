@@ -18,9 +18,11 @@ const liveAndLatestOfferController = async (req, res, next) => {
     pageSize = 15,
     adstypes,
     searchQuery,
-    taxonomy = decodeURIComponent(taxonomy),
+    taxonomy = decodeURIComponent(req?.query?.taxonomy),
     location,
+    priceFilter,
   } = req.query;
+
   try {
     const pipeline = [
       {
@@ -123,8 +125,15 @@ const liveAndLatestOfferController = async (req, res, next) => {
         },
       },
       {
-        $sort: { createdAt: -1 },
+        $sort: {
+          ...(priceFilter
+            ? priceFilter === "ascending"
+              ? { advertOfferPrice: 1 }
+              : { advertOfferPrice: -1 }
+            : { createdAt: -1 }),
+        },
       },
+
       {
         $skip: (page - 1) * pageSize,
       },
@@ -132,9 +141,7 @@ const liveAndLatestOfferController = async (req, res, next) => {
         $limit: parseInt(pageSize),
       },
     ];
-
     const ads = await advertModal.aggregate(pipeline);
-
     if (ads.length === 0 && page > 1) {
       return res.status(NO_CONTENT).json({
         status: "false",
@@ -203,7 +210,6 @@ const GetAdvertDetails = async (req, res, next) => {
       advertPreview: JSON.stringify(advertPreview),
     });
   } catch (error) {
-    console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",
