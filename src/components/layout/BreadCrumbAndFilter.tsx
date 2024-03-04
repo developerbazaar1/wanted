@@ -67,7 +67,7 @@ const BreadCrumbAndFilter: React.FC = () => {
     }
 
     if (pathnames.length === 0 || pathnames.includes("services")) {
-      navigate(`/services/search${searchParams.toString()}`);
+      navigate(`/services/search?${searchParams.toString()}`);
       return;
     }
     setSearchParams((prev) => {

@@ -49,7 +49,7 @@ const MiddleNav = () => {
       setValue("postalCode", "UK");
     }
 
-    console.log(formData);
+    // console.log(formData);
 
     const { searchQuery, postalCode } = formData;
 
