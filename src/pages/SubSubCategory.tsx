@@ -59,7 +59,8 @@ const SubSubCategory = () => {
       AdsPage,
       searchParams.get("search") || "",
       taxonomyFilter || "",
-      searchParams.get("location") || ""
+      searchParams.get("location") || "",
+      searchParams.get("price") || ""
     )
       .then((res) => {
         console.log(res);
@@ -131,6 +132,7 @@ const SubSubCategory = () => {
     searchParams.get("search"),
     taxonomyFilter,
     searchParams.get("location"),
+    searchParams.get("price"),
   ]);
 
   // console.log(adverts.data);

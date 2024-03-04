@@ -4,6 +4,7 @@ import {
   NavLink,
   Outlet,
   useLocation,
+  useNavigate,
   useSearchParams,
 } from "react-router-dom";
 import "../../css/ComponentsCSS/BreadCrumbAndFilter.css";
@@ -25,6 +26,7 @@ interface Breadcrumb {
 
 const BreadCrumbAndFilter: React.FC = () => {
   // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [priceFilter, setPriceFilter] = useState("");
   const location = useLocation();
@@ -32,9 +34,42 @@ const BreadCrumbAndFilter: React.FC = () => {
   // const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   const [pathstate, setPathstate] = useState<string[]>();
 
+  const pathnames = location.pathname.split("/").filter((x) => x);
+
   //function to set set the filterPrice
   function handleSetFilter(filter: string) {
+    // const newSearchParams = new URLSearchParams();
+
+    setSearchParams((prev) => {
+      prev.set("price", filter);
+      return prev;
+    });
+    // console.log("Old serach Params", searchParams.toString());
+
+    // Check if other search parameters exist
+    // if (searchParams) {
+    //   searchParams.forEach((value, key) => {
+    //     newSearchParams.set(key, value);
+    //   });
+    //   newSearchParams.set("rahul", "kumar");
+    // }
+
+    // console.log("All other serach parmas", newSearchParams.toString());
+    // return;
     setPriceFilter(filter);
+    if (pathnames.includes("details")) {
+      if (pathnames.includes("services")) {
+        navigate(`/services/search?${searchParams.toString()}`);
+        return;
+      }
+      navigate(`${pathnames[0]}?${searchParams.toString()}`);
+      return;
+    }
+
+    if (pathnames.length === 0 || pathnames.includes("services")) {
+      navigate(`/services/search${searchParams.toString()}`);
+      return;
+    }
     setSearchParams((prev) => {
       prev.set("price", filter);
       return prev;
@@ -42,7 +77,6 @@ const BreadCrumbAndFilter: React.FC = () => {
   }
 
   useEffect(() => {
-    const pathnames = location.pathname.split("/").filter((x) => x);
     // console.log("path name", pathnames);
     setPathstate(pathnames);
 
@@ -72,6 +106,7 @@ const BreadCrumbAndFilter: React.FC = () => {
             </Link>
           )} */}
 
+          {/* This is code for breadcrumbs */}
           {/* {breadcrumbs?.length !== 1
             ? breadcrumbs.map((breadcrumb, index) => (
                 <span key={index}>
@@ -98,12 +133,37 @@ const BreadCrumbAndFilter: React.FC = () => {
               ))
             : ""} */}
           <div className="price-distance-filter-container">
-            <div className="btn-group">
+            {/* <div className="btn-group dropdown">
               <button
                 type="button"
                 className={`dropdown-toggle featured-filter-box ${
                   priceFilter ? "featured-filter-selected" : null
                 }`}
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                id="priceDropDown"
+              >
+                {priceFilter
+                  ? priceFilter === "ascending"
+                    ? "Low to High"
+                    : "High to Low"
+                  : "Price"}
+              </button>
+              <ul className="dropdown-menu" aria-labelledby="priceDropDown">
+                <li onClick={() => handleSetFilter("ascending")}>
+                  <span className="dropdown-item"> Price: Low to High</span>
+                </li>
+                <li onClick={() => handleSetFilter("descending")}>
+                  <span className="dropdown-item">Price: High to Low</span>
+                </li>
+              </ul>
+            </div> */}
+
+            <div className="dropdown">
+              <button
+                className={`dropdown-toggle featured-filter-box`}
+                type="button"
+                id="priceFilter"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
@@ -113,9 +173,14 @@ const BreadCrumbAndFilter: React.FC = () => {
                     : "High to Low"
                   : "Price"}
               </button>
-              <ul className="dropdown-menu">
-                <li onClick={() => handleSetFilter("ascending")}>
-                  <span className="dropdown-item"> Price: Low to High</span>
+              <ul className="dropdown-menu" aria-labelledby="priceFilter">
+                <li>
+                  <span
+                    className="dropdown-item"
+                    onClick={() => handleSetFilter("ascending")}
+                  >
+                    Price: Low to High
+                  </span>
                 </li>
                 <li onClick={() => handleSetFilter("descending")}>
                   <span className="dropdown-item">Price: High to Low</span>

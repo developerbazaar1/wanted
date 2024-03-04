@@ -94,12 +94,13 @@ export const AdsApi = {
     page = 1,
     searchQuery = "",
     taxonomy = "",
-    location = ""
+    location = "",
+    priceFilter = ""
   ) => {
     return await api.request({
       url: `/getsingsubservideadvert?_id=${_id}&page=${page}&pageSize=6&searchQuery=${searchQuery}&taxonomy=${encodeURIComponent(
         taxonomy
-      )}&location=${location}`,
+      )}&location=${location}&priceFilter=${priceFilter}`,
       method: "GET",
     });
   },

@@ -56,19 +56,18 @@ ul > li {
 
 .featured-filter-box {
   background: #fff;
-  border: 0.1rem solid #cacacc;
-  border-radius: 0.2rem;
-  padding: 0.6rem 1.6rem;
+  border: 0.1rem solid #cacacc !important;
+  border-radius: 0.2rem !important;
+  padding: 0.6rem 1.6rem !important;
   -webkit-user-select: none !important;
   user-select: none !important;
   white-space: nowrap !important;
-  -webkit-border-radius: 0.2rem;
-  -moz-border-radius: 0.2rem;
-  -ms-border-radius: 0.2rem;
-  -o-border-radius: 0.2rem;
+  -webkit-border-radius: 0.2rem !important;
+  -moz-border-radius: 0.2rem !important;
+  -ms-border-radius: 0.2rem !important;
+  -o-border-radius: 0.2rem !important;
 }
 
-.featured-filter-box:focus,
 .featured-filter-box:hover {
   border-color: #615c66;
 }
