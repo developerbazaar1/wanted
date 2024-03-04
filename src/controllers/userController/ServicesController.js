@@ -258,6 +258,7 @@ const getSingleSubservice = async (req, res, next) => {
       page = 1,
       pageSize = 15,
       searchQuery,
+      priceFilter,
       taxonomy = decodeURIComponent(taxonomy),
       location,
     } = req.query;
@@ -265,8 +266,8 @@ const getSingleSubservice = async (req, res, next) => {
     let services = await advertModal.aggregate([
       {
         $lookup: {
-          from: "providerportfolios", // Replace with your actual collection name for providers
-          localField: "advertProviderPortfolio_id", // Replace with the field in advertModal that links to providers
+          from: "providerportfolios",
+          localField: "advertProviderPortfolio_id",
           foreignField: "_id",
           pipeline: [
             {
@@ -379,7 +380,13 @@ const getSingleSubservice = async (req, res, next) => {
         },
       },
       {
-        $sort: { createdAt: -1 },
+        $sort: {
+          ...(priceFilter
+            ? priceFilter === "ascending"
+              ? { advertOfferPrice: 1 }
+              : { advertOfferPrice: -1 }
+            : { createdAt: -1 }),
+        },
       },
       {
         $skip: (page - 1) * pageSize,
