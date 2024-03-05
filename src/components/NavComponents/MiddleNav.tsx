@@ -334,12 +334,12 @@ const MiddleNav = () => {
             <div className="postal__input__container" ref={selectRef}>
               {PostalIcon}
               <input
-                type="text"
+                type="search"
                 id="mobilesearch"
                 className="postal__input"
                 placeholder="Your postal code"
                 autoComplete="off"
-                aria-label="Location"
+                aria-label="Search"
                 {...register("postalCode")}
               />
 
@@ -383,6 +383,20 @@ const MiddleNav = () => {
           </form>
         </div>
       </div>
+      {/* <form className="d-flex flex-row position-relative">
+        <input
+          type="search"
+          className="form-control"
+          id="example-search-input"
+        />
+
+        <button
+          className="btn btn-outline-success border-0 position-absolute end-0"
+          type="submit"
+        >
+          <i className="fa fa-search pointer" role="button"></i>
+        </button>
+      </form> */}
     </>
   );
 };
