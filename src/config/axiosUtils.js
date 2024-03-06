@@ -381,3 +381,12 @@ export async function newAdvertAPI(data, token) {
 
   return response;
 }
+
+export const GoogleAPI = {
+  locationTypeAhead: async (input) => {
+    return await openapi.request({
+      url: `/get-predection?input=${input}`,
+      method: "GET",
+    });
+  },
+};
