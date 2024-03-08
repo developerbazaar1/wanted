@@ -185,7 +185,7 @@ nab .login:hover {
 }
 
 .large_middle_nav {
-  width: 59%;
+  width: 60%;
 }
 
 @media screen and (max-width: 1275px) {
@@ -195,7 +195,7 @@ nab .login:hover {
 }
 @media screen and (max-width: 1117px) {
   .large_middle_nav {
-    width: 72%;
+    width: 70%;
   }
 }
 
@@ -232,7 +232,7 @@ nab .login:hover {
 
   .search__input,
   .postal__input {
-    padding: 0 0 0 39px;
+    padding: 0 5px 0 39px;
   }
 
   .searchbuttonText {
@@ -246,7 +246,7 @@ nab .login:hover {
     width: 283px;
   }
   .postal__input__container {
-    width: 31%;
+    width: 32%;
   }
 }
 
@@ -598,7 +598,7 @@ input[type="radio"] {
 
 @media screen and (min-width: 992px) {
   .search__input__conatiner {
-    width: 42%;
+    width: 38%;
   }
 
   .search__input__conatiner .search_icon {

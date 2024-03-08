@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Reward from "./components/Reward.tsx";
 import Setting from "./components/Setting.tsx";
 import Wishlist from "./components/Wishlist.tsx";
@@ -49,57 +49,67 @@ import { SearchProvider } from "./features/searchContext.tsx";
 //   return components;
 // };
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/login" element={<AuthChecked components={<Login />} />} />
-      <Route
-        path="/resetsucess"
-        element={<AuthChecked components={<ResetPassworConform />} />}
-      />
-      <Route path="/signup" element={<AuthChecked components={<SignUp />} />} />
-      <Route
-        path="/forgotassword"
-        element={<AuthChecked components={<ForgotPassword />} />}
-      />
-      <Route path="/test" element={<Test />} />
-
-      <Route element={<Layout />}>
-        <Route element={<BreadCrumbAndFilter />}>
-          <Route index element={<Home />} />
-          <Route path="services/:subcategory" element={<SubCategory />} />
-          <Route path=":page/:page?/:page?/details" element={<Details />} />
-          <Route
-            path="services/:subcategory/:services"
-            element={<SubSubCategory />}
-          />
-          {/* route to show services search */}
-          <Route path="services/search" element={<SubSubCategory />} />
-          <Route
-            path="live-ads"
-            element={<LiveAds />}
-            errorElement={<div> this is for error element</div>}
-          />
-          <Route path="latest-offers" element={<LatestOffers />} />
-          <Route path="all" element={<All />} />
-        </Route>
-        <Route
-          path="/profile"
-          element={<ProctedRoute components={<Profile />} />}
-        >
-          <Route index element={<Setting />} />
-          <Route path="reward" element={<Reward />} />
-          <Route path="wishlist" element={<Wishlist />} />
-        </Route>
-      </Route>
-    </>
-  )
-);
-
 const App: React.FC = () => {
   const dispatch = useDispatch();
-
+  const [priceFilter, setPriceFilter] = useState("");
   const token = useToken();
+
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path="/login" element={<AuthChecked components={<Login />} />} />
+        <Route
+          path="/resetsucess"
+          element={<AuthChecked components={<ResetPassworConform />} />}
+        />
+        <Route
+          path="/signup"
+          element={<AuthChecked components={<SignUp />} />}
+        />
+        <Route
+          path="/forgotassword"
+          element={<AuthChecked components={<ForgotPassword />} />}
+        />
+        <Route path="/test" element={<Test />} />
+
+        <Route element={<Layout setPriceFilter={setPriceFilter} />}>
+          <Route
+            element={
+              <BreadCrumbAndFilter
+                priceFilter={priceFilter}
+                setPriceFilter={setPriceFilter}
+              />
+            }
+          >
+            <Route index element={<Home />} />
+            <Route path="services/:subcategory" element={<SubCategory />} />
+            <Route path=":page/:page?/:page?/details" element={<Details />} />
+            <Route
+              path="services/:subcategory/:services"
+              element={<SubSubCategory />}
+            />
+            {/* route to show services search */}
+            <Route path="services/search" element={<SubSubCategory />} />
+            <Route
+              path="live-ads"
+              element={<LiveAds />}
+              errorElement={<div> this is for error element</div>}
+            />
+            <Route path="latest-offers" element={<LatestOffers />} />
+            <Route path="all" element={<All />} />
+          </Route>
+          <Route
+            path="/profile"
+            element={<ProctedRoute components={<Profile />} />}
+          >
+            <Route index element={<Setting />} />
+            <Route path="reward" element={<Reward />} />
+            <Route path="wishlist" element={<Wishlist />} />
+          </Route>
+        </Route>
+      </>
+    )
+  );
 
   useEffect(() => {
     ServicesAPi.GetCategoryServices()

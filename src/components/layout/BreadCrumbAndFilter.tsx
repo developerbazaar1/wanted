@@ -24,11 +24,19 @@ interface Breadcrumb {
 //   return splitedlable;
 // };
 
-const BreadCrumbAndFilter: React.FC = () => {
+interface priceFilterType {
+  priceFilter: string;
+  setPriceFilter: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const BreadCrumbAndFilter = ({
+  priceFilter,
+  setPriceFilter,
+}: priceFilterType) => {
   // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [priceFilter, setPriceFilter] = useState("");
+  // const [priceFilter, setPriceFilter] = useState("");
   const location = useLocation();
   const [, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   // const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
@@ -187,73 +195,81 @@ const BreadCrumbAndFilter: React.FC = () => {
                 </li>
               </ul>
             </div>
-            <button className="featured-filter-box">Distance</button>
+            <div className="dropdown">
+              <button
+                className="featured-filter-box"
+                type="button"
+                id="distanceFilter"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Distance
+              </button>
+              <ul className="dropdown-menu" aria-labelledby="distanceFilter">
+                <li className="dropdown-item">
+                  <input type="radio" id="any" value="any" name="distance" />{" "}
+                  <label htmlFor="any" aria-label="">
+                    Any Distance
+                  </label>
+                </li>
+                <li className="dropdown-item">
+                  <input type="radio" id="1m" name="distance" value="1m" />{" "}
+                  <label htmlFor="1m" className="">
+                    Within 1.0 mi
+                  </label>
+                </li>
+                <li className="dropdown-item">
+                  <input type="radio" id="5m" name="distance" value="5m" />{" "}
+                  <label htmlFor="5m" className="">
+                    Within 5.0 mi
+                  </label>
+                </li>
+                <li className="dropdown-item">
+                  <input type="radio" id="10m" name="distance" value="10m" />{" "}
+                  <label htmlFor="10m" className="">
+                    Within 10.0 mi
+                  </label>
+                </li>
+                <li className="dropdown-item">
+                  <input type="radio" id="20m" name="distance" value="20m" />{" "}
+                  <label htmlFor="20m" className="">
+                    Within 20.0 mi
+                  </label>
+                </li>
+                <li className="dropdown-item">
+                  <input type="radio" id="50m" name="distance" value="50m" />{" "}
+                  <label htmlFor="50m" className="">
+                    Within 50.0 mi
+                  </label>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className="d-none d-md-flex">&nbsp;</div>
         <div className="filterNav">
           <NavLink
-            to={`live-ads${
-              searchParams.get("search")
-                ? `?search=${searchParams.get("search")}`
-                : ""
-            }${
-              searchParams.get("location")
-                ? `${
-                    searchParams.get("search") ? "&" : "?"
-                  }location=${searchParams.get("location")}`
-                : ""
-            }`}
+            to={`live-ads?${searchParams.toString()}`}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Live Ads
           </NavLink>
 
           <NavLink
-            to={`latest-offers${
-              searchParams.get("search")
-                ? `?search=${searchParams.get("search")}`
-                : ""
-            }${
-              searchParams.get("location")
-                ? `${
-                    searchParams.get("search") ? "&" : "?"
-                  }location=${searchParams.get("location")}`
-                : ""
-            }`}
+            to={`latest-offers?${searchParams.toString()}`}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Latest Offers
           </NavLink>
           <NavLink
-            to={`/${
-              searchParams.get("search")
-                ? `?search=${searchParams.get("search")}`
-                : ""
-            }${
-              searchParams.get("location")
-                ? `${
-                    searchParams.get("search") ? "&" : "?"
-                  }location=${searchParams.get("location")}`
-                : ""
-            }`}
+            to={`/?${searchParams.toString()}`}
             className={pathstate?.includes("services") ? "active-nav-bg" : ""}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             Services
           </NavLink>
           <NavLink
-            to={`all${
-              searchParams.get("search")
-                ? `?search=${searchParams.get("search")}`
-                : ""
-            }${
-              searchParams.get("location")
-                ? `${
-                    searchParams.get("search") ? "&" : "?"
-                  }location=${searchParams.get("location")}`
-                : ""
-            }`}
+            to={`all?${searchParams.toString()}`}
             style={({ isActive }) => (isActive ? breadNav : {})}
           >
             All

@@ -21,21 +21,10 @@ const Home = () => {
     if (
       taxonomyFilter ||
       searchParams.get("search") ||
-      searchParams.get("location")
+      searchParams.get("location") ||
+      searchParams.get("price")
     ) {
-      return navigate(
-        `/services/search${
-          searchParams.get("search")
-            ? `?search=${searchParams.get("search")}`
-            : ""
-        }${
-          searchParams.get("location")
-            ? `${
-                searchParams.get("search") ? "&" : "?"
-              }location=${searchParams.get("location")}`
-            : ""
-        }`
-      );
+      return navigate(`/services/search?${searchParams.toString()}`);
     }
 
     setLoading(true);

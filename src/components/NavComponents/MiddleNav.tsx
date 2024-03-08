@@ -230,9 +230,10 @@ const MiddleNav = () => {
                 />
               </svg>
               <input
-                type="text"
+                type="search"
                 placeholder="Search by keywords"
                 className="search__input"
+                autoComplete="off"
                 {...register("searchQuery")}
               />
             </div>
