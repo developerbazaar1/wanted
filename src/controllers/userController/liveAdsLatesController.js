@@ -65,11 +65,11 @@ const liveAndLatestOfferController = async (req, res, next) => {
                           $regex: new RegExp(`.*${searchQuery}.*`, "i"),
                         },
                       },
-                      {
-                        advertDescription: {
-                          $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-                        },
-                      },
+                      // {
+                      //   advertDescription: {
+                      //     $regex: new RegExp(`.*${searchQuery}.*`, "i"),
+                      //   },
+                      // },
                     ],
                   },
                 ]
