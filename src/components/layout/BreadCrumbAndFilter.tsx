@@ -8,6 +8,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import "../../css/ComponentsCSS/BreadCrumbAndFilter.css";
+import { useForm } from "react-hook-form";
 // import { SearchContext } from "../../features/searchContext";
 
 const breadNav = {
@@ -33,10 +34,11 @@ const BreadCrumbAndFilter = ({
   priceFilter,
   setPriceFilter,
 }: priceFilterType) => {
+  const { register, watch } = useForm();
   // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  // const [priceFilter, setPriceFilter] = useState("");
+  const [radiusFilter, setRadiusFilter] = useState("");
   const location = useLocation();
   const [, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   // const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
@@ -83,6 +85,10 @@ const BreadCrumbAndFilter = ({
       return prev;
     });
   }
+
+  useEffect(() => {
+    setRadiusFilter(watch("distance"));
+  }, [watch("distance")]);
 
   useEffect(() => {
     // console.log("path name", pathnames);
@@ -203,41 +209,77 @@ const BreadCrumbAndFilter = ({
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Distance
+                {radiusFilter ? radiusFilter : "Distance"}
               </button>
               <ul className="dropdown-menu" aria-labelledby="distanceFilter">
                 <li className="dropdown-item">
-                  <input type="radio" id="any" value="any" name="distance" />{" "}
+                  <input
+                    type="radio"
+                    id="any"
+                    value="any"
+                    {...register("distance")}
+                    name="distance"
+                  />{" "}
                   <label htmlFor="any" aria-label="">
                     Any Distance
                   </label>
                 </li>
                 <li className="dropdown-item">
-                  <input type="radio" id="1m" name="distance" value="1m" />{" "}
+                  <input
+                    type="radio"
+                    id="1m"
+                    value="1m"
+                    {...register("distance")}
+                    name="distance"
+                  />{" "}
                   <label htmlFor="1m" className="">
                     Within 1.0 mi
                   </label>
                 </li>
                 <li className="dropdown-item">
-                  <input type="radio" id="5m" name="distance" value="5m" />{" "}
+                  <input
+                    type="radio"
+                    id="5m"
+                    {...register("distance")}
+                    name="distance"
+                    value="5m"
+                  />{" "}
                   <label htmlFor="5m" className="">
                     Within 5.0 mi
                   </label>
                 </li>
                 <li className="dropdown-item">
-                  <input type="radio" id="10m" name="distance" value="10m" />{" "}
+                  <input
+                    type="radio"
+                    id="10m"
+                    {...register("distance")}
+                    name="distance"
+                    value="10m"
+                  />{" "}
                   <label htmlFor="10m" className="">
                     Within 10.0 mi
                   </label>
                 </li>
                 <li className="dropdown-item">
-                  <input type="radio" id="20m" name="distance" value="20m" />{" "}
+                  <input
+                    type="radio"
+                    id="20m"
+                    {...register("distance")}
+                    name="distance"
+                    value="20m"
+                  />{" "}
                   <label htmlFor="20m" className="">
                     Within 20.0 mi
                   </label>
                 </li>
                 <li className="dropdown-item">
-                  <input type="radio" id="50m" name="distance" value="50m" />{" "}
+                  <input
+                    type="radio"
+                    id="50m"
+                    {...register("distance")}
+                    name="distance"
+                    value="50m"
+                  />{" "}
                   <label htmlFor="50m" className="">
                     Within 50.0 mi
                   </label>
