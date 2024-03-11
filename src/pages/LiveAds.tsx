@@ -55,7 +55,8 @@ const LiveAds = () => {
       searchParams.get("search") || "",
       taxonomyFilter || "",
       searchParams.get("location") || "",
-      searchParams.get("price") || ""
+      searchParams.get("price") || "",
+      searchParams.get("radius") || ""
     )
 
       .then((res) => {
@@ -130,6 +131,7 @@ const LiveAds = () => {
     taxonomyFilter,
     searchParams.get("location"),
     searchParams.get("price"),
+    searchParams.get("radius"),
   ]);
 
   useEffect(() => {
@@ -140,6 +142,7 @@ const LiveAds = () => {
     taxonomyFilter,
     searchParams.get("location"),
     searchParams.get("price"),
+    searchParams.get("radius"),
   ]);
 
   if (loading) {

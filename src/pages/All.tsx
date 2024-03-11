@@ -54,7 +54,8 @@ const All = () => {
       searchParams.get("search") || "",
       taxonomyFilter || "",
       searchParams.get("location") || "",
-      searchParams.get("price") || ""
+      searchParams.get("price") || "",
+      searchParams.get("radius") || ""
     )
 
       .then((res) => {
@@ -128,6 +129,7 @@ const All = () => {
       taxonomyFilter,
       searchParams.get("location"),
       searchParams.get("price"),
+      searchParams.get("radius"),
     ]
   );
 
@@ -139,6 +141,7 @@ const All = () => {
     taxonomyFilter,
     searchParams.get("location"),
     searchParams.get("price"),
+    searchParams.get("radius"),
   ]);
 
   if (loading) {

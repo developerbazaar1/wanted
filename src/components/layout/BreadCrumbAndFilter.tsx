@@ -28,17 +28,20 @@ interface Breadcrumb {
 interface priceFilterType {
   priceFilter: string;
   setPriceFilter: React.Dispatch<React.SetStateAction<string>>;
+  radiusFilter: string;
+  setRadiusFilter: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const BreadCrumbAndFilter = ({
   priceFilter,
   setPriceFilter,
+  radiusFilter,
+  setRadiusFilter,
 }: priceFilterType) => {
   const { register, watch } = useForm();
   // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [radiusFilter, setRadiusFilter] = useState("");
   const location = useLocation();
   const [, setBreadcrumbs] = useState<Breadcrumb[]>([]);
   // const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
@@ -87,7 +90,32 @@ const BreadCrumbAndFilter = ({
   }
 
   useEffect(() => {
-    setRadiusFilter(watch("distance"));
+    if (watch("distance")) {
+      setSearchParams((prev) => {
+        prev.set("radius", watch("distance"));
+        return prev;
+      });
+
+      setRadiusFilter(watch("distance"));
+
+      if (pathnames.includes("details")) {
+        if (pathnames.includes("services")) {
+          navigate(`/services/search?${searchParams.toString()}`);
+          return;
+        }
+        navigate(`${pathnames[0]}?${searchParams.toString()}`);
+        return;
+      }
+
+      if (pathnames.length === 0 || pathnames.includes("services")) {
+        navigate(`/services/search?${searchParams.toString()}`);
+        return;
+      }
+      setSearchParams((prev) => {
+        prev.set("radius", watch("distance"));
+        return prev;
+      });
+    }
   }, [watch("distance")]);
 
   useEffect(() => {
@@ -147,32 +175,6 @@ const BreadCrumbAndFilter = ({
               ))
             : ""} */}
           <div className="price-distance-filter-container">
-            {/* <div className="btn-group dropdown">
-              <button
-                type="button"
-                className={`dropdown-toggle featured-filter-box ${
-                  priceFilter ? "featured-filter-selected" : null
-                }`}
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-                id="priceDropDown"
-              >
-                {priceFilter
-                  ? priceFilter === "ascending"
-                    ? "Low to High"
-                    : "High to Low"
-                  : "Price"}
-              </button>
-              <ul className="dropdown-menu" aria-labelledby="priceDropDown">
-                <li onClick={() => handleSetFilter("ascending")}>
-                  <span className="dropdown-item"> Price: Low to High</span>
-                </li>
-                <li onClick={() => handleSetFilter("descending")}>
-                  <span className="dropdown-item">Price: High to Low</span>
-                </li>
-              </ul>
-            </div> */}
-
             <div className="dropdown">
               <button
                 className={`dropdown-toggle featured-filter-box`}
@@ -209,7 +211,7 @@ const BreadCrumbAndFilter = ({
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {radiusFilter ? radiusFilter : "Distance"}
+                {radiusFilter ? `${radiusFilter} mil` : "Distance"}
               </button>
               <ul className="dropdown-menu" aria-labelledby="distanceFilter">
                 <li className="dropdown-item">
@@ -228,7 +230,7 @@ const BreadCrumbAndFilter = ({
                   <input
                     type="radio"
                     id="1m"
-                    value="1m"
+                    value="1"
                     {...register("distance")}
                     name="distance"
                   />{" "}
@@ -242,7 +244,7 @@ const BreadCrumbAndFilter = ({
                     id="5m"
                     {...register("distance")}
                     name="distance"
-                    value="5m"
+                    value="5"
                   />{" "}
                   <label htmlFor="5m" className="">
                     Within 5.0 mi
@@ -254,7 +256,7 @@ const BreadCrumbAndFilter = ({
                     id="10m"
                     {...register("distance")}
                     name="distance"
-                    value="10m"
+                    value="10"
                   />{" "}
                   <label htmlFor="10m" className="">
                     Within 10.0 mi
@@ -266,7 +268,7 @@ const BreadCrumbAndFilter = ({
                     id="20m"
                     {...register("distance")}
                     name="distance"
-                    value="20m"
+                    value="20"
                   />{" "}
                   <label htmlFor="20m" className="">
                     Within 20.0 mi
@@ -278,7 +280,7 @@ const BreadCrumbAndFilter = ({
                     id="50m"
                     {...register("distance")}
                     name="distance"
-                    value="50m"
+                    value="50"
                   />{" "}
                   <label htmlFor="50m" className="">
                     Within 50.0 mi

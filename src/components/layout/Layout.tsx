@@ -3,13 +3,16 @@ import { Outlet } from "react-router-dom";
 import TopNav from "../TopNav";
 import NavBar from "../NavComponents/NavBar";
 
-function Layout({ setPriceFilter }: any) {
+function Layout({ setPriceFilter, setRadiusFilter }: any) {
   return (
     <>
       <div className="blac__background ">
         <TopNav />
       </div>
-      <NavBar setPriceFilter={setPriceFilter} />
+      <NavBar
+        setPriceFilter={setPriceFilter}
+        setRadiusFilter={setRadiusFilter}
+      />
 
       <Outlet />
       <Footer />

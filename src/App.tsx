@@ -52,6 +52,7 @@ import { SearchProvider } from "./features/searchContext.tsx";
 const App: React.FC = () => {
   const dispatch = useDispatch();
   const [priceFilter, setPriceFilter] = useState("");
+  const [radiusFilter, setRadiusFilter] = useState("");
   const token = useToken();
 
   const router = createBrowserRouter(
@@ -72,12 +73,21 @@ const App: React.FC = () => {
         />
         <Route path="/test" element={<Test />} />
 
-        <Route element={<Layout setPriceFilter={setPriceFilter} />}>
+        <Route
+          element={
+            <Layout
+              setPriceFilter={setPriceFilter}
+              setRadiusFilter={setRadiusFilter}
+            />
+          }
+        >
           <Route
             element={
               <BreadCrumbAndFilter
                 priceFilter={priceFilter}
                 setPriceFilter={setPriceFilter}
+                radiusFilter={radiusFilter}
+                setRadiusFilter={setRadiusFilter}
               />
             }
           >

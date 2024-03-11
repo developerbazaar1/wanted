@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import LoginSingupButton from "./LoginSingupButton";
 import { useContext } from "react";
 import { SearchContext } from "../../features/searchContext";
-const NavBar = ({ setPriceFilter }: any) => {
+const NavBar = ({ setPriceFilter, setRadiusFilter }: any) => {
   const { updatetaxonomyFilterQuery } = useContext(SearchContext);
 
   const token = localStorage.getItem("userwantedToken");
@@ -22,6 +22,7 @@ const NavBar = ({ setPriceFilter }: any) => {
                 onClick={() => {
                   updatetaxonomyFilterQuery("");
                   setPriceFilter("");
+                  setRadiusFilter("");
                 }}
                 state={{ reset: "resetSearch" }}
               >

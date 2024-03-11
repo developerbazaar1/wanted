@@ -39,7 +39,7 @@ const Details = () => {
   const token = useToken();
   const { advertid } = useLocation().state;
 
-  console.log("This is advert id", advertid);
+  // console.log("This is advert id", advertid);
 
   function RemoveAndAddWishList(Advert_id: string): void {
     WishListAPi.UpdateWishList(token, Advert_id)

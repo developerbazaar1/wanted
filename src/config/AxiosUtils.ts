@@ -51,12 +51,13 @@ export const AdsApi = {
     searchQuery = "",
     taxonomy = "",
     location = "",
-    priceFilter = ""
+    priceFilter = "",
+    radius = ""
   ) => {
     const response = await api.request({
       url: `/getads?adstypes=${adstypes}&page=${page}&pageSize=${pageSize}&searchQuery=${searchQuery}&taxonomy=${encodeURIComponent(
         taxonomy
-      )}&location=${location}&priceFilter=${priceFilter}`,
+      )}&location=${location}&priceFilter=${priceFilter}&radius=${radius}`,
       method: "get",
     });
     // console.log(response);
@@ -95,12 +96,13 @@ export const AdsApi = {
     searchQuery = "",
     taxonomy = "",
     location = "",
-    priceFilter = ""
+    priceFilter = "",
+    radius = ""
   ) => {
     return await api.request({
       url: `/getsingsubservideadvert?_id=${_id}&page=${page}&pageSize=6&searchQuery=${searchQuery}&taxonomy=${encodeURIComponent(
         taxonomy
-      )}&location=${location}&priceFilter=${priceFilter}`,
+      )}&location=${location}&priceFilter=${priceFilter}&radius=${radius}`,
       method: "GET",
     });
   },
@@ -168,6 +170,12 @@ export const GoogleAPI = {
   locationTypeAhead: async (input: string) => {
     return await openapi.request({
       url: `/get-predection?input=${input}`,
+      method: "GET",
+    });
+  },
+  queryTypeAhead: async (input: string) => {
+    return await openapi.request({
+      url: `/get-query-predection?input=${input}`,
       method: "GET",
     });
   },

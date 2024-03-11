@@ -61,7 +61,8 @@ const LatestOffers = () => {
       searchParams.get("search") || "",
       taxonomyFilter || "",
       searchParams.get("location") || "",
-      searchParams.get("price") || ""
+      searchParams.get("price") || "",
+      searchParams.get("radius") || ""
     )
 
       .then((res) => {
@@ -136,6 +137,7 @@ const LatestOffers = () => {
     taxonomyFilter,
     searchParams.get("location"),
     searchParams.get("price"),
+    searchParams.get("radius"),
   ]);
 
   useEffect(() => {
@@ -146,6 +148,7 @@ const LatestOffers = () => {
     taxonomyFilter,
     searchParams.get("location"),
     searchParams.get("price"),
+    searchParams.get("radius"),
   ]);
 
   if (loading) {
