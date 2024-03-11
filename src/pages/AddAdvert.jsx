@@ -26,6 +26,7 @@ import Subscriptions from "../components/Subscriptions";
 import ProductForm from "../components/ProductForm";
 import { useNavigate } from "react-router-dom";
 const AddAdvert = () => {
+  const inputRef = useRef();
   const navigate = useNavigate();
   const [subscription, setsubscription] = useState(null);
   const [locTypeAhead, setLocTypeAhead] = useState([]);
@@ -40,6 +41,7 @@ const AddAdvert = () => {
   const { subcategory } = useSubCategory();
   const { category } = useCategory();
   const { subsubcategory } = useSubSubCategory();
+  const [inputActive, setInputActive] = useState(false);
 
   const {
     register,
@@ -56,6 +58,11 @@ const AddAdvert = () => {
       (cat) => cat.categoryName === selectedValue
     );
     setSelectedCategory(selectedCat);
+  };
+
+  const handleInputFocus = () => {
+    // console.log("This is on Focused is called");
+    setInputActive(true);
   };
 
   const HandleAddadvertSubmit = (formData) => {
@@ -194,6 +201,27 @@ const AddAdvert = () => {
       console.error(error);
     }
   };
+
+  //  function to set the  location value after selecting
+  // const setSelectedLocation = (value) => {
+  //   setValue("ad_location", value);
+  //   setInputActive(false);
+  // };
+
+  const handleClickOutside = (e) => {
+    console.log("This is ref", inputRef);
+    if (inputRef.current && !inputRef.current.contains(e.target)) {
+      console.log("Inside the curret ref");
+      setInputActive(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     FetchLocationTypeAhead();
@@ -431,6 +459,7 @@ const AddAdvert = () => {
                       className={`form-group position-relative ${
                         errors?.ad_location ? "error_pesudo" : ""
                       }`}
+                      ref={inputRef}
                     >
                       <label className="form-head" htmlFor="location">
                         Location
@@ -441,12 +470,13 @@ const AddAdvert = () => {
                         id="ad_location"
                         placeholder="Enter location"
                         autoComplete="off"
+                        onFocus={handleInputFocus}
                         {...register("ad_location", {
                           required: true,
                         })}
                       />
 
-                      {locTypeAhead?.length > 0 && (
+                      {inputActive && locTypeAhead?.length > 0 && (
                         <ul className="type-ahead-options">
                           {locTypeAhead?.map((typeAhead) => (
                             <li

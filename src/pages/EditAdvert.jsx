@@ -21,11 +21,6 @@ const EditAdvertData = () => {
   const [inputActive, setInputActive] = useState(false);
   const inputRef = useRef();
 
-  const handleInputFocus = () => {
-    console.log("This is on Focused is called");
-    setInputActive(true);
-  };
-
   let { _id } = useLocation().state;
   const [selectedImage, setSelectedImage] = useState(null);
   const [locTypeAhead, setLocTypeAhead] = useState([]);
@@ -47,6 +42,11 @@ const EditAdvertData = () => {
     watch,
     formState: { errors },
   } = useForm();
+
+  const handleInputFocus = () => {
+    // console.log("This is on Focused is called");
+    setInputActive(true);
+  };
 
   const handleImageDrop = (e) => {
     e.preventDefault();
@@ -170,10 +170,11 @@ const EditAdvertData = () => {
     setInputActive(false);
   };
 
-  const handleClickOutside = () => {
+  const handleClickOutside = (e) => {
     console.log("This is ref", inputRef);
-    if (inputRef.current) {
-      console.log("This is event it is not Calling");
+    if (inputRef.current && !inputRef.current.contains(e.target)) {
+      console.log("Inside the curret ref");
+      setInputActive(false);
     }
   };
 
@@ -416,6 +417,7 @@ const EditAdvertData = () => {
                       className={`form-group position-relative ${
                         errors?.advertLocation ? "error_pesudo" : ""
                       }`}
+                      ref={inputRef}
                     >
                       <label className="form-head" htmlFor="advertLocation">
                         Location
@@ -427,7 +429,6 @@ const EditAdvertData = () => {
                         placeholder="Enter location"
                         autoComplete="off"
                         onFocus={handleInputFocus}
-                        ref={inputRef}
                         {...register("advertLocation", {
                           required: true,
                         })}

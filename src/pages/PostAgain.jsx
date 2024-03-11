@@ -3,7 +3,7 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import { Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Spiner from "../components/Spiner";
-import { ProctedApi } from "../config/axiosUtils";
+import { GoogleAPI, ProctedApi } from "../config/axiosUtils";
 import { castPostAgainAdvert } from "../helper/castAddAdvert";
 import { useAuth } from "../service/auth";
 import { toast } from "react-toastify";
@@ -21,11 +21,14 @@ import Subscriptions from "../components/Subscriptions";
 const PostAgain = () => {
   let { _id } = useLocation().state;
   const [subscription, setsubscription] = useState(null);
+  const [inputActive, setInputActive] = useState(false);
   const [selectedSubscription, setselectedSubscription] = useState(null);
+  const [locTypeAhead, setLocTypeAhead] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [fileName, setfileName] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const inputRef = useRef();
   const { user, token } = useAuth();
   const fileInputRef = useRef(null);
   // const [selectedSubscription, setselectedSubscription] = useState(null);
@@ -49,6 +52,11 @@ const PostAgain = () => {
   // console.log(advert);
 
   //function to handle category change
+
+  const handleInputFocus = () => {
+    // console.log("This is on Focused is called");
+    setInputActive(true);
+  };
 
   const handleImageDrop = (e) => {
     e.preventDefault();
@@ -145,11 +153,48 @@ const PostAgain = () => {
       });
   };
 
-  // console.log(subcategory);
+  //  function to set the  location value after selecting
+  const setSelectedLocation = (value) => {
+    setValue("advertLocation", value);
+    setInputActive(false);
+  };
+
+  const handleClickOutside = (e) => {
+    // console.log("This is ref", inputRef);
+    if (inputRef.current && !inputRef.current.contains(e.target)) {
+      // console.log("Inside the curret ref");
+      setInputActive(false);
+    }
+  };
+
+  // Attach click event listener when the component mounts
 
   const handleSelectsub = (sub) => {
     setselectedSubscription(sub);
   };
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const FetchLocationTypeAhead = async () => {
+    try {
+      const response = await GoogleAPI.locationTypeAhead(
+        watch("advertLocation") || ""
+      );
+
+      console.log(response.data);
+      setLocTypeAhead(response?.data?.predictions);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    FetchLocationTypeAhead();
+  }, [watch("advertLocation")]);
 
   useEffect(() => {
     setLoading(true);
@@ -436,22 +481,78 @@ const PostAgain = () => {
 
                   <div className="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                     <div
-                      className={`form-group ${
+                      className={`form-group position-relative${
                         errors?.advertLocation ? "error_pesudo" : ""
                       }`}
+                      ref={inputRef}
                     >
                       <label className="form-head" htmlFor="advertLocation">
                         Location
                       </label>
                       <input
-                        type="text"
+                        type="search"
                         className="form-control"
                         id="advertLocation"
                         placeholder="Enter location"
+                        autoComplete="off"
+                        onFocus={handleInputFocus}
                         {...register("advertLocation", {
                           required: true,
                         })}
                       />
+
+                      {inputActive && locTypeAhead?.length > 0 && (
+                        <ul className="type-ahead-options">
+                          {locTypeAhead?.map((typeAhead) => (
+                            <li
+                              className="type-ahead-option"
+                              key={typeAhead?.place_id}
+                              onClick={() =>
+                                setSelectedLocation(typeAhead?.description)
+                              }
+                            >
+                              <span className="icon icon--medium icon--beacon">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="21"
+                                  height="21"
+                                  viewBox="0 0 20 20"
+                                  fill="none"
+                                >
+                                  <g clipPath="url(#clip0_1661_1098)">
+                                    <path
+                                      d="M7.5 2.84375C5.48071 2.84375 3.83789 4.48657 3.83789 6.50586C3.83789 8.52515 5.48071 10.168 7.5 10.168C7.84104 10.168 8.17896 10.121 8.50436 10.0284C8.81561 9.9398 8.99607 9.61566 8.90751 9.30441C8.81889 8.99319 8.4948 8.81267 8.18353 8.90129C7.96251 8.96419 7.73253 8.99609 7.5 8.99609C6.12688 8.99609 5.00977 7.87897 5.00977 6.50586C5.00977 5.13274 6.12688 4.01562 7.5 4.01562C8.87312 4.01562 9.99023 5.13274 9.99023 6.50586C9.99023 6.75017 9.95508 6.99131 9.88573 7.22255C9.79277 7.53251 9.9687 7.85914 10.2787 7.9521C10.5887 8.045 10.9152 7.86916 11.0082 7.55917C11.1103 7.21865 11.1621 6.86428 11.1621 6.50586C11.1621 4.48657 9.51929 2.84375 7.5 2.84375Z"
+                                      fill="#353535"
+                                    />
+                                    <path
+                                      d="M11.7444 2.25676C10.6103 1.12391 9.10289 0.5 7.49991 0.5C5.8969 0.5 4.38955 1.12391 3.25547 2.25679C2.1215 3.38958 1.49599 4.89608 1.49414 6.50009C1.49528 7.66771 1.8196 8.76318 2.48558 9.84916C3.06229 10.7895 3.81149 11.61 4.60468 12.4786C5.38242 13.3303 6.18659 14.2111 6.82884 15.2271C6.93621 15.397 7.12318 15.5 7.32413 15.5H7.67569C7.87664 15.5 8.06361 15.397 8.17099 15.2271C8.81323 14.211 9.6174 13.3303 10.3951 12.4786C11.1883 11.61 11.9375 10.7895 12.5142 9.84913C13.1803 8.76315 13.5045 7.66766 13.5057 6.4988C13.5039 4.89605 12.8783 3.38955 11.7444 2.25676ZM9.52978 11.6884C8.83825 12.4457 8.12672 13.225 7.49991 14.1212C6.87314 13.225 6.16157 12.4457 5.47005 11.6884C3.96656 10.0419 2.66807 8.61992 2.66602 6.50018C2.66906 3.83785 4.83756 1.67188 7.49991 1.67188C10.1623 1.67188 12.3308 3.83785 12.3338 6.49892C12.3318 8.61992 11.0333 10.0419 9.52978 11.6884Z"
+                                      fill="#353535"
+                                    />
+                                  </g>
+                                  <defs>
+                                    <clipPath id="clip0_1661_1098">
+                                      <rect
+                                        width="15"
+                                        height="15"
+                                        fill="white"
+                                        transform="translate(0 0.5)"
+                                      />
+                                    </clipPath>
+                                  </defs>
+                                </svg>
+                              </span>
+
+                              <div className="text-part-container">
+                                <div className="keyword-highlight-text-wrapper type-ahead-option-primary-text">
+                                  <span className="type-ahead-option-highlight">
+                                    {typeAhead?.description}
+                                  </span>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </div>
 
