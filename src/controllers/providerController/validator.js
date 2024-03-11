@@ -1,3 +1,4 @@
+const getGeoCode = require("../../helpers/ConvertGeocoding");
 const {
   BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
@@ -83,19 +84,12 @@ const portfolioValidator = async (req, res, next) => {
     storeSubCategory,
     _id,
   } = req.body;
-  // console.log(_id);
-  // console.log(
-  //   storeName,
-  //   storeEmail,
-  //   storeCategory,
-  //   storeAddress,
-  //   storeDescription,
-  //   storeWebsite,
-  //   storeContactDetails,
-  //   storeSubCategory,
-  //   _id
-  // );
+
   try {
+    const location = await getGeoCode(storeAddress);
+
+    req.body["cordinate"] = location;
+
     if (!_id) {
       return res.status(UNAUTHORIZED).json({
         status: "error",
@@ -154,6 +148,10 @@ const advertValidator = async (req, res, next) => {
 
   // console.log(req.body, "advert validator");
   try {
+    const location = await getGeoCode(req.body.advertLocation);
+
+    req.body["cordinate"] = location;
+
     if (!subscription_plan_id) {
       return res.status(BAD_REQUEST).json({
         status: "Error",
@@ -199,6 +197,10 @@ const advertValidator = async (req, res, next) => {
 const updateAdvertValidator = async (req, res, next) => {
   let { advertId, provider_id } = req.body;
   try {
+    const location = await getGeoCode(req.body.advertLocation);
+
+    req.body["cordinate"] = location;
+
     if (!advertId || !provider_id) {
       return res.status(BAD_REQUEST).json({
         status: "error",
@@ -207,6 +209,7 @@ const updateAdvertValidator = async (req, res, next) => {
     }
     next();
   } catch (error) {
+    console.log(error);
     return res.status(INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "Internal server error",
@@ -259,6 +262,11 @@ const postAdvertAgainValidator = async (req, res, next) => {
         message: "You Are not authorized!",
       });
     }
+
+    const location = await getGeoCode(req.body.advertLocation);
+
+    req.body["cordinate"] = location;
+
     next();
   } catch (error) {
     console.log("error inside the validator", error);

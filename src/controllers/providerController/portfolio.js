@@ -21,6 +21,7 @@ const createPortofolio = async (req, res, next) => {
     storeContactDetails,
     storeSubCategory,
     storeThumbNail,
+    cordinate,
     _id,
   } = req.body;
 
@@ -35,6 +36,10 @@ const createPortofolio = async (req, res, next) => {
     storeSubCategory,
     storeThumbNail,
     isCompleted: true,
+    storeLocationCoordinates: {
+      type: "Point",
+      coordinates: [cordinate.lng, cordinate.lat],
+    },
   };
 
   if (

@@ -2,6 +2,7 @@ const { OK, BAD_REQUEST } = require("../httpStatusCode");
 const CategroyModal = require("../models/adminModel/category");
 const SubcategoryModal = require("../models/adminModel/subCategory");
 const SubSubCategoryModal = require("../models/adminModel/subSubCategoryModal");
+const AdvertModal = require("../models/providerModel/advertModal");
 const axios = require("axios");
 
 const getCategoryController = async (req, res, async) => {
@@ -94,13 +95,18 @@ const getsubSubCategoryController = async (req, res, async) => {
   }
 };
 
+/**
+ * controller that return type ahead location based on search string
+ * @param {input} req
+ * @param {*} res
+ */
 const getTypeAheadController = async (req, res) => {
   try {
-    const apiKey = "AIzaSyCx-cGRGxdiU0cYI0q5TdWvATXEsIXUYFY";
+    const apiKey = process.env.GOOGLEMAPAPIKEY;
     const input = req.query.input; // Assuming input is passed as a query parameter
     const location = "40.76999,-122.44696";
     const radius = "50000";
-    const types = "locality|sublocality";
+    const types = "postal_code|locality|sublocality";
     const language = "en-GB";
     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&location=${location}&radius=${radius}&types=${types}&key=${apiKey}&language=${language}&components=country:GB`;
 
@@ -114,9 +120,95 @@ const getTypeAheadController = async (req, res) => {
   }
 };
 
+//controller that fetched the query search type ahead
+
+const getQueryTypeAheadController = async (req, res) => {
+  const input = req.query.input;
+  try {
+    // Perform the autocomplete search using AdvertModal.aggregate
+    const data = await AdvertModal.aggregate([
+      {
+        $match: {
+          $or: [
+            {
+              "products.productTitle": {
+                $regex: new RegExp(`.*${input}.*`, "i"),
+              },
+            },
+            {
+              "products.productName": {
+                $regex: new RegExp(`.*${input}.*`, "i"),
+              },
+            },
+            {
+              advertTitle: {
+                $regex: new RegExp(`.*${input}.*`, "i"),
+              },
+            },
+          ],
+        },
+      },
+      { $limit: 10 },
+      {
+        $project: {
+          _id: 1,
+          advertTitle: 1,
+          "products.productTitle": 1,
+          "products.productName": 1,
+          "products._id": 1,
+        },
+      },
+    ]);
+
+    // Filter and transform data
+
+    let formatedData = [];
+    data.forEach((element) => {
+      if (element?.advertTitle.match(new RegExp(`.*${input}.*`, "i"))) {
+        formatedData.push({
+          _id: Math.random() + Date.now().toString(),
+          name: element?.advertTitle,
+        });
+      }
+      element?.products?.forEach((productElement) => {
+        if (
+          productElement?.productTitle?.match(new RegExp(`.*${input}.*`, "i"))
+        ) {
+          formatedData.push({
+            _id: Math.random() + Date.now().toString(),
+            name: productElement?.productTitle,
+          });
+        }
+        if (
+          productElement?.productName?.match(new RegExp(`.*${input}.*`, "i"))
+        ) {
+          formatedData.push({
+            _id: Math.random() + Date.now().toString(),
+            name: productElement?.productName,
+          });
+        }
+      });
+    });
+
+    // Limit the array to 10 elements
+    formatedData = formatedData.slice(0, 9);
+    res.status(200).json({
+      predections: formatedData,
+    });
+  } catch (error) {
+    console.log(error);
+    // Handle errors
+    const status = error.status || 500;
+    const message =
+      error.message || "Internal server error. Please try again later.";
+    res.status(status).json({ error: message });
+  }
+};
+
 module.exports = {
   getCategoryController,
   getsubCategoryController,
   getsubSubCategoryController,
   getTypeAheadController,
+  getQueryTypeAheadController,
 };

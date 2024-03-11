@@ -10,7 +10,6 @@ const providerPortfolioModal = new mongoose.Schema({
     type: String,
     // required: false,
   },
-
   storeCategory: {
     type: String,
     // required: false,
@@ -51,6 +50,18 @@ const providerPortfolioModal = new mongoose.Schema({
   isCompleted: {
     type: Boolean,
     default: false,
+  },
+  storeLocationCoordinates: {
+    // Define the GeoJSON Point schema for coordinates
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      index: "2dsphere", // Create a 2dsphere index for geospatial queries
+    },
   },
 });
 

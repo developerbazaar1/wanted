@@ -36,6 +36,7 @@ const AddAdvert = async (req, res, next) => {
       advertOfferPrice,
       subscription_plan_id,
       product,
+      cordinate,
     } = req.body;
 
     const subscription = await SubscriptionModal.findById(subscription_plan_id);
@@ -86,6 +87,10 @@ const AddAdvert = async (req, res, next) => {
       advertLocation,
       advertPostalCode,
       advertDescription,
+      advertLocationCoordinates: {
+        type: "Point",
+        coordinates: [cordinate.lng, cordinate.lat],
+      },
       whereToShow,
       advertOfferPrice,
       subscription_plan_id,
@@ -217,7 +222,7 @@ const updateAdvertController = async (req, res) => {
       { new: true }
     );
 
-    // console.log("updated advert", advert);
+    console.log("updated advert", advert);
 
     if (!advert) {
       return res.status(404).json({

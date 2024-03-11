@@ -1,8 +1,11 @@
 const { INTERNAL_SERVER_ERROR } = require("../httpStatusCode");
 
 const AdvertAndProductDataCast = async (req, res, next) => {
-  // console.log("this is files", req.files);
   // return res.status(404).json("error");
+
+  // console.log("This is", req.body.cordinate);
+  // return res.status(404).json("error");
+
   let {
     advertTitle,
     advertPostalCode,
@@ -14,6 +17,7 @@ const AdvertAndProductDataCast = async (req, res, next) => {
     product,
     advertImage,
     advertStoreName,
+    cordinate,
   } = req.body;
 
   try {
@@ -63,6 +67,10 @@ const AdvertAndProductDataCast = async (req, res, next) => {
       advertLocation,
       advertOfferPrice,
       advertDescription,
+      advertLocationCoordinates: {
+        type: "Point",
+        coordinates: [cordinate.lng, cordinate.lat],
+      },
       products,
       advertImage,
       advertStoreName,

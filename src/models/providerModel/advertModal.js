@@ -132,6 +132,18 @@ const advertModal = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  advertLocationCoordinates: {
+    // Define the GeoJSON Point schema for coordinates
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      index: "2dsphere", // Create a 2dsphere index for geospatial queries
+    },
+  },
 });
 
 advertModal.index({

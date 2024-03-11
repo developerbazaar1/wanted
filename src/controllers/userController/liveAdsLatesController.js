@@ -11,6 +11,7 @@ const mongoose = require("mongoose");
 const advertModal = require("../../models/providerModel/advertModal");
 const providerPortfolio = require("../../models/providerModel/providerPortfolio");
 const { transformProducts } = require("../../helpers/advertProductsDataFormat");
+const getGeoCode = require("../../helpers/ConvertGeocoding");
 
 const liveAndLatestOfferController = async (req, res, next) => {
   const {
@@ -21,10 +22,56 @@ const liveAndLatestOfferController = async (req, res, next) => {
     taxonomy = decodeURIComponent(req?.query?.taxonomy),
     location,
     priceFilter,
+    radius,
   } = req.query;
-
   try {
-    const pipeline = [
+    // console.log("This is radius", typeof radius);
+    // Convert radius from miles to meters (for MongoDB's $geoNear)
+    const radiusMeters = parseFloat(radius) * 1609.34; // 1 mile = 1609.34 meters
+    let pipeline = [];
+    let cordinate;
+    if (location) {
+      cordinate = await getGeoCode(location);
+    }
+
+    if (radius && location && radius != "any") {
+      pipeline.push({
+        $geoNear: {
+          near: { type: "Point", coordinates: [cordinate.lng, cordinate.lat] },
+          distanceField: "dist.calculated",
+          maxDistance: radiusMeters,
+          spherical: true,
+        },
+      });
+    }
+
+    if ((location && !radius) || (location && radius === "any")) {
+      // console.log("This is radius", radius, "This is Location", location);
+      pipeline.push({
+        $match: {
+          $or: [
+            {
+              advertPostalCode: {
+                $regex: new RegExp(`^${location}`),
+                $options: "i",
+              },
+            },
+            {
+              advertLocation: {
+                $regex: new RegExp(`.*${location}.*`, "i"),
+              },
+            },
+            {
+              "provider.storeAddress": {
+                $regex: new RegExp(`.*${location}.*`, "i"),
+              },
+            },
+          ],
+        },
+      });
+    }
+
+    pipeline.push(
       {
         $match: {
           advertStatus: "active",
@@ -65,11 +112,6 @@ const liveAndLatestOfferController = async (req, res, next) => {
                           $regex: new RegExp(`.*${searchQuery}.*`, "i"),
                         },
                       },
-                      // {
-                      //   advertDescription: {
-                      //     $regex: new RegExp(`.*${searchQuery}.*`, "i"),
-                      //   },
-                      // },
                     ],
                   },
                 ]
@@ -97,30 +139,6 @@ const liveAndLatestOfferController = async (req, res, next) => {
                   },
                 ]
               : [{}]),
-            ...(location
-              ? [
-                  {
-                    $or: [
-                      {
-                        advertPostalCode: {
-                          $regex: new RegExp(`^${location}`),
-                          $options: "i",
-                        },
-                      },
-                      {
-                        advertLocation: {
-                          $regex: new RegExp(`.*${location}.*`, "i"),
-                        },
-                      },
-                      {
-                        "provider.storeAddress": {
-                          $regex: new RegExp(`.*${location}.*`, "i"),
-                        },
-                      },
-                    ],
-                  },
-                ]
-              : [{}]),
           ],
         },
       },
@@ -139,8 +157,9 @@ const liveAndLatestOfferController = async (req, res, next) => {
       },
       {
         $limit: parseInt(pageSize),
-      },
-    ];
+      }
+    );
+
     const ads = await advertModal.aggregate(pipeline);
     if (ads.length === 0 && page > 1) {
       return res.status(NO_CONTENT).json({

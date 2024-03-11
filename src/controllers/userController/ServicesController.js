@@ -8,6 +8,7 @@ const {
 const CategoryModal = require("../../models/adminModel/category");
 const subCategory = require("../../models/adminModel/subCategory");
 const advertModal = require("../../models/providerModel/advertModal");
+const getGeoCode = require("../../helpers/ConvertGeocoding");
 
 const servicesController = async (req, res, next) => {
   // let { service } = req.query;
@@ -252,6 +253,8 @@ const servicesSubController = async (req, res, next) => {
 // };
 
 const getSingleSubservice = async (req, res, next) => {
+  // console.log("in the service");
+
   try {
     const {
       _id,
@@ -261,9 +264,57 @@ const getSingleSubservice = async (req, res, next) => {
       priceFilter,
       taxonomy = decodeURIComponent(taxonomy),
       location,
+      radius,
     } = req.query;
 
-    let services = await advertModal.aggregate([
+    const radiusMeters = parseFloat(radius) * 1609.34; // 1 mile = 1609.34 meters
+    let pipeline = [];
+    let cordinate;
+    if (location) {
+      cordinate = await getGeoCode(location);
+    }
+
+    if (radius && location && radius != "any") {
+      pipeline.push({
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [cordinate.lng, cordinate.lat],
+          },
+          distanceField: "dist.calculated",
+          maxDistance: radiusMeters,
+          spherical: true,
+        },
+      });
+    }
+
+    if ((location && !radius) || (location && radius === "any")) {
+      // console.log("This is radius", radius, "This is Location", location);
+      pipeline.push({
+        $match: {
+          $or: [
+            {
+              advertPostalCode: {
+                $regex: new RegExp(`^${location}`),
+                $options: "i",
+              },
+            },
+            {
+              advertLocation: {
+                $regex: new RegExp(`.*${location}.*`, "i"),
+              },
+            },
+            {
+              "provider.storeAddress": {
+                $regex: new RegExp(`.*${location}.*`, "i"),
+              },
+            },
+          ],
+        },
+      });
+    }
+
+    pipeline.push(
       {
         $lookup: {
           from: "providerportfolios",
@@ -352,30 +403,6 @@ const getSingleSubservice = async (req, res, next) => {
                   },
                 ]
               : [{}]),
-            ...(location
-              ? [
-                  {
-                    $or: [
-                      {
-                        advertPostalCode: {
-                          $regex: new RegExp(`^${location}`),
-                          $options: "i",
-                        },
-                      },
-                      {
-                        advertLocation: {
-                          $regex: new RegExp(`.*${location}.*`, "i"),
-                        },
-                      },
-                      {
-                        "provider.storeAddress": {
-                          $regex: new RegExp(`.*${location}.*`, "i"),
-                        },
-                      },
-                    ],
-                  },
-                ]
-              : [{}]),
           ],
         },
       },
@@ -409,8 +436,10 @@ const getSingleSubservice = async (req, res, next) => {
           advertOfferPrice: 1,
           products: 1,
         },
-      },
-    ]);
+      }
+    );
+
+    let services = await advertModal.aggregate(pipeline);
 
     // console.log(services);
 
@@ -439,7 +468,7 @@ const getSingleSubservice = async (req, res, next) => {
     }
   } catch (error) {
     // console.log(error);
-    console.error("ERROR IN CATCH BLOCK->", JSON.stringify(error, null, 2));
+    console.log("ERROR IN CATCH BLOCK->", error);
     const status = error.status || INTERNAL_SERVER_ERROR;
     const message = error.message || "Internal server error, try later!";
 
