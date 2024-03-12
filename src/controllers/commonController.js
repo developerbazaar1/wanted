@@ -141,6 +141,21 @@ const getQueryTypeAheadController = async (req, res) => {
               },
             },
             {
+              "products.category": {
+                $regex: new RegExp(`.*${input}.*`, "i"),
+              },
+            },
+            {
+              "products.subcategory": {
+                $regex: new RegExp(`.*${input}.*`, "i"),
+              },
+            },
+            {
+              "products.subsubcategory": {
+                $regex: new RegExp(`.*${input}.*`, "i"),
+              },
+            },
+            {
               advertTitle: {
                 $regex: new RegExp(`.*${input}.*`, "i"),
               },
@@ -156,42 +171,59 @@ const getQueryTypeAheadController = async (req, res) => {
           "products.productTitle": 1,
           "products.productName": 1,
           "products._id": 1,
+          "products.category": 1,
+          "products.subcategory": 1,
+          "products.subsubcategory": 1,
         },
       },
     ]);
 
     // Filter and transform data
-
     let formatedData = [];
+    let uniqueNames = new Set();
     data.forEach((element) => {
+      console.log("Elements products", element.products);
+
       if (element?.advertTitle.match(new RegExp(`.*${input}.*`, "i"))) {
-        formatedData.push({
-          _id: Math.random() + Date.now().toString(),
-          name: element?.advertTitle,
-        });
+        addUniqueName(element.advertTitle, uniqueNames, formatedData);
       }
       element?.products?.forEach((productElement) => {
         if (
           productElement?.productTitle?.match(new RegExp(`.*${input}.*`, "i"))
         ) {
-          formatedData.push({
-            _id: Math.random() + Date.now().toString(),
-            name: productElement?.productTitle,
-          });
+          addUniqueName(
+            productElement?.productTitle,
+            uniqueNames,
+            formatedData
+          );
         }
         if (
           productElement?.productName?.match(new RegExp(`.*${input}.*`, "i"))
         ) {
-          formatedData.push({
-            _id: Math.random() + Date.now().toString(),
-            name: productElement?.productName,
-          });
+          addUniqueName(productElement?.productName, uniqueNames, formatedData);
+        }
+        if (productElement?.category?.match(new RegExp(`.*${input}.*`, "i"))) {
+          addUniqueName(productElement?.category, uniqueNames, formatedData);
+        }
+        if (
+          productElement?.subcategory?.match(new RegExp(`.*${input}.*`, "i"))
+        ) {
+          addUniqueName(productElement?.subcategory, uniqueNames, formatedData);
+        }
+        if (
+          productElement?.subsubcategory?.match(new RegExp(`.*${input}.*`, "i"))
+        ) {
+          addUniqueName(
+            productElement?.subsubcategory,
+            uniqueNames,
+            formatedData
+          );
         }
       });
     });
 
     // Limit the array to 10 elements
-    formatedData = formatedData.slice(0, 9);
+    formatedData = formatedData.slice(0, 10);
     res.status(200).json({
       predections: formatedData,
     });
@@ -204,6 +236,23 @@ const getQueryTypeAheadController = async (req, res) => {
     res.status(status).json({ error: message });
   }
 };
+// helper function for uniquerNames
+function addUniqueName(name, uniqueNames, formatedData) {
+  if (!uniqueNames.has(name)) {
+    uniqueNames.add(name);
+    formatedData.push({
+      _id: Math.random() + Date.now().toString(),
+      name: name,
+    });
+  }
+}
+
+//declare to fetch category, Sub category and sub subCategory query autocomplete
+
+// async function fetchCollectionCategory() {}
+
+// async function fetchCollectionSubCategory() {}
+// async function fetchCollectionSubSubcategory() {}
 
 module.exports = {
   getCategoryController,
