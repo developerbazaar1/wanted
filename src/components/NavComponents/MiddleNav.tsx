@@ -193,7 +193,7 @@ const MiddleNav = () => {
       const response = await GoogleAPI.locationTypeAhead(
         watch("postalCode") || ""
       );
-      console.log(response.data);
+      // console.log(response.data);
       setLocTypeAhead(response?.data?.predictions);
     } catch (error) {
       console.error(error);
@@ -214,7 +214,6 @@ const MiddleNav = () => {
     getCurrentLocation()
       .then((res) => {
         // let addres = `${res?.formattedAddress?.placeLabel} , ${res?.formattedAddress?.formattedAddress}`;
-        console.log("This is location response", res?.formattedAddress);
         setValue("postalCode", res?.formattedAddress);
       })
       .catch((e) => {

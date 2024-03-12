@@ -71,9 +71,7 @@ async function reverseGeocode(
         },
       }
     );
-
-    const formattedAddress: string =
-      response?.data?.addresses[0]?.formattedAddress;
+    const formattedAddress: string = response?.data?.addresses[0]?.city;
     if (!formattedAddress) {
       throw new Error("Address not found in the response");
     }
@@ -97,7 +95,6 @@ export function getCurrentLocation(): Promise<LocationData> {
               latitude,
               longitude
             );
-
             const formattedAddress: string = addressData.formattedAddress;
             resolve({ latitude, longitude, formattedAddress });
           } catch (error) {
