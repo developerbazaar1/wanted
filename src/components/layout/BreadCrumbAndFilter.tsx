@@ -138,8 +138,129 @@ const BreadCrumbAndFilter = ({
 
   return (
     <div className="bread_filter_container">
+      {/* // this filter will come on screen less than 600px */}
+
+      <div className="sm-price-distance-filter-container">
+        <div className="dropdown">
+          <button
+            className={`dropdown-toggle featured-filter-box`}
+            type="button"
+            id="priceFilter"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {priceFilter
+              ? priceFilter === "ascending"
+                ? "Low to High"
+                : "High to Low"
+              : "Price"}
+          </button>
+          <ul className="dropdown-menu arrowClip" aria-labelledby="priceFilter">
+            <li>
+              <span
+                className="dropdown-item"
+                onClick={() => handleSetFilter("ascending")}
+              >
+                Price: Low to High
+              </span>
+            </li>
+            <li onClick={() => handleSetFilter("descending")}>
+              <span className="dropdown-item">Price: High to Low</span>
+            </li>
+          </ul>
+        </div>
+        <div className="dropdown">
+          <button
+            className="featured-filter-box"
+            type="button"
+            id="distanceFilter"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {radiusFilter ? `${radiusFilter} mil` : "Distance"}
+          </button>
+          <ul
+            className="dropdown-menu arrowClip"
+            aria-labelledby="distanceFilter"
+          >
+            <li className="dropdown-item">
+              <input
+                type="radio"
+                id="any"
+                value="any"
+                {...register("distance")}
+                name="distance"
+              />{" "}
+              <label htmlFor="any" aria-label="">
+                Any Distance
+              </label>
+            </li>
+            <li className="dropdown-item">
+              <input
+                type="radio"
+                id="1m"
+                value="1"
+                {...register("distance")}
+                name="distance"
+              />{" "}
+              <label htmlFor="1m" className="">
+                Within 1.0 mi
+              </label>
+            </li>
+            <li className="dropdown-item">
+              <input
+                type="radio"
+                id="5m"
+                {...register("distance")}
+                name="distance"
+                value="5"
+              />{" "}
+              <label htmlFor="5m" className="">
+                Within 5.0 mi
+              </label>
+            </li>
+            <li className="dropdown-item">
+              <input
+                type="radio"
+                id="10m"
+                {...register("distance")}
+                name="distance"
+                value="10"
+              />{" "}
+              <label htmlFor="10m" className="">
+                Within 10.0 mi
+              </label>
+            </li>
+            <li className="dropdown-item">
+              <input
+                type="radio"
+                id="20m"
+                {...register("distance")}
+                name="distance"
+                value="20"
+              />{" "}
+              <label htmlFor="20m" className="">
+                Within 20.0 mi
+              </label>
+            </li>
+            <li className="dropdown-item">
+              <input
+                type="radio"
+                id="50m"
+                {...register("distance")}
+                name="distance"
+                value="50"
+              />{" "}
+              <label htmlFor="50m" className="">
+                Within 50.0 mi
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr className="hr d-lg-none" />
       <div className="fileteAnBreadCrump">
-        <div className=" bread_crumb_link  d-none d-md-flex">
+        <div className="bread_crumb_link  d-none d-md-flex">
           {/* {isHomeRoute ? (
             <span className="text-black">Home</span>
           ) : (
@@ -189,7 +310,10 @@ const BreadCrumbAndFilter = ({
                     : "High to Low"
                   : "Price"}
               </button>
-              <ul className="dropdown-menu" aria-labelledby="priceFilter">
+              <ul
+                className="dropdown-menu arrowClip"
+                aria-labelledby="priceFilter"
+              >
                 <li>
                   <span
                     className="dropdown-item"
@@ -213,7 +337,10 @@ const BreadCrumbAndFilter = ({
               >
                 {radiusFilter ? `${radiusFilter} mil` : "Distance"}
               </button>
-              <ul className="dropdown-menu" aria-labelledby="distanceFilter">
+              <ul
+                className="dropdown-menu arrowClip"
+                aria-labelledby="distanceFilter"
+              >
                 <li className="dropdown-item">
                   <input
                     type="radio"
@@ -320,6 +447,7 @@ const BreadCrumbAndFilter = ({
           </NavLink>
         </div>
       </div>
+      <hr className="hr d-lg-none" />
       <Outlet />
     </div>
   );

@@ -102,3 +102,77 @@ ul > li {
 .active-nav-bg {
   background-color: #c9ffd3 !important;
 }
+
+.arrowClip:before {
+  background-color: #fff;
+  border-left: 0.1rem solid #cacacc;
+  border-top: 0.1rem solid #cacacc;
+  box-shadow: -0.2rem -0.2rem 0.2rem rgba(0, 0, 0, 0.1);
+  content: "";
+  height: 1.2rem;
+  left: 10%;
+  position: absolute;
+  top: -11px;
+  transform: rotate(45deg);
+  width: 1.2rem;
+  z-index: 0;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+}
+
+.sm-price-distance-filter-container {
+  justify-content: start;
+  width: 92%;
+  margin: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+@media screen and (min-width: 991px) {
+  .sm-price-distance-filter-container {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .hr {
+    margin: 0;
+    margin: auto;
+    width: 98%;
+  }
+
+  .bread_filter_container {
+    margin-top: 15px;
+    gap: 15px;
+  }
+  .filterNav > a {
+    font-size: 14px;
+  }
+
+  .fileteAnBreadCrump {
+    justify-content: end;
+  }
+
+  .postal__input__container,
+  .search__input__conatiner {
+    padding: 8px 5px 8px 0px;
+  }
+
+  .search__input__conatiner .search_icon,
+  .postal_icon {
+    top: 13px;
+    left: 5px;
+  }
+
+  .searButoon_container > button > svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .featured-filter-box {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 14px;
+  }
+}

@@ -11,7 +11,10 @@ import { useForm } from "react-hook-form";
 import { useServices } from "../../service/auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { showArrowCheck } from "../../utils/CastintoFormData";
+import {
+  getCurrentLocation,
+  showArrowCheck,
+} from "../../utils/CastintoFormData";
 import { SearchContext } from "../../features/searchContext";
 import { GoogleAPI } from "../../config/AxiosUtils";
 
@@ -179,17 +182,12 @@ const MiddleNav = () => {
       const response = await GoogleAPI.queryTypeAhead(
         watch("searchQuery") || ""
       );
-      console.log("this is query type-ahead", response.data.predections);
+      // console.log("this is query type-ahead", response.data.predections);
       setQueryTypeAhead(response.data.predections);
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    fetchquerytypeAhead();
-  }, [watch("searchQuery")]);
-  //function to fetch the type-ahead-result
   const FetchLocationTypeAhead = async () => {
     try {
       const response = await GoogleAPI.locationTypeAhead(
@@ -203,8 +201,26 @@ const MiddleNav = () => {
   };
 
   useEffect(() => {
+    fetchquerytypeAhead();
+  }, [watch("searchQuery")]);
+  //function to fetch the type-ahead-result
+
+  useEffect(() => {
     FetchLocationTypeAhead();
   }, [watch("postalCode")]);
+
+  // This is used to fetched the search location for current location
+  useEffect(() => {
+    getCurrentLocation()
+      .then((res) => {
+        // let addres = `${res?.formattedAddress?.placeLabel} , ${res?.formattedAddress?.formattedAddress}`;
+        console.log("This is location response", res?.formattedAddress);
+        setValue("postalCode", res?.formattedAddress);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
 
   useEffect(() => {
     // Function to handle clicks outside the postal__input__container
@@ -264,7 +280,7 @@ const MiddleNav = () => {
               </svg>
               <input
                 type="search"
-                placeholder="Search by keywords"
+                placeholder="Search Wanted"
                 className="search__input"
                 autoComplete="off"
                 onFocus={handleInputFocus}
@@ -313,19 +329,19 @@ const MiddleNav = () => {
               )}
             </div>
             {/* filter categroy div */}
-            <div className="filter__conatiner d-none d-lg-block">
+            <div
+              className="filter__conatiner d-none d-lg-block"
+              id="dropdownMenuLink"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              data-bs-auto-close="true"
+              role="button"
+            >
               {FilterIcon}
               {/* <span className="search__input">All Categories</span> */}
               <div className="search__input">
                 <div className="dropdown">
-                  <a
-                    className="app-menu__item"
-                    id="dropdownMenuLink"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    data-bs-auto-close="true"
-                    type="button"
-                  >
+                  <a className="app-menu__item">
                     <span className="app-menu__label__2">
                       {taxonomyFilter ? (
                         <span className="text-danger">{taxonomyFilter}</span>
@@ -413,7 +429,7 @@ const MiddleNav = () => {
                 type="search"
                 id="mobilesearch"
                 className="postal__input"
-                placeholder="Your postal code"
+                placeholder="Location"
                 autoComplete="off"
                 aria-label="Search"
                 onFocus={handleLocationTypeAhead}

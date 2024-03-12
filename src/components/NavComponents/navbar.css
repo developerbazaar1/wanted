@@ -208,6 +208,28 @@ nab .login:hover {
   }
 }
 
+@media screen and (max-width: 600px) {
+  .login,
+  .signUp {
+    font-size: 15px;
+    padding: 8px 4px;
+  }
+
+  .cat_icon_img_div {
+    width: 26px;
+    height: 26px;
+  }
+
+  .cat_icon_container .cat_name {
+    font-size: 21px;
+  }
+
+  .search__input,
+  .postal__input {
+    font-size: 14px;
+  }
+}
+
 @media screen and (min-width: 992px) {
   #modal_one {
     min-width: 40vw;
@@ -273,7 +295,7 @@ nab .login:hover {
 .dropdown-menu .dropdown-submenu {
   display: none;
   position: absolute;
-  left: 120%;
+  left: 118%;
   border-left: 2px solid #17c737 !important;
   top: -46px;
 }
@@ -286,9 +308,10 @@ nab .login:hover {
 }
 
 .dropw_down_menu {
-  transform: translate3d(-47px, 38px, 0px) !important;
+  transform: translate3d(-39px, 38px, 0px) !important;
   width: 218px;
-  /* padding: 0 7px !important; */
+  /*padding: 0 7px !important;
+  */
   border-bottom-right-radius: 5px !important;
   border-bottom-left-radius: 5px !important;
   border-style: none !important;
@@ -296,6 +319,10 @@ nab .login:hover {
   border-top-right-radius: 0px !important;
   border-top-left-radius: 0px !important;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  -webkit-transform: translate3d(-39px, 38px, 0px) !important;
+  -moz-transform: translate3d(-39px, 38px, 0px) !important;
+  -ms-transform: translate3d(-39px, 38px, 0px) !important;
+  -o-transform: translate3d(-39px, 38px, 0px) !important;
 }
 
 .dropdown-item {
@@ -672,6 +699,18 @@ input[type="radio"] {
 
 .type-ahead-option .text-part-container {
   margin-left: 12px;
+}
+
+@media screen and (max-width: 620px) {
+  .type-ahead-option-highlight {
+    font-size: 14px;
+  }
+  .type-ahead-option {
+    padding: 3px 7px;
+  }
+  .type-ahead-option .text-part-container {
+    margin-left: 5px;
+  }
 }
 
 @media screen and (min-width: 48em) {

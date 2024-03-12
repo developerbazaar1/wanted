@@ -225,3 +225,9 @@ input[type="checkbox"] {
     margin-top: 50px;
   }
 }
+
+@media screen and (max-width: 400px) {
+  .top__nav {
+    font-size: 10px;
+  }
+}
