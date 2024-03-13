@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Link,
   // Link,
   NavLink,
   Outlet,
@@ -9,6 +10,9 @@ import {
 } from "react-router-dom";
 import "../../css/ComponentsCSS/BreadCrumbAndFilter.css";
 import { useForm } from "react-hook-form";
+import { BackIcon } from "../../utils/SvgElements";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { useServices } from "../../service/auth";
 // import { SearchContext } from "../../features/searchContext";
 
 const breadNav = {
@@ -38,8 +42,10 @@ const BreadCrumbAndFilter = ({
   radiusFilter,
   setRadiusFilter,
 }: priceFilterType) => {
+  const { category } = useServices();
   const { register, watch } = useForm();
   // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
+  const [smcatsh, setSmcatSh] = useState(false);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -48,6 +54,10 @@ const BreadCrumbAndFilter = ({
   const [pathstate, setPathstate] = useState<string[]>();
 
   const pathnames = location.pathname.split("/").filter((x) => x);
+
+  const handleChangeSmallOpenHide = (value: boolean) => {
+    setSmcatSh(value);
+  };
 
   //function to set set the filterPrice
   function handleSetFilter(filter: string) {
@@ -141,35 +151,39 @@ const BreadCrumbAndFilter = ({
       {/* // this filter will come on screen less than 600px */}
 
       <div className="sm-price-distance-filter-container">
-        <div className="dropdown">
-          <button
-            className={`dropdown-toggle featured-filter-box`}
-            type="button"
-            id="priceFilter"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            {priceFilter
-              ? priceFilter === "ascending"
-                ? "Low to High"
-                : "High to Low"
-              : "Price"}
-          </button>
-          <ul className="dropdown-menu arrowClip" aria-labelledby="priceFilter">
-            <li>
-              <span
-                className="dropdown-item"
-                onClick={() => handleSetFilter("ascending")}
-              >
-                Price: Low to High
-              </span>
-            </li>
-            <li onClick={() => handleSetFilter("descending")}>
-              <span className="dropdown-item">Price: High to Low</span>
-            </li>
-          </ul>
-        </div>
-        <div className="dropdown">
+        <div className="d-flex gap-1 sm-price-distance-filter">
+          <div className="dropdown">
+            <button
+              className={`dropdown-toggle featured-filter-box`}
+              type="button"
+              id="priceFilter"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {priceFilter
+                ? priceFilter === "ascending"
+                  ? "Low to High"
+                  : "High to Low"
+                : "Price"}
+            </button>
+            <ul
+              className="dropdown-menu arrowClip"
+              aria-labelledby="priceFilter"
+            >
+              <li>
+                <span
+                  className="dropdown-item"
+                  onClick={() => handleSetFilter("ascending")}
+                >
+                  Price: Low to High
+                </span>
+              </li>
+              <li onClick={() => handleSetFilter("descending")}>
+                <span className="dropdown-item">Price: High to Low</span>
+              </li>
+            </ul>
+          </div>
+          <div className="dropdown"></div>
           <button
             className="featured-filter-box"
             type="button"
@@ -257,10 +271,51 @@ const BreadCrumbAndFilter = ({
             </li>
           </ul>
         </div>
+        <div
+          className="d-flex align-items-end sm-category"
+          role="button"
+          onClick={() => handleChangeSmallOpenHide(true)}
+        >
+          Categories
+        </div>
+        <div
+          className={`sm-cate-container ${
+            smcatsh === true ? "sm-cate-container-open" : ""
+          }`}
+        >
+          <div className="cat-head d-flex align-items-center">
+            <button
+              title="Back"
+              className="sm-cat-back-btn"
+              onClick={() => handleChangeSmallOpenHide(false)}
+            >
+              {BackIcon}
+            </button>
+            <div className="title">Categories</div>
+          </div>
+          <hr className="m-0" />
+          <section className="sm-cate-body">
+            <div className="top-cat">All Categories</div>
+            <ul>
+              {category?.map((catElement: any) => (
+                <li key={catElement._id}>
+                  <span className="sm-cate-list">
+                    <Link to="#" className="sm-list-link">
+                      {catElement?.categoryName}
+                    </Link>
+                    <div className="more-list-icon">
+                      <IoIosAddCircleOutline />
+                    </div>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
       </div>
       <hr className="hr d-lg-none" />
       <div className="fileteAnBreadCrump">
-        <div className="bread_crumb_link  d-none d-md-flex">
+        <div className="bread_crumb_link_lg d-md-flex">
           {/* {isHomeRoute ? (
             <span className="text-black">Home</span>
           ) : (

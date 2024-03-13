@@ -321,3 +321,18 @@ export const FilterIcon = (
     </defs>
   </svg>
 );
+
+export const BackIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+  >
+    <path
+      className="ls-header-svg"
+      fill="#1f1f1f"
+      d="M5.793 12.707l10.992 10.996a1.002 1.002 0 0 0 1.422 0 .997.997 0 0 0 0-1.418L7.922 12 18.207 1.71a1.002 1.002 0 0 0 0-1.42 1.01 1.01 0 0 0-1.422 0L5.793 11.292a.993.993 0 0 0 0 1.414zm0 0"
+    ></path>
+  </svg>
+);
