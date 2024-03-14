@@ -126,6 +126,8 @@ ul > li {
   .sm-list-link {
     text-decoration: none;
     color: black;
+    width: 78%;
+    display: block;
   }
 
   .sm-cate-body {
@@ -138,6 +140,40 @@ ul > li {
       text-transform: uppercase;
     }
   }
+
+  .sm-subCat-lists {
+    position: relative;
+    left: 100%;
+    opacity: 1;
+    width: 100%;
+    z-index: 10;
+  }
+
+  .sm-subCat-lists-open {
+    left: 0 !important;
+    transition: all 0.25s;
+  }
+
+  .sm-common-list {
+    color: #2b2430;
+    cursor: pointer;
+    display: block;
+    line-height: 21px;
+    outline: 0;
+    overflow-wrap: break-word;
+    padding: 13px 0px 13px 16px;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+  }
+  .sm-subCat-list {
+    padding: 0 17px 0 16px;
+    position: relative;
+  }
+
+  .more-list-icon.more-list-icon-open {
+    rotate: 45deg;
+  }
 }
 
 .sm-cate-container-open {
@@ -148,7 +184,7 @@ ul > li {
   background-color: white;
   width: 100%;
   left: 0;
-  height: 100%;
+  height: fit-content;
 }
 
 @media screen and (min-width: 530px) {

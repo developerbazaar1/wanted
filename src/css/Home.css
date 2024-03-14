@@ -50,7 +50,11 @@
     width: 47%; /* Add !important to this line */
   }
 }
-
+@media screen and (max-width: 630px) {
+  .cat_icon_container .cat_name {
+    font-size: 21px;
+  }
+}
 @media screen and (min-width: 1082px) {
   .single_cat {
     width: 31%;

@@ -220,10 +220,6 @@ nab .login:hover {
     height: 26px;
   }
 
-  .cat_icon_container .cat_name {
-    font-size: 21px;
-  }
-
   .search__input,
   .postal__input {
     font-size: 14px;

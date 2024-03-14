@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Link,
-  // Link,
   NavLink,
   Outlet,
   useLocation,
@@ -10,10 +8,7 @@ import {
 } from "react-router-dom";
 import "../../css/ComponentsCSS/BreadCrumbAndFilter.css";
 import { useForm } from "react-hook-form";
-import { BackIcon } from "../../utils/SvgElements";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { useServices } from "../../service/auth";
-// import { SearchContext } from "../../features/searchContext";
+import SmCategoryComponent from "./SmCategoryComponent";
 
 const breadNav = {
   backgroundColor: "#C9FFD3",
@@ -42,7 +37,6 @@ const BreadCrumbAndFilter = ({
   radiusFilter,
   setRadiusFilter,
 }: priceFilterType) => {
-  const { category } = useServices();
   const { register, watch } = useForm();
   // const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   const [smcatsh, setSmcatSh] = useState(false);
@@ -278,40 +272,12 @@ const BreadCrumbAndFilter = ({
         >
           Categories
         </div>
-        <div
-          className={`sm-cate-container ${
-            smcatsh === true ? "sm-cate-container-open" : ""
-          }`}
-        >
-          <div className="cat-head d-flex align-items-center">
-            <button
-              title="Back"
-              className="sm-cat-back-btn"
-              onClick={() => handleChangeSmallOpenHide(false)}
-            >
-              {BackIcon}
-            </button>
-            <div className="title">Categories</div>
-          </div>
-          <hr className="m-0" />
-          <section className="sm-cate-body">
-            <div className="top-cat">All Categories</div>
-            <ul>
-              {category?.map((catElement: any) => (
-                <li key={catElement._id}>
-                  <span className="sm-cate-list">
-                    <Link to="#" className="sm-list-link">
-                      {catElement?.categoryName}
-                    </Link>
-                    <div className="more-list-icon">
-                      <IoIosAddCircleOutline />
-                    </div>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+        {smcatsh && (
+          <SmCategoryComponent
+            smcatsh={smcatsh}
+            handleChangeSmallOpenHide={handleChangeSmallOpenHide}
+          />
+        )}
       </div>
       <hr className="hr d-lg-none" />
       <div className="fileteAnBreadCrump">
