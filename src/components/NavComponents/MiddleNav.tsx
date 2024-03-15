@@ -26,7 +26,7 @@ interface serachVlue {
 
 const MiddleNav = () => {
   const [, setSearchParams] = useSearchParams();
-
+  const LiveLocation = useRef("");
   const [locTypeAhead, setLocTypeAhead] = useState([]);
   const [queryTypeAheadstate, setQueryTypeAhead] = useState([]);
   const location = useLocation().pathname;
@@ -215,9 +215,14 @@ const MiddleNav = () => {
       .then((res) => {
         // let addres = `${res?.formattedAddress?.placeLabel} , ${res?.formattedAddress?.formattedAddress}`;
         setValue("postalCode", res?.formattedAddress);
+        LiveLocation.current = res?.formattedAddress;
       })
       .catch((e) => {
-        console.log(e);
+        if (e.message === "User denied geolocation prompt") {
+          alert("You blocked live location. enter manually !");
+        } else {
+          alert("Failed to fetch current location set manually !");
+        }
       });
   }, []);
 

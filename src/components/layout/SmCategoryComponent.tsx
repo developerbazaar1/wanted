@@ -15,8 +15,7 @@ const SmCategoryComponent: React.FC<Props> = ({
   smcatsh,
   handleChangeSmallOpenHide,
 }) => {
-  const { taxonomyFilter, updatetaxonomyFilterQuery } =
-    useContext(SearchContext);
+  const { updatetaxonomyFilterQuery } = useContext(SearchContext);
   const { category, subCategory, SubSubCategory } = useServices();
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -24,9 +23,10 @@ const SmCategoryComponent: React.FC<Props> = ({
   const [openedCategories, setOpenedCategories] = useState<string[]>([]);
   const [openedSubCategories, setOpenedSubCategories] = useState<string[]>([]);
 
-  console.log("This is taxnomoy", taxonomyFilter);
+  // console.log("This is taxnomoy", taxonomyFilter);
   // function to Handle Selected category
   function handleSelectedDropDown(service: string) {
+    handleChangeSmallOpenHide(false);
     updatetaxonomyFilterQuery(service);
     if (pathnames.length === 0 || pathnames.includes(`services`)) {
       navigate(`/services/search`);
@@ -59,14 +59,18 @@ const SmCategoryComponent: React.FC<Props> = ({
   };
 
   const renderSubCategories = (categoryId: string) => {
-    if (!isCategoryOpened(categoryId)) return null;
+    // if (!isCategoryOpened(categoryId)) return null;
 
     const filteredSubCategories = subCategory.filter(
       (subCat: any) => subCat.category_id === categoryId
     );
 
     return (
-      <ul className="sm-subCat-lists sm-subCat-lists-open">
+      <ul
+        className={`sm-subCat-lists ${
+          isCategoryOpened(categoryId) ? "sm-subCat-lists-open" : ""
+        }`}
+      >
         {filteredSubCategories.map((subCatElement: any) => (
           <li className="sm-subCat-list" key={subCatElement._id}>
             <span className="sm-common-list">

@@ -142,6 +142,7 @@ ul > li {
   }
 
   .sm-subCat-lists {
+    height: 0;
     position: relative;
     left: 100%;
     opacity: 1;
@@ -151,7 +152,12 @@ ul > li {
 
   .sm-subCat-lists-open {
     left: 0 !important;
+    height: fit-content;
     transition: all 0.25s;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -ms-transition: all 0.25s;
+    -o-transition: all 0.25s;
   }
 
   .sm-common-list {
@@ -173,6 +179,32 @@ ul > li {
 
   .more-list-icon.more-list-icon-open {
     rotate: 45deg;
+  }
+}
+
+.sm-selected-cat-title {
+  -webkit-font-smoothing: antialiased;
+  background: #fff;
+  color: red;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.2;
+  padding: 0rem 1.6rem 0 0;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  width: 92%;
+  margin: auto;
+}
+
+@media screen and (min-width: 992px) {
+  .sm-selected-cat-title {
+    display: none;
   }
 }
 
@@ -253,7 +285,7 @@ ul > li {
   }
 }
 
-@media screen and (min-width: 991px) {
+@media screen and (min-width: 992px) {
   .sm-price-distance-filter-container {
     display: none;
   }

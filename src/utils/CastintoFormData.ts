@@ -102,7 +102,6 @@ export function getCurrentLocation(): Promise<LocationData> {
           }
         },
         (error: GeolocationPositionError) => {
-          console.error("Error getting location:", error);
           reject(error);
         }
       );

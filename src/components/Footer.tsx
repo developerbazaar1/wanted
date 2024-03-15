@@ -1,4 +1,4 @@
-import Logo from "./Logo";
+import logo from "../assets/logo.png";
 import "../css/Footer.css";
 import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -10,7 +10,9 @@ function Footer() {
         <div className="footer_container pb-5">
           <div className="footer_discription_div">
             <div className="footer_logo">
-              <Logo />
+              <Link to="/" className="footer_logo_img">
+                <img src={logo} alt="logo" />
+              </Link>
             </div>
             <p className="footer-font">
               Lorem Ipsum is simply dummy text of the printing and typesetting

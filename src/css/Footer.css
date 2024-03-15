@@ -16,6 +16,14 @@
   line-height: 24px;
 }
 
+.footer_logo_img {
+  padding: 9px 0px;
+  height: 67px;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
 .footer_discription_div {
   margin-bottom: 12px;
 }
