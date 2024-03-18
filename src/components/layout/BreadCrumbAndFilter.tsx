@@ -290,13 +290,35 @@ const BreadCrumbAndFilter = ({
             </li>
           </ul>
         </div>
-        <div
+        {/* <div
           className="d-flex align-items-end sm-category"
           role="button"
           onClick={() => handleChangeSmallOpenHide(true)}
         >
-          Categories
-        </div>
+          {taxonomyFilter
+            ? // <h1 className="sm-selected-cat-title">{taxonomyFilter}</h1>
+              taxonomyFilter
+            : " Categories"}
+        </div> */}
+
+        {taxonomyFilter ? (
+          // <h1 className="sm-selected-cat-title">{taxonomyFilter}</h1>
+          <div
+            className="sm-selected-cat-title"
+            role="button"
+            onClick={() => handleChangeSmallOpenHide(true)}
+          >
+            {taxonomyFilter}
+          </div>
+        ) : (
+          <div
+            className="d-flex align-items-end sm-category"
+            role="button"
+            onClick={() => handleChangeSmallOpenHide(true)}
+          >
+            Categories
+          </div>
+        )}
         {smcatsh && (
           <SmCategoryComponent
             smcatsh={smcatsh}
@@ -518,7 +540,7 @@ const BreadCrumbAndFilter = ({
         </div>
       </div>
       <hr className="hr d-lg-none m-0" />
-      <h1 className="sm-selected-cat-title">{taxonomyFilter}</h1>
+      {/* <h1 className="sm-selected-cat-title">{taxonomyFilter}</h1> */}
       <Outlet />
     </div>
   );

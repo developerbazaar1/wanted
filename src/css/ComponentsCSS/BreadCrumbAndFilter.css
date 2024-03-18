@@ -183,13 +183,14 @@ ul > li {
 }
 
 .sm-selected-cat-title {
+  text-align: end;
   -webkit-font-smoothing: antialiased;
   background: #fff;
   color: red;
   font-size: 19px;
   font-weight: 800;
   line-height: 1.2;
-  padding: 0rem 1.6rem 0 0;
+  padding: 0rem 0rem 0 0;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   display: -webkit-box;
@@ -200,6 +201,12 @@ ul > li {
   overflow-wrap: break-word;
   width: 92%;
   margin: auto;
+}
+
+@media screen and (max-width: 320px) {
+  .sm-selected-cat-title {
+    font-size: 15px;
+  }
 }
 
 @media screen and (min-width: 992px) {
