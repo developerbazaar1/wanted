@@ -24,7 +24,7 @@ const NavBar = ({ setPriceFilter, setRadiusFilter }: any) => {
                   setPriceFilter("");
                   setRadiusFilter("");
                 }}
-                // state={{ reset: "resetSearch" }}
+                state={{ reset: "resetSearch" }}
               >
                 <img src={navLogo} className="nav_logo" alt="" />
               </Link>

@@ -38,7 +38,7 @@ const BreadCrumbAndFilter = ({
   radiusFilter,
   setRadiusFilter,
 }: priceFilterType) => {
-  const { register, watch } = useForm();
+  const { register, watch, setValue } = useForm();
   const { taxonomyFilter } = useContext(SearchContext);
   const [smcatsh, setSmcatSh] = useState(false);
   const navigate = useNavigate();
@@ -62,6 +62,7 @@ const BreadCrumbAndFilter = ({
       prev.set("price", filter);
       return prev;
     });
+
     // console.log("Old serach Params", searchParams.toString());
 
     // Check if other search parameters exist
@@ -141,6 +142,22 @@ const BreadCrumbAndFilter = ({
     setBreadcrumbs(breadcrumbArray);
   }, [location]);
 
+  useEffect(() => {
+    for (const [key, value] of searchParams.entries()) {
+      switch (key) {
+        case "price":
+          setPriceFilter(value);
+          break;
+        case "radius":
+          setValue("distance", value);
+          break;
+        default:
+          // Handle default case if needed
+          break;
+      }
+    }
+  }, []);
+
   return (
     <div className="bread_filter_container">
       {/* // this filter will come on screen less than 600px */}
@@ -186,7 +203,7 @@ const BreadCrumbAndFilter = ({
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            {radiusFilter ? `${radiusFilter} mil` : "Distance"}
+            {radiusFilter ? `${radiusFilter} mile` : "Distance"}
           </button>
           <ul
             className="dropdown-menu arrowClip"
@@ -403,7 +420,7 @@ const BreadCrumbAndFilter = ({
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                {radiusFilter ? `${radiusFilter} mil` : "Distance"}
+                {radiusFilter ? `${radiusFilter} mile` : "Distance"}
               </button>
               <ul
                 className="dropdown-menu arrowClip"

@@ -25,7 +25,7 @@ interface serachVlue {
 }
 
 const MiddleNav = () => {
-  const [, setSearchParams] = useSearchParams();
+  const [searchParmas, setSearchParams] = useSearchParams();
   const LiveLocation = useRef("");
   const [locTypeAhead, setLocTypeAhead] = useState([]);
   const [queryTypeAheadstate, setQueryTypeAhead] = useState([]);
@@ -42,7 +42,7 @@ const MiddleNav = () => {
   const [showModal1, setShowModal1] = useState<boolean>(false);
   const navigate = useNavigate();
   const { category, subCategory, SubSubCategory } = useServices();
-  const { register, handleSubmit, setValue, reset, watch } =
+  const { register, handleSubmit, setValue, resetField, watch } =
     useForm<serachVlue>();
 
   const pathnames = location.split("/").filter((x) => x);
@@ -95,11 +95,22 @@ const MiddleNav = () => {
     if (postalCode) {
       SearchObject["location"] = postalCode;
     }
-    setSearchParams(SearchObject);
+    setSearchParams((prevSearch: any) => {
+      // console.log("prev search params", prevSearch);
+      for (const [key, value] of Object.entries(SearchObject)) {
+        prevSearch.set(key, value);
+      }
+      return prevSearch;
+    });
   }
 
   function handleSelectedDropDown(service: string) {
     updatetaxonomyFilterQuery(service);
+    setSearchParams((prev) => {
+      prev.set("taxonomy", service);
+      return prev;
+    });
+
     const dropDown = document.getElementById("mainDorpwDoen");
     dropDown?.classList.remove("show");
     if (pathnames.length === 0 || pathnames.includes(`services`)) {
@@ -113,7 +124,7 @@ const MiddleNav = () => {
      * reset the form when user click on the logo
      */
     if (state?.reset) {
-      reset();
+      resetField("searchQuery");
     }
 
     if (pathnames.includes("services")) {
@@ -214,7 +225,9 @@ const MiddleNav = () => {
     getCurrentLocation()
       .then((res) => {
         // let addres = `${res?.formattedAddress?.placeLabel} , ${res?.formattedAddress?.formattedAddress}`;
-        setValue("postalCode", res?.formattedAddress);
+        if (!watch("postalCode")) {
+          setValue("postalCode", res?.formattedAddress);
+        }
         LiveLocation.current = res?.formattedAddress;
       })
       .catch((e) => {
@@ -227,7 +240,7 @@ const MiddleNav = () => {
   }, []);
 
   useEffect(() => {
-    // Function to handle clicks outside the postal__input__container
+    // Function to handle clicks outside the query type-ahead box
     function handleClickOutside(event: MouseEvent) {
       if (
         selectRef.current &&
@@ -258,6 +271,28 @@ const MiddleNav = () => {
       document.removeEventListener("click", handleClickOutsideOfLocation);
     };
   }, []);
+
+  // function to save the category and sub category when refresh
+  useEffect(() => {
+    for (const [key, value] of searchParmas.entries()) {
+      switch (key) {
+        case "search":
+          setValue("searchQuery", value);
+          break;
+        case "location":
+          setValue("postalCode", value);
+          break;
+        case "taxonomy":
+          updatetaxonomyFilterQuery(value);
+          break;
+        default:
+          // Handle default case if needed
+          break;
+      }
+    }
+  }, [searchParmas]);
+
+  // let queryIterable =  searchParmas.entries();
 
   return (
     <>
