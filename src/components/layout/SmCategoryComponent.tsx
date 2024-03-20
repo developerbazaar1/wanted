@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { BackIcon } from "../../utils/SvgElements";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useServices } from "../../service/auth";
@@ -16,6 +16,7 @@ const SmCategoryComponent: React.FC<Props> = ({
   handleChangeSmallOpenHide,
 }) => {
   const { updatetaxonomyFilterQuery } = useContext(SearchContext);
+  const [searchParams, setSearchParams] = useSearchParams();
   const { category, subCategory, SubSubCategory } = useServices();
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -25,13 +26,19 @@ const SmCategoryComponent: React.FC<Props> = ({
 
   // console.log("This is taxnomoy", taxonomyFilter);
   // function to Handle Selected category
-  function handleSelectedDropDown(service: string) {
+  function handleSmSelectedDropDown(service: string) {
     handleChangeSmallOpenHide(false);
     updatetaxonomyFilterQuery(service);
+    setSearchParams((prev) => {
+      prev.set("taxonomy", service);
+      return prev;
+    });
+
     if (pathnames.length === 0 || pathnames.includes(`services`)) {
-      navigate(`/services/search`);
+      navigate(`/services/search?${searchParams.toString()}`);
     }
   }
+
   const toggleCategory = (categoryId: string) => {
     if (openedCategories.includes(categoryId)) {
       setOpenedCategories(openedCategories.filter((id) => id !== categoryId));
@@ -74,16 +81,15 @@ const SmCategoryComponent: React.FC<Props> = ({
         {filteredSubCategories.map((subCatElement: any) => (
           <li className="sm-subCat-list" key={subCatElement._id}>
             <span className="sm-common-list">
-              <Link
-                to="#"
+              <span
                 className="sm-list-link"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleSelectedDropDown(subCatElement.subCategoryName);
+                  handleSmSelectedDropDown(subCatElement.subCategoryName);
                 }}
               >
                 {subCatElement?.subCategoryName}
-              </Link>
+              </span>
               <div
                 className={`more-list-icon ${
                   isSubCategoryOpened(subCatElement._id)
@@ -120,16 +126,15 @@ const SmCategoryComponent: React.FC<Props> = ({
         {filteredSubSubCategories.map((subSubCatElement: any) => (
           <li className="sm-subCat-list" key={subSubCatElement._id}>
             <span className={`sm-common-list`}>
-              <Link
-                to="#"
+              <span
                 className="sm-list-link"
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleSelectedDropDown(subSubCatElement.subSubCategoryName);
+                  handleSmSelectedDropDown(subSubCatElement.subSubCategoryName);
                 }}
               >
                 {subSubCatElement?.subSubCategoryName}
-              </Link>
+              </span>
             </span>
           </li>
         ))}
@@ -156,21 +161,22 @@ const SmCategoryComponent: React.FC<Props> = ({
         </div>
         <hr className="m-0" />
         <section className="sm-cate-body">
-          <div className="top-cat">All Categories</div>
+          <div className="top-cat" onClick={() => handleSmSelectedDropDown("")}>
+            All Categories
+          </div>
           <ul>
             {category.map((catElement: any) => (
               <li key={catElement._id}>
                 <span className="sm-cate-list">
-                  <Link
-                    to="#"
+                  <span
                     className="sm-list-link"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleSelectedDropDown(catElement.categoryName);
+                      handleSmSelectedDropDown(catElement.categoryName);
                     }}
                   >
                     {catElement?.categoryName}
-                  </Link>
+                  </span>
                   <div
                     onClick={() => toggleCategory(catElement._id)}
                     className={`more-list-icon ${

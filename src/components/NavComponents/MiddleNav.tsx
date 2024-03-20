@@ -80,11 +80,26 @@ const MiddleNav = () => {
     }
 
     if (pathnames.length === 0 || pathnames.includes("services")) {
-      navigate(
-        `/services/search?search=${searchQuery || ""}&location=${
-          postalCode || ""
-        }`
-      );
+      if (searchQuery) {
+        setSearchParams((prev) => {
+          prev.set("search", searchQuery);
+          return prev;
+        });
+      }
+      if (taxonomyFilter) {
+        console.log("Inside the taxonomy");
+        setSearchParams((prev) => {
+          prev.set("taxonomy", taxonomyFilter);
+          return prev;
+        });
+      }
+      if (postalCode) {
+        setSearchParams((prev) => {
+          prev.set("location", postalCode);
+          return prev;
+        });
+      }
+      navigate(`/services/search?${searchParmas.toString()}`);
       return;
     }
 
@@ -114,7 +129,7 @@ const MiddleNav = () => {
     const dropDown = document.getElementById("mainDorpwDoen");
     dropDown?.classList.remove("show");
     if (pathnames.length === 0 || pathnames.includes(`services`)) {
-      navigate(`/services/search`);
+      navigate(`/services/search?${searchParmas.toString()}`);
     }
   }
 

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/LiveAds.css";
 import NextButton from "../components/NextButton";
 import { Link, useSearchParams } from "react-router-dom";
@@ -9,14 +9,12 @@ import { useToken, useWishList } from "../service/auth";
 import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
 import { useDispatch } from "react-redux";
 import { wishList as SetstoreWishList } from "../features/wishList";
-import { SearchContext } from "../features/searchContext";
 
 const LatestOffers = () => {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
 
-  const { taxonomyFilter } = useContext(SearchContext);
   const [adverts, setAdvert] = useState<{
     data: any;
     status: string;
@@ -59,7 +57,7 @@ const LatestOffers = () => {
       AdsPage,
       15,
       searchParams.get("search") || "",
-      taxonomyFilter || "",
+      searchParams.get("taxonomy") || "",
       searchParams.get("location") || "",
       searchParams.get("price") || "",
       searchParams.get("radius") || ""
@@ -84,7 +82,7 @@ const LatestOffers = () => {
 
         if (
           searchParams.get("search") ||
-          taxonomyFilter ||
+          searchParams.get("taxonomy") ||
           searchParams.get("location")
         ) {
           if (AdsPage > 1) {
@@ -134,7 +132,7 @@ const LatestOffers = () => {
     setAdsLoading(1);
   }, [
     searchParams.get("search"),
-    taxonomyFilter,
+    searchParams.get("taxonomy"),
     searchParams.get("location"),
     searchParams.get("price"),
     searchParams.get("radius"),
@@ -145,7 +143,7 @@ const LatestOffers = () => {
   }, [
     AdsPage,
     searchParams.get("search"),
-    taxonomyFilter,
+    searchParams.get("taxonomy"),
     searchParams.get("location"),
     searchParams.get("price"),
     searchParams.get("radius"),

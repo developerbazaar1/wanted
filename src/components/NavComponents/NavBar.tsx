@@ -1,26 +1,42 @@
 import "./navbar.css";
 import navLogo from "../../assets/logo.png";
-// import login from "../../assets/login.png";
 import UserProfile from "./UserProfile";
 import MiddleNav from "./MiddleNav";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import LoginSingupButton from "./LoginSingupButton";
-import { useContext } from "react";
-import { SearchContext } from "../../features/searchContext";
-const NavBar = ({ setPriceFilter, setRadiusFilter }: any) => {
-  const { updatetaxonomyFilterQuery } = useContext(SearchContext);
+// import taxonomy from "../../features/taxonomy";
 
+const NavBar = ({ setPriceFilter, setRadiusFilter }: any) => {
+  const [searchParams] = useSearchParams();
   const token = localStorage.getItem("userwantedToken");
+
+  // Function to generate query string with encoded parameters if they exist
+  const generateQueryString = () => {
+    const locationValue = searchParams.get("location");
+    const locationParam = locationValue
+      ? `location=${encodeURIComponent(locationValue)}`
+      : "";
+
+    const taxonomyValue = searchParams.get("taxonomy");
+    const taxonomyParam = taxonomyValue
+      ? `taxonomy=${encodeURIComponent(taxonomyValue)}`
+      : "";
+
+    return `/?${locationParam}${
+      locationParam && taxonomyParam ? "&" : ""
+    }${taxonomyParam}`;
+  };
+
   return (
     <div className="white__background">
       <div className="nav_container">
         <div className="mobile_top sm-none ">
           <div className="">
             <div className="logo_div">
+              {/* Generate Link with conditional parameters */}
               <Link
-                to="/"
+                to={generateQueryString()}
                 onClick={() => {
-                  updatetaxonomyFilterQuery("");
                   setPriceFilter("");
                   setRadiusFilter("");
                 }}

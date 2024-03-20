@@ -1,15 +1,15 @@
 import "../css/Home.css";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ServicesAPi } from "../config/AxiosUtils";
 import Loader from "../components/Loader";
-import { SearchContext } from "../features/searchContext";
+// import { SearchContext } from "../features/searchContext";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { taxonomyFilter } = useContext(SearchContext);
+  // const { taxonomyFilter } = useContext(SearchContext);
 
   const [services, setServices] = useState({
     category: [],
@@ -19,7 +19,7 @@ const Home = () => {
 
   useEffect(() => {
     if (
-      taxonomyFilter ||
+      searchParams.get("taxonomy") ||
       searchParams.get("search") ||
       searchParams.get("location") ||
       searchParams.get("price")
@@ -61,6 +61,7 @@ const Home = () => {
       </div>
     );
   }
+
   if (services.category.length <= 0 && !loading) {
     return (
       <h2

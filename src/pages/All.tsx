@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -8,13 +8,13 @@ import { AdsApi, WishListAPi } from "../config/AxiosUtils";
 import { useToken, useWishList } from "../service/auth";
 import { Favourite, FilledFavouriteIconLarge } from "../utils/SvgElements";
 import { wishList as SetstoreWishList } from "../features/wishList";
-import { SearchContext } from "../features/searchContext";
+// import { SearchContext } from "../features/searchContext";
 const All = () => {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
 
-  const { taxonomyFilter } = useContext(SearchContext);
+  // const { taxonomyFilter } = useContext(SearchContext);
   const [adverts, setAdvert] = useState<{
     data: any;
     status: string;
@@ -44,7 +44,6 @@ const All = () => {
         toast.error(e.response.data.message);
       });
   }
-
   function FetchData() {
     setLoading(true);
     AdsApi.getAdsBaedOnType(
@@ -52,7 +51,7 @@ const All = () => {
       AdsPage,
       15,
       searchParams.get("search") || "",
-      taxonomyFilter || "",
+      searchParams.get("taxonomy") || "",
       searchParams.get("location") || "",
       searchParams.get("price") || "",
       searchParams.get("radius") || ""
@@ -77,7 +76,7 @@ const All = () => {
 
         if (
           searchParams.get("search") ||
-          taxonomyFilter ||
+          searchParams.get("taxonomy") ||
           searchParams.get("location")
         ) {
           if (AdsPage > 1) {
@@ -126,7 +125,7 @@ const All = () => {
     () => setAdsLoading(1),
     [
       searchParams.get("search"),
-      taxonomyFilter,
+      searchParams.get("taxonomy"),
       searchParams.get("location"),
       searchParams.get("price"),
       searchParams.get("radius"),
@@ -138,7 +137,7 @@ const All = () => {
   }, [
     AdsPage,
     searchParams.get("search"),
-    taxonomyFilter,
+    searchParams.get("taxonomy"),
     searchParams.get("location"),
     searchParams.get("price"),
     searchParams.get("radius"),
